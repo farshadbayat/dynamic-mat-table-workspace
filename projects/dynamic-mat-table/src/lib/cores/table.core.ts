@@ -1,6 +1,6 @@
 import { TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
-import { MatSort, MatTable } from '@angular/material';
+import { MatSort, MatTable, MatPaginator } from '@angular/material';
 import { ViewChild, Input, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { TableMenu } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
@@ -11,6 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { HeaderFilterComponent } from '../dynamic-mat-table/extensions/filter/header-filter.component';
+import { TablePagination } from '../models/table-pagination.model';
 
 
 export class TableCore<T extends TableRow> {
@@ -23,13 +24,46 @@ export class TableCore<T extends TableRow> {
   private previousIndex: number; // Drag & Drop
   public tvsDataSource: TableVirtualScrollDataSource<T>;
   private tableSelection = new SelectionModel<T>(true, []);
+  private tablePagination: TablePagination;
+  public tablePagingEnable = false;
+  public viewportClass: 'viewport' | 'viewport-with-pagination';
+  private matPaginator: MatPaginator;
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
+  @ViewChild(MatPaginator, { static: false })
+  set paginator(mp: MatPaginator) {
+    this.matPaginator = mp;
+    this.updateDatasource();
+  }
 
   /************************************ Input & Output parameters ************************************/
+  @Input()
+  get pagingEnable() {
+      return this.tablePagingEnable;
+  }
+  set pagingEnable(value: boolean) {
+    this.tablePagingEnable = value;
+    this.updateDatasource();
+  }
+
+  @Input()
+  get pagination() {
+    return  this.tablePagination;
+  }
+  set pagination(value: TablePagination) {
+    if (value !== null) {
+      this.tablePagination = value;
+    }
+    this.tablePagination.pageSizeOptions = (this.tablePagination.pageSizeOptions === null ?
+                                            [5, 10, 25, 100] : this.tablePagination.pageSizeOptions);
+    this.tablePagination.pageSize = (this.tablePagination.pageSize === null ?
+                                      this.tablePagination.pageSizeOptions[0] : this.tablePagination.pageSize);
+    this.updateDatasource();
+  }
+  @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   @Input()
   get rowSelection() {
     return  this.tableSelection;
@@ -79,7 +113,7 @@ export class TableCore<T extends TableRow> {
     } else {
       this.tvsDataSource = new TableVirtualScrollDataSource<T>();
     }
-    this.dataSource.sort = this.sort;
+    this.updateDatasource();
   }
 
   @Input() pending: boolean;
@@ -113,6 +147,20 @@ export class TableCore<T extends TableRow> {
   }
 
   /**************************************** Methods **********************************************/
+  updateDatasource() {
+    // console.log('oo', this.tvsDataSource.paginator);
+
+    this.viewportClass = 'viewport';
+    if ( this.tablePagingEnable === true && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
+      this.tvsDataSource.sort = this.sort;
+      this.tvsDataSource.paginator = this.matPaginator;
+      this.viewportClass = 'viewport-with-pagination';
+      this.tablePagination.length = this.tvsDataSource.data.length;
+    } else if ( this.tablePagingEnable === false && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
+      this.tvsDataSource.paginator = null;
+    }
+  }
+
   clear() {
     this.viewport.scrollTo({ top: 0, behavior: 'auto' });
     this.dataSource = new TableVirtualScrollDataSource<T>([]);

@@ -6,6 +6,7 @@ import { TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { MenuActionChange } from './extensions/menu/table-menu.component';
+import { TablePagination } from '../models/table-pagination.model';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
   }
 
   ngAfterViewInit(): void {
+    this.sort.sortChange.subscribe(() => this.pagination.pageIndex = 0);
   }
 
   ngOnInit() {
@@ -40,7 +42,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
     this.sort.sortChange.subscribe( resp => {
       console.log(resp);
     });
-    console.log(this.sort);
   }
 
   ellipsis(cellRef) {
@@ -72,5 +73,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
       this.dataSource.clearFilter();
       this.headerFilterList.forEach( hf => hf.clearColumn_OnClick() );
     }
+  }
+
+  doRendering(e) {
+    console.log(e);
+  }
+
+  pagination_onChange(e: TablePagination) {
+    this.paginationChange.emit(e);
   }
 }

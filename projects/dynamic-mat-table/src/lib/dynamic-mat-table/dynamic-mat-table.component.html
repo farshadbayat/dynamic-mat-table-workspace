@@ -1,5 +1,5 @@
-<cdk-virtual-scroll-viewport class="wrapper" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight"
-  [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable">
+<cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight"
+  [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable" (requestRendering)="doRendering($event)">
   <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy">
 
     <!-- Checkbox Column -->
@@ -64,6 +64,9 @@
 
   </mat-table>
 </cdk-virtual-scroll-viewport>
+<mat-paginator class="table-paginator" *ngIf="pagingEnable" [showFirstLastButtons]="pagination?.showFirstLastButtons"
+[length]="pagination?.length" [pageSize]="pagination?.pageSize" [pageIndex]="pagination?.pageIndex" (page)="pagination_onChange($event)" [pageSizeOptions]="pagination?.pageSizeOptions">
+</mat-paginator>
 
 <div *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)" class="no-records">
   <mat-icon>web</mat-icon> {{languageText?.Table.NoData}}

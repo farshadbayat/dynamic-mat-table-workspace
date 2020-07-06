@@ -4,7 +4,8 @@ import { MatTableModule,
   MatInputModule,
   MatSortModule,
   MatIconModule,
-  MatProgressBarModule } from '@angular/material';
+  MatProgressBarModule,
+  MatPaginatorModule} from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
@@ -29,6 +30,7 @@ import { DynamicMatTableComponent } from './dynamic-mat-table.component';
     MatIconModule,
     DragDropModule,
     TableMenuModule,
+    MatPaginatorModule,
     HeaderFilterModule
   ],
   exports: [ DynamicMatTableComponent],

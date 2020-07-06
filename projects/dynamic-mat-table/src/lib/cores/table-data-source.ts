@@ -63,9 +63,13 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
   ngOnInit(): void {
   }
 
-  _updateChangeSubscription() {
+  pagingData(data) {
+    console.log('---');
     console.log(this);
+    return this._pageData(data);
+  }
 
+  _updateChangeSubscription() {
     this.initStreams();
     const sort: MatSort | null = (this as any)._sort;
     const paginator: MatPaginator | null = (this as any)._paginator;
@@ -81,7 +85,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
 
     const filteredData = combineLatest([dataStream, filter]).pipe(map(([data]) => this._filterData(data)));
     const orderedData = combineLatest([filteredData, sortChange]).pipe(map(([data]) => this._orderData(data)));
-    const paginatedData = combineLatest([orderedData, pageChange]).pipe(map(([data]) => this._pageData(data)));
+    const paginatedData = combineLatest([orderedData, pageChange]).pipe(map(([data]) => this.pagingData(data)));
 
     this._renderChangesSubscription.unsubscribe();
     this._renderChangesSubscription = new Subscription();

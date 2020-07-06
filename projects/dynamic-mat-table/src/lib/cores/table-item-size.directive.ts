@@ -1,4 +1,4 @@
-import { AfterContentInit, ContentChild, Directive, forwardRef, Input, NgZone, OnChanges, OnDestroy } from '@angular/core';
+import { AfterContentInit, ContentChild, Directive, forwardRef, Input, NgZone, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import { distinctUntilChanged, filter, map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { TableVirtualScrollDataSource } from './table-data-source';
@@ -52,8 +52,9 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
   @Input()
   bufferMultiplier = defaults.bufferMultiplier;
 
-  @ContentChild(MatTable, { static: true })
-  table: MatTable<any>;
+  @ContentChild(MatTable, { static: true }) table: MatTable<any>;
+
+  @Output() requestRendering: EventEmitter<any> = new EventEmitter();
 
   scrollStrategy = new FixedSizeTableVirtualScrollStrategy();
 
@@ -96,6 +97,11 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
       });
   }
 
+  getPage(data, start, end): any[] {
+    this.requestRendering.emit({from: start, to: end});
+    return !isNumber(start) || !isNumber(end) ? data : data.slice(start, end);
+  }
+
   connectDataSource(dataSource: any) {
     this.dataSourceChanges.next();
     if (dataSource instanceof TableVirtualScrollDataSource) {
@@ -110,7 +116,7 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
             this.scrollStrategy
               .renderedRangeStream
               .pipe(
-                map(({ start, end }) => !isNumber(start) || !isNumber(end) ? data : data.slice(start, end))
+                map(({ start, end }) => this.getPage(data, start, end))
               )
           )
         )

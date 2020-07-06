@@ -1,5 +1,9 @@
-.wrapper {
+.viewport {
   height: calc( 100% - 10px);
+}
+
+.viewport-with-pagination {
+  height: calc( 100% - 48px);
 }
 
 @import './dynamic-mat-table.style.scss';
@@ -7,6 +11,11 @@
 :host {
   display: block;
   table-layout: fixed;
+}
+
+.table-paginator {
+  position: sticky;
+  bottom: 0;
 }
 
 mat-footer-row, mat-row{

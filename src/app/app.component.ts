@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent } from 'dynamic-mat-table';
+import { TablePagination } from 'projects/dynamic-mat-table/src/public-api';
 const DATA = getData(1000);
 
 
@@ -18,6 +19,8 @@ export class AppComponent {
   pending = false;
   tableSelection: TableSelectionMode = 'none';
   conditinalClass = false;
+  pagination: TablePagination = { pageIndex: 0, pageSize: 10 };
+  enablingPagination = true;
   @ViewChild(DynamicMatTableComponent, {static: true}) table: DynamicMatTableComponent<TestElement>;
 
   constructor() {
@@ -61,6 +64,14 @@ export class AppComponent {
     });
     const cloned = this.fields.map(x => Object.assign({}, x));
     this.fields = cloned;
+  }
+
+  paginationMode_onClick() {
+    if ( this.enablingPagination === true) {
+      this.enablingPagination = false;
+    } else {
+      this.enablingPagination = true;
+    }
   }
 
 }
