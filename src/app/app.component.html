@@ -1,0 +1,21 @@
+<mat-card style="margin: 8px; padding: 8px;">
+  <h2>Demo Dynamic Mat Table</h2>
+  <dynamic-mat-table [columns]="fields" [dataSource]="dataSource" [sticky]="stickyHeader" [showNoData]="showNoData" tableName="demo_table"
+  [class.conditional-class]="conditinalClass" [showProgress]="showProgress" [pending]="pending" [selection]="tableSelection"></dynamic-mat-table>
+</mat-card>
+
+<section class="section">
+  <button mat-raised-button color="primary" (click)="fetchData_onClick()"> Fetch Car Data</button>
+  <button mat-raised-button color="primary" (click)="pending = !pending"> Pending {{pending}}</button>
+  <button mat-raised-button color="primary" (click)="stickyHeader = !stickyHeader"> Header Sticky: {{stickyHeader}}</button>
+  <button mat-raised-button color="primary" (click)="columnSticky_onClick(1, 'strat')"> {{ fields[1]?.name + ':' + fields[1]?.sticky}}</button>
+  <button mat-raised-button color="primary" (click)="columnSticky_onClick(3, 'end')"> {{ fields[3]?.name + ':' + fields[3]?.sticky}}</button>
+  <button mat-raised-button color="primary" (click)="tableSelection_onClick()"> Table Selection ({{ tableSelection}})</button>
+  <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass;"> Conditional Class ({{ conditinalClass}})</button>
+  <button mat-raised-button color="primary" (click)="table.clear();"> Clear Data</button>
+  <button mat-raised-button color="primary" (click)="addNewColumn_onClick();"> Add New Column</button>
+  </section>
+  <section class="section">
+    <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
+    <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>
+  </section>

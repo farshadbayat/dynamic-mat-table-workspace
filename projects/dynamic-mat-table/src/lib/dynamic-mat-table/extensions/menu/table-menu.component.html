@@ -1,0 +1,69 @@
+<button class="clear" mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon>more_vert</mat-icon>
+</button>
+
+
+<mat-menu #menu="matMenu" [overlapTrigger]="false">
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="convertMenu">
+    <mat-icon>save</mat-icon>
+    <span>Save Data</span>
+  </button>
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="columnMenu">
+    <mat-icon>view_column</mat-icon>
+    <span>Columns Setting</span>
+  </button>
+  <button mat-menu-item color="primary" (click)="clearFilter_OnClick()">
+    <mat-icon style="margin-top: -3px">clear</mat-icon>
+    <span>Clear filters</span>
+  </button>
+</mat-menu>
+
+<!-- Convert Sub Menu -->
+
+<mat-menu #convertMenu="matMenu">
+  <button mat-menu-item (click)="download_OnClick('JSON')" >Json File</button>
+  <button mat-menu-item (click)="download_OnClick('CSV')">CSV File</button>
+</mat-menu>
+
+<!-- Column Setting Sub Menu -->
+
+<mat-menu #columnMenu="matMenu">
+  <ng-container *ngIf="columnInfo.length > 0 else noColumns">
+    <div class="va-mat-table-dragable-container" cdkDropList dkDropListLockAxis="y" cdkDropListOrientation="vertical">
+      <div *ngFor="let column of columnInfo; let i = index" (click)="$event.stopPropagation(); $event.preventDefault();"
+        class="dragable-row" cdkDrag [cdkDragData]="{columnIndex: i, columnTitle: column.header}"
+        (cdkDragDropped)="columnMenuDropped($event)">
+        <mat-icon cdkDragHandle>drag_indicator</mat-icon>
+        <mat-checkbox [disabled]="column.preventHidden" [checked]="!column.hidden"
+          (click)="$event.stopPropagation();" (change)="toggleSelectedColumn(column.index)">
+          {{ column.header }}
+        </mat-checkbox>
+
+        <div class="va-mat-table-drag-preview" *cdkDragPreview>
+          <mat-icon>drag_indicator</mat-icon>
+          <mat-checkbox [checked]="!column.hidden">
+            {{ column.header }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+    <div style="border-top: solid 1px #e7e7e7;">
+      <button mat-menu-item color="primary" (click)="apply_OnClick($event)" class="column-setting">
+        <mat-icon color="primary">done</mat-icon>
+      </button>
+      <button mat-menu-item color="primary" class="column-setting">
+        <mat-icon color="primary">clear</mat-icon>
+      </button>
+    </div>
+  </ng-container>
+
+  <ng-template #noColumns>
+    <div mat-menu-item>
+      No Columns
+    </div>
+  </ng-template>
+</mat-menu>
+
+
+
+
