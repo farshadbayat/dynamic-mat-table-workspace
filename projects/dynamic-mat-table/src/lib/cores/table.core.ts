@@ -1,7 +1,7 @@
 import { TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { MatSort, MatTable, MatPaginator } from '@angular/material';
-import { ViewChild, Input, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { ViewChild, Input, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
 import { TableMenu } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utility';
@@ -152,12 +152,12 @@ export class TableCore<T extends TableRow> {
 
     this.viewportClass = 'viewport';
     if ( this.tablePagingEnable === true && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
-      this.tvsDataSource.sort = this.sort;
-      this.tvsDataSource.paginator = this.matPaginator;
+      // this.tvsDataSource.sort = this.sort;
+      // this.tvsDataSource.paginator = this.matPaginator;
       this.viewportClass = 'viewport-with-pagination';
       this.tablePagination.length = this.tvsDataSource.data.length;
     } else if ( this.tablePagingEnable === false && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
-      this.tvsDataSource.paginator = null;
+      // this.tvsDataSource.paginator = null;
     }
   }
 
