@@ -1,4 +1,4 @@
-<button class="clear" mat-icon-button [matMenuTriggerFor]="menu">
+<button class="clear" #menuTrigger="matMenuTrigger" mat-icon-button [matMenuTriggerFor]="menu">
   <mat-icon>more_vert</mat-icon>
 </button>
 
@@ -12,7 +12,11 @@
     <mat-icon>view_column</mat-icon>
     <span>Columns Setting</span>
   </button>
-  <button mat-menu-item color="primary" (click)="clearFilter_OnClick()">
+  <button mat-menu-item (click)="saveSetting_OnClick()">
+    <mat-icon>grading</mat-icon>
+    <span>Save Table Setting</span>
+  </button>
+  <button mat-menu-item (click)="clearFilter_OnClick()">
     <mat-icon style="margin-top: -3px">clear</mat-icon>
     <span>Clear filters</span>
   </button>
@@ -23,6 +27,7 @@
 <mat-menu #convertMenu="matMenu">
   <button mat-menu-item (click)="download_OnClick('JSON')" >Json File</button>
   <button mat-menu-item (click)="download_OnClick('CSV')">CSV File</button>
+  <button mat-menu-item (click)="print_OnClick(menuTrigger)">Print Table</button>
 </mat-menu>
 
 <!-- Column Setting Sub Menu -->
@@ -47,6 +52,14 @@
         </div>
       </div>
     </div>
+    <mat-radio-group [(ngModel)]="tableSetting.filterMode">
+      <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Filtering on Local</mat-radio-button>
+      <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Filtering on Server</mat-radio-button>
+    </mat-radio-group>
+    <mat-radio-group [(ngModel)]="tableSetting.sortMode">
+      <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Sort on Local</mat-radio-button>
+      <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Sort on Server</mat-radio-button>
+    </mat-radio-group>
     <div style="border-top: solid 1px #e7e7e7;">
       <button mat-menu-item color="primary" (click)="apply_OnClick($event)" class="column-setting">
         <mat-icon color="primary">done</mat-icon>

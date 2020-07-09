@@ -37,6 +37,10 @@ export class AppComponent {
     this.dataSource = new TableVirtualScrollDataSource(DATA);
   }
 
+  table_onChangeSetting(setting) {
+    console.log(setting);
+  }
+
   columnSticky_onClick(columnSticky, type) {
     console.log(this.fields);
 
@@ -73,6 +77,8 @@ export class AppComponent {
       this.enablingPagination = true;
     }
   }
+
+
 
 }
 

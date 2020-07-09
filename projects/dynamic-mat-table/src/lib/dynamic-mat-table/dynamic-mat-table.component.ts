@@ -16,6 +16,7 @@ import { TablePagination } from '../models/table-pagination.model';
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> implements OnInit, AfterViewInit {
   public languageText: LanguagePack;
+  printing = true;
   @Input()
   get languagePack() {
     return this.languageText;
@@ -34,7 +35,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
   }
 
   ngAfterViewInit(): void {
-    this.sort.sortChange.subscribe(() => this.pagination.pageIndex = 0);
+    // this.sort.sortChange.subscribe(() => this.pagination.pageIndex = 0);
   }
 
   ngOnInit() {
@@ -62,7 +63,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
   menuActionChange(e: MenuActionChange) {
     console.log(e);
     if (e.type === 'ColumnSetting') {
-      this.refreshColumn(e.data);
+      this.refreshColumn(e.data.columnOrder);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
         this.tableService.exportToCsv(this.dataSource.filteredData, this.rowSelection);
@@ -72,6 +73,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
     } else if (e.type === 'FilterClear') {
       this.dataSource.clearFilter();
       this.headerFilterList.forEach( hf => hf.clearColumn_OnClick() );
+    }  else if (e.type === 'Print') {
+      this.printing = true;
+      setTimeout( () => {
+                          window.print();
+                          this.printing = false;
+                          }, 50);
+    } else if (e.type === 'SaveSetting') {
+      this.settingChange.emit(this.setting);
     }
   }
 

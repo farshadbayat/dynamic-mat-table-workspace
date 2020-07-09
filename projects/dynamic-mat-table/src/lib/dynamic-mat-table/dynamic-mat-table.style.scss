@@ -68,3 +68,22 @@
     }
   }
 }
+
+@media print {
+
+  .printpreview {
+    background-color: white;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    z-index: 99999999;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    overflow: visible;
+    display: block;
+    // width: auto;
+    // height: auto;
+  }
+}

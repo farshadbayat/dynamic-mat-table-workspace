@@ -1,8 +1,8 @@
 import { TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { MatSort, MatTable, MatPaginator } from '@angular/material';
-import { ViewChild, Input, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
-import { TableMenu } from '../models/table-menu.model';
+import { ViewChild, Input, OnInit, ViewChildren, QueryList, Output, EventEmitter } from '@angular/core';
+import { TableMenu, TableSetting } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utility';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -26,8 +26,9 @@ export class TableCore<T extends TableRow> {
   private tableSelection = new SelectionModel<T>(true, []);
   private tablePagination: TablePagination;
   public tablePagingEnable = false;
-  public viewportClass: 'viewport' | 'viewport-with-pagination';
+  public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
   private matPaginator: MatPaginator;
+  private tableSetting: TableSetting;
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
@@ -36,10 +37,18 @@ export class TableCore<T extends TableRow> {
   @ViewChild(MatPaginator, { static: false })
   set paginator(mp: MatPaginator) {
     this.matPaginator = mp;
-    this.updateDatasource();
+    // this.updateDatasource();
   }
-
   /************************************ Input & Output parameters ************************************/
+  @Input()
+  get setting() {
+    return this.tableSetting;
+  }
+  set setting(value: TableSetting) {
+    this.tableSetting = value;
+  }
+  @Output() settingChange: EventEmitter<any> = new EventEmitter();
+
   @Input()
   get pagingEnable() {
       return this.tablePagingEnable;
@@ -61,9 +70,12 @@ export class TableCore<T extends TableRow> {
                                             [5, 10, 25, 100] : this.tablePagination.pageSizeOptions);
     this.tablePagination.pageSize = (this.tablePagination.pageSize === null ?
                                       this.tablePagination.pageSizeOptions[0] : this.tablePagination.pageSize);
+    console.log(this.tablePagination);
+
     this.updateDatasource();
   }
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
+
   @Input()
   get rowSelection() {
     return  this.tableSelection;
@@ -72,6 +84,7 @@ export class TableCore<T extends TableRow> {
     this.tableSelection = value;
   }
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
+
   @Input()
   get selection() {
     return this.selectionRow;
@@ -113,7 +126,7 @@ export class TableCore<T extends TableRow> {
     } else {
       this.tvsDataSource = new TableVirtualScrollDataSource<T>();
     }
-    this.updateDatasource();
+    this.dataSource.sort = this.sort;
   }
 
   @Input() pending: boolean;
@@ -149,14 +162,15 @@ export class TableCore<T extends TableRow> {
   /**************************************** Methods **********************************************/
   updateDatasource() {
     // console.log('oo', this.tvsDataSource.paginator);
-
-    this.viewportClass = 'viewport';
+    console.log(this.tablePagingEnable);
+    console.log('updateDatasource');
     if ( this.tablePagingEnable === true && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
+      this.viewportClass = 'viewport-with-pagination';
       // this.tvsDataSource.sort = this.sort;
       // this.tvsDataSource.paginator = this.matPaginator;
-      this.viewportClass = 'viewport-with-pagination';
-      this.tablePagination.length = this.tvsDataSource.data.length;
+      // this.tablePagination.length = this.tvsDataSource.data.length;
     } else if ( this.tablePagingEnable === false && this.tvsDataSource !== null && this.tvsDataSource !== undefined) {
+      this.viewportClass = 'viewport';
       // this.tvsDataSource.paginator = null;
     }
   }

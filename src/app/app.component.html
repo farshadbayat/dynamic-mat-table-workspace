@@ -10,7 +10,9 @@
                       [selection]="tableSelection"
                       [pagination]="pagination"
                       [pagingEnable]="enablingPagination"
-                      [class.conditional-class]="conditinalClass">
+                      [class.conditional-class]="conditinalClass"
+                      (settingChange)="table_onChangeSetting($event)"
+                      >
   </dynamic-mat-table>
 </mat-card>
 

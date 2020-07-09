@@ -1,4 +1,4 @@
-<cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight"
+<cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight" [class.printpreview]="printing"
   [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable" (requestRendering)="doRendering($event)">
   <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy">
 
@@ -34,7 +34,7 @@
         </header-filter>
       </mat-header-cell>
       <mat-cell *matCellDef="let row">
-        <span  #refEl (resized)="ellipsis(refEl)">
+        <span  #refEl (click)="ellipsis(refEl)">
           {{ row[column.name] }}
         </span>
       </mat-cell>

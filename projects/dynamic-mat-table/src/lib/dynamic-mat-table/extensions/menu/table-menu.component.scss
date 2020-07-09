@@ -96,3 +96,16 @@ mat-icon {
 ::ng-deep .mat-menu-panel {
   min-height: 48px !important;
 }
+
+
+.mat-radio-group{
+  display: inline-block;
+  padding: 6px 5px 0px 5px;
+  border-top: 1px solid #f3f3f3;
+  overflow: hidden;
+  margin-top: -2px;
+  mat-radio-button{
+    padding: 3px 0 10px 8px;
+    width: 100%;
+  }
+}
