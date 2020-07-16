@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChildren, QueryList, AfterViewInit, ChangeDetectorRef, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { TableCore } from '../cores/table.core';
 import { TableService } from './dynamic-mat-table.service';
 import { LanguagePack } from '../models/language-pack.model';
