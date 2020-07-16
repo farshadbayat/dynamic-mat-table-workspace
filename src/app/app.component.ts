@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent } from 'dynamic-mat-table';
+import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/index';
+// import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent } from 'dynamic-mat-table';
+// import { TablePagination } from 'projects/dynamic-mat-table/src/public-api';
 const DATA = getData(1000);
 
 
@@ -18,6 +20,9 @@ export class AppComponent {
   pending = false;
   tableSelection: TableSelectionMode = 'none';
   conditinalClass = false;
+  pagination: TablePagination = { pageIndex: 0, pageSize: 10 };
+  enablingPagination = false;
+  direction: 'rtl' | 'ltr' = 'ltr';
   @ViewChild(DynamicMatTableComponent, {static: true}) table: DynamicMatTableComponent<TestElement>;
 
   constructor() {
@@ -32,6 +37,10 @@ export class AppComponent {
 
   fetchData_onClick() {
     this.dataSource = new TableVirtualScrollDataSource(DATA);
+  }
+
+  table_onChangeSetting(setting) {
+    console.log(setting);
   }
 
   columnSticky_onClick(columnSticky, type) {
@@ -63,6 +72,32 @@ export class AppComponent {
     this.fields = cloned;
   }
 
+  addNewLongColumn_onClick() {
+    this.fields.push({
+      name: 'longText', header: 'Long Text'
+    });
+    const cloned = this.fields.map(x => Object.assign({}, x));
+    this.fields = cloned;
+  }
+
+  paginationMode_onClick() {
+    if ( this.enablingPagination === true) {
+      this.enablingPagination = false;
+    } else {
+      this.enablingPagination = true;
+    }
+  }
+
+  direction_onClick() {
+    if (this.direction === 'ltr') {
+      this.direction = 'rtl';
+    } else {
+      this.direction = 'ltr';
+    }
+  }
+
+
+
 }
 
 
@@ -82,5 +117,11 @@ export function getData(n = 1000): TestElement[] {
     color: (['Red', 'Green', 'Blue', 'Yellow', 'Magenta'])[Math.floor(Math.random() * 5)],
     brand: (['Irankhodro', 'SAIPA', 'Kerman Khodro', 'Zanjan Benz', 'Tehran PIKEY'])[Math.floor(Math.random() * 5)],
     type: (['SUV', 'Truck', 'Sedan', 'Van', 'Coupe' , 'Sports Car'])[Math.floor(Math.random() * 6)],
+    longText: (['Overdub: Correct your voice recordings by simply typing. Powered by Lyrebird AI.',
+     'Multitrack recording — Descript dynamically generates a single combined transcript.',
+     'Our style of podcasting and editing wouldn’t be possible without Descript.',
+     'Live Collaboration: Real time multiuser editing and commenting.',
+     'Use the Timeline Editor for fine-tuning with fades and volume editing.',
+     'Edit audio by editing text. Drag and drop to add music and sound effects.'])[Math.floor(Math.random() * 6)],
   }));
 }

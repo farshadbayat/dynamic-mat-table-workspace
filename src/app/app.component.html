@@ -1,7 +1,20 @@
 <mat-card style="margin: 8px; padding: 8px;">
   <h2>Demo Dynamic Mat Table</h2>
-  <dynamic-mat-table [columns]="fields" [dataSource]="dataSource" [sticky]="stickyHeader" [showNoData]="showNoData" tableName="demo_table"
-  [class.conditional-class]="conditinalClass" [showProgress]="showProgress" [pending]="pending" [selection]="tableSelection"></dynamic-mat-table>
+  <dynamic-mat-table tableName="demo_table"
+                      [columns]="fields"
+                      [dataSource]="dataSource"
+                      [sticky]="stickyHeader"
+                      [showNoData]="showNoData"
+                      [showProgress]="showProgress"
+                      [pending]="pending"
+                      [selection]="tableSelection"
+                      [pagination]="pagination"
+                      [pagingEnable]="enablingPagination"
+                      [class.conditional-class]="conditinalClass"
+                      (settingChange)="table_onChangeSetting($event)"
+                      [dir]="direction"
+                      >
+  </dynamic-mat-table>
 </mat-card>
 
 <section class="section">
@@ -14,6 +27,9 @@
   <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass;"> Conditional Class ({{ conditinalClass}})</button>
   <button mat-raised-button color="primary" (click)="table.clear();"> Clear Data</button>
   <button mat-raised-button color="primary" (click)="addNewColumn_onClick();"> Add New Column</button>
+  <button mat-raised-button color="primary" (click)="addNewLongColumn_onClick();"> Add Long Content Column</button>
+  <button mat-raised-button color="primary" (click)="paginationMode_onClick();"> Pagination Mode ({{ enablingPagination}})</button>
+  <button mat-raised-button color="primary" (click)="direction_onClick();"> Direction ({{ direction}})</button>
   </section>
   <section class="section">
     <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>

@@ -5,6 +5,7 @@ import {
   Input,
   EventEmitter,
   OnInit,
+  OnChanges,
   ChangeDetectorRef,
   QueryList,
   ViewChildren,
