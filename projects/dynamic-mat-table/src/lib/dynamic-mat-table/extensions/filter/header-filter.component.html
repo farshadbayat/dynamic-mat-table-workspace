@@ -10,7 +10,7 @@
 
     <div >
       <mat-form-field>
-        <mat-select [value]="filter.selectedIndex" [panelClass]="'mat-elevation-z10'" (selectionChange)="filter.selectedIndex = $event.value;" placeholder='Conditions'>
+        <mat-select [value]="filter.selectedIndex" [panelClass]="'mat-elevation-z10'" (selectionChange)="filter.selectedIndex = $event.value;" placeholder='Conditions' (keyup.enter)="applyFilter_OnClick()">
           <mat-option *ngFor="let op of filter.getOperations(); let selectedIndex=index" [value]="selectedIndex">
             {{ op.text }}
           </mat-option>
@@ -21,7 +21,7 @@
     <div *ngFor="let ctrl of filter?.parameters">
       <mat-form-field class="input-field">
         <mat-label>{{ctrl.text}}</mat-label>
-        <input matInput #filterInput="matInput" [(ngModel)]="ctrl.value" [placeholder]=""/>
+        <input matInput #filterInput="matInput" [(ngModel)]="ctrl.value" [placeholder]="" (keyup.enter)="applyFilter_OnClick()" autocomplete="off"/>
       </mat-form-field>
     </div>
 

@@ -6,7 +6,6 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
 import { OnInit } from '@angular/core';
 
-// const CHANGE_STRING = ' ';
 export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> implements OnInit {
 
   public dataToRender$: Subject<T[]>;
@@ -20,6 +19,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
   }
 
   setFilter(fieldName: string, filters: AbstractFilter[]): Observable<null> {
+    console.log(fieldName);
     this.filterMap[fieldName] = filters;
     return new Observable(subscriber => {
       setTimeout(() => {
@@ -31,7 +31,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
   }
 
   clearFilter(fieldName: string = null) {
-    if (fieldName != null) {
+    if (fieldName != null ) {
       delete this.filterMap[fieldName];
     } else {
       this.filterMap = {};
@@ -45,6 +45,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
 
   public refreshFilterPredicate() {
     let conditionsString = '';
+    console.log(this.filterMap);
 
     Object.keys(this.filterMap).forEach(key => {
       let fieldCondition = '';

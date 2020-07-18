@@ -17,7 +17,7 @@ import { TextFilter } from './compare/text-filter';
 import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
-import { TableCore } from 'projects/dynamic-mat-table/src/lib/cores/table.core';
+import { isNull } from '../../../utilies/utils';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -38,8 +38,7 @@ const listAnimation = trigger('listAnimation', [
 })
 export class HeaderFilterComponent implements OnInit, AfterViewInit {
   @Input() field?: TableField<any>;
-  // tslint:disable-next-line:no-output-native
-  @Output() change = new EventEmitter<AbstractFilter[]>();
+  @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
   @ViewChildren('filterInput') filterInputList: QueryList<MatInput>;
   @ViewChild(MatMenuTrigger, { static: true }) menu: MatMenuTrigger;
@@ -47,20 +46,20 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   private filterList: AbstractFilter[] = [];
   @Input()
   get filters(): AbstractFilter[] {
-    if ( TableCore.isNull(this.filterList) === true || this.filterList.length === 0) {
+    if ( isNull(this.filterList) === true || this.filterList.length === 0) {
       this.filterList = [];
       this.addNewFilter(this.field.type || 'text');
     }
     return this.filterList;
   }
-  set filters(value: AbstractFilter[]) {
-    this.filterList = value;
+  set filters(values: AbstractFilter[]) {
+    this.filterList = values;
+    console.log(this.filterList);
   }
-
 
   @HostBinding('class.has-value')
   get hasValue(): boolean {
-    return this.filters.filter( f => f.hasValue() === true).length > 0;
+    return this.filters && this.filters.filter( f => f.hasValue() === true).length > 0;
   }
 
   @HostBinding('class.show-trigger')
@@ -76,7 +75,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (TableCore.isNull(this.filters)) {
+    if (isNull(this.filters)) {
       this.filters = [];
       this.addNewFilter(this.field.type);
     }
@@ -134,23 +133,13 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // getFilterTypeSelected(filterType: AbstractFilter, type: string) {
-  //   if ((filterType.selectedIndex === null && type === 'and') || (filterType.selectedIndex !== null && filterType.type === type)) {
-  //     return 'primary';
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-
   clearColumn_OnClick() {
-    this.filters = [];
-    this.change.emit(this.filters);
+    this.filterList = [];
+    this.filterChanged.emit(this.filterList);
   }
 
   applyFilter_OnClick() {
-    console.log(this.filters.filter( f => f.hasValue() === true));
-    this.change.emit(this.filters);
+    this.filterChanged.emit(this.filterList);
   }
 
 }

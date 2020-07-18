@@ -17,7 +17,7 @@ import { TextFilter } from './compare/text-filter';
 import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
-import { Utils } from '../../../cores/utils';
+import { isNull } from '../../../utilies/utils';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -46,7 +46,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   private filterList: AbstractFilter[] = [];
   @Input()
   get filters(): AbstractFilter[] {
-    if ( Utils.isNull(this.filterList) === true || this.filterList.length === 0) {
+    if ( isNull(this.filterList) === true || this.filterList.length === 0) {
       this.filterList = [];
       this.addNewFilter(this.field.type || 'text');
     }
@@ -75,7 +75,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (Utils.isNull(this.filters)) {
+    if (isNull(this.filters)) {
       this.filters = [];
       this.addNewFilter(this.field.type);
     }

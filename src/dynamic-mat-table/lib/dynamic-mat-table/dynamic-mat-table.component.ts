@@ -8,7 +8,6 @@ import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { MenuActionChange } from './extensions/menu/table-menu.component';
 import { TablePagination } from '../models/table-pagination.model';
 import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
-import { Utils } from '../cores/utils';
 
 
 @Component({
@@ -69,9 +68,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
   }
 
   menuActionChange(e: MenuActionChange) {
-    console.log(e);
     if (e.type === 'TableSetting') {
-      // this.refreshColumn(e.data.columnSetting);
       this.saveSetting(e.data, false);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
