@@ -5,7 +5,6 @@ import {
   Input,
   EventEmitter,
   OnInit,
-  OnChanges,
   ChangeDetectorRef,
   QueryList,
   ViewChildren,
@@ -18,7 +17,7 @@ import { TextFilter } from './compare/text-filter';
 import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
-import { TableCore } from 'projects/dynamic-mat-table/src/lib/cores/table.core';
+import { Utils } from '../../../cores/utils';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -39,18 +38,28 @@ const listAnimation = trigger('listAnimation', [
 })
 export class HeaderFilterComponent implements OnInit, AfterViewInit {
   @Input() field?: TableField<any>;
-  // tslint:disable-next-line:no-output-native
-  @Output() change = new EventEmitter<AbstractFilter[]>();
+  @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
   @ViewChildren('filterInput') filterInputList: QueryList<MatInput>;
   @ViewChild(MatMenuTrigger, { static: true }) menu: MatMenuTrigger;
 
-  @Input() filterList: AbstractFilter[] = [];
-
+  private filterList: AbstractFilter[] = [];
+  @Input()
+  get filters(): AbstractFilter[] {
+    if ( Utils.isNull(this.filterList) === true || this.filterList.length === 0) {
+      this.filterList = [];
+      this.addNewFilter(this.field.type || 'text');
+    }
+    return this.filterList;
+  }
+  set filters(values: AbstractFilter[]) {
+    this.filterList = values;
+    console.log(this.filterList);
+  }
 
   @HostBinding('class.has-value')
   get hasValue(): boolean {
-    return this.filterList.filter( f => f.hasValue() === true).length > 0;
+    return this.filters && this.filters.filter( f => f.hasValue() === true).length > 0;
   }
 
   @HostBinding('class.show-trigger')
@@ -66,8 +75,8 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (TableCore.isNull(this.filterList)) {
-      this.filterList = [];
+    if (Utils.isNull(this.filters)) {
+      this.filters = [];
       this.addNewFilter(this.field.type);
     }
   }
@@ -92,8 +101,8 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
       }
       default: this.filterList.push(new TextFilter(this.service));
     }
-    this.filterList[this.filterList.length - 1].selectedIndex = 0;
-    return this.filterList[this.filterList.length - 1];
+    this.filters[this.filters.length - 1].selectedIndex = 0;
+    return this.filters[this.filters.length - 1];
   }
 
   ngAfterViewInit() {
@@ -110,38 +119,27 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   filterAction_OnClick(index, action) {
     if (action === 0 || action === 1) { // and or
-      this.filterList[index].type = action === 0 ? 'and' : 'or';
-      if (this.filterList.length === index + 1) {
+      this.filters[index].type = action === 0 ? 'and' : 'or';
+      if (this.filters.length === index + 1) {
         this.addNewFilter(this.field.type);
         this.focusToLastInput();
       }
-    } else if (action === 2 && this.filterList.length > 1) { // delete
+    } else if (action === 2 && this.filters.length > 1) { // delete
       window.requestAnimationFrame(() => {
-        this.filterList.splice(index, 1);
+        this.filters.splice(index, 1);
         this.cdr.detectChanges();
         this.focusToLastInput();
       }); // bug for delete filter item(unwanted reaction close menu)
     }
   }
 
-  // getFilterTypeSelected(filterType: AbstractFilter, type: string) {
-  //   if ((filterType.selectedIndex === null && type === 'and') || (filterType.selectedIndex !== null && filterType.type === type)) {
-  //     return 'primary';
-  //   } else {
-  //     return null;
-  //   }
-  // }
-
-
   clearColumn_OnClick() {
     this.filterList = [];
-    this.addNewFilter(this.field.type || 'text');
-    this.change.emit(this.filterList);
+    this.filterChanged.emit(this.filterList);
   }
 
   applyFilter_OnClick() {
-    console.log(this.filterList.filter( f => f.hasValue() === true));
-    this.change.emit(this.filterList);
+    this.filterChanged.emit(this.filterList);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
 import { TableCore } from '../cores/table.core';
 import { TableService } from './dynamic-mat-table.service';
 import { LanguagePack } from '../models/language-pack.model';
@@ -7,6 +7,7 @@ import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { MenuActionChange } from './extensions/menu/table-menu.component';
 import { TablePagination } from '../models/table-pagination.model';
+import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
 
 
 @Component({
@@ -15,6 +16,7 @@ import { TablePagination } from '../models/table-pagination.model';
   styleUrls: ['./dynamic-mat-table.component.scss']
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> implements OnInit, AfterViewInit {
+  @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
   public languageText: LanguagePack;
   printing = true;
   @Input()

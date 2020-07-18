@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/index';
-// import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent } from 'dynamic-mat-table';
-// import { TablePagination } from 'projects/dynamic-mat-table/src/public-api';
+ import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/public-api';
+// import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
 const DATA = getData(1000);
 
 

@@ -172,7 +172,7 @@ export class TableCore<T extends TableRow> implements OnInit {
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
-  @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
+  // @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
 
   /************************************ Input & Output parameters ************************************/
   @Input()

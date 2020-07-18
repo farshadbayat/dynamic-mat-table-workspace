@@ -6,7 +6,7 @@
   <div filter-event class="menu-title">
     {{field?.header}}
   </div>
-  <div [@listAnimation]="filterList.length" filter-event *ngFor="let filter of filterList; let index = index" class="filter-panel">
+  <div [@listAnimation]="filters.length" filter-event *ngFor="let filter of filters; let index = index" class="filter-panel">
 
     <div >
       <mat-form-field>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="or-and">
-      <span *ngIf="filterList?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? language.Filter.And : language.Filter.Or}}</span>
+      <span *ngIf="filters?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? language.Filter.And : language.Filter.Or}}</span>
       <span class="svg">
         <mat-icon (click)="filterAction_OnClick(index,0)">add</mat-icon>
       </span>

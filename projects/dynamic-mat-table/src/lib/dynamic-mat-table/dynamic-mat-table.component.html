@@ -28,7 +28,7 @@
       <mat-header-cell *matHeaderCellDef cdkDrag cdkDropList cdkDropListLockAxis="x" cdkDropListOrientation="horizontal"
         (cdkDropListDropped)="dropListDropped($event, i)" (cdkDragStarted)="dragStarted($event, i)"
         [cdkDragData]="{name: column.name, columIndex: i}">
-        <header-filter [field]="column" (change)="filter_OnChanged(column, $event)" [filterList]="dataSource.getFilter(column.name)">
+        <header-filter [field]="column" (change)="filter_OnChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
           <mat-icon class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
           <div mat-sort-header class="header-caption">{{ column.header }}</div>
         </header-filter>
