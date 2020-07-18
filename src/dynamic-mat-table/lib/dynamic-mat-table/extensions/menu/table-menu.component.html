@@ -33,9 +33,9 @@
 <!-- Column Setting Sub Menu -->
 
 <mat-menu #columnMenu="matMenu">
-  <ng-container *ngIf="tableSetting?.columnSetting?.length > 0 else noColumns">
+  <ng-container *ngIf="currentTableSetting?.columnSetting?.length > 0 else noColumns">
     <div class="va-mat-table-dragable-container" cdkDropList dkDropListLockAxis="y" cdkDropListOrientation="vertical" dir="ltr">
-      <div *ngFor="let column of tableSetting.columnSetting; let i = index" (click)="$event.stopPropagation(); $event.preventDefault();"
+      <div *ngFor="let column of currentTableSetting.columnSetting; let i = index" (click)="$event.stopPropagation(); $event.preventDefault();"
         class="dragable-row" cdkDrag [cdkDragData]="{columnIndex: i, columnTitle: column.header}"
         (cdkDragDropped)="columnMenuDropped($event)">
         <button mat-icon-button class="column-setting-button" (click)="columnSetting_onClick(i)">
@@ -57,10 +57,10 @@
     </div>
 
     <div style="border-top: solid 1px #e7e7e7;">
-      <button mat-menu-item color="primary" (click)="apply_OnClick($event)" class="done-setting">
+      <button mat-menu-item color="primary" class="done-setting" (click)="apply_OnClick($event)">
         <mat-icon color="primary">done</mat-icon>
       </button>
-      <button mat-menu-item color="primary" class="done-setting">
+      <button mat-menu-item color="primary" class="done-setting" (click)="cancel_OnClick($event)">
         <mat-icon color="primary">clear</mat-icon>
       </button>
     </div>
@@ -77,17 +77,17 @@
 <mat-menu #columnSettingMenu="matMenu" [overlapTrigger]="false" style="padding: 10px !important;">
   <div *ngIf="currentColumn !== null" (click)="$event.stopPropagation(); $event.preventDefault();" class="column-setting">
     <div class="column-setting-header column-setting-header-first"><mat-icon color="primary">filter_alt</mat-icon>Filtering Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="tableSetting.columnSetting[currentColumn].filter">
+    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter">
       <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
       <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
     </mat-radio-group>
     <div class="column-setting-header"><mat-icon color="primary">sort</mat-icon>Sorting Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="tableSetting.columnSetting[currentColumn].sort">
+    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort">
       <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
       <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
     </mat-radio-group>
     <div class="column-setting-header"><mat-icon color="primary">push_pin</mat-icon>Pin Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="tableSetting.columnSetting[currentColumn].sticky">
+    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky">
       <mat-radio-button value='none' (click)="$event.stopPropagation()">None</mat-radio-button>
       <mat-radio-button value='start' (click)="$event.stopPropagation()">Start</mat-radio-button>
       <mat-radio-button value='end' (click)="$event.stopPropagation()">End</mat-radio-button>

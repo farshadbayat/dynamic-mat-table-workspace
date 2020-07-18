@@ -44,12 +44,23 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   @ViewChildren('filterInput') filterInputList: QueryList<MatInput>;
   @ViewChild(MatMenuTrigger, { static: true }) menu: MatMenuTrigger;
 
-  @Input() filterList: AbstractFilter[] = [];
+  private filterList: AbstractFilter[] = [];
+  @Input()
+  get filters(): AbstractFilter[] {
+    if ( TableCore.isNull(this.filterList) === true || this.filterList.length === 0) {
+      this.filterList = [];
+      this.addNewFilter(this.field.type || 'text');
+    }
+    return this.filterList;
+  }
+  set filters(value: AbstractFilter[]) {
+    this.filterList = value;
+  }
 
 
   @HostBinding('class.has-value')
   get hasValue(): boolean {
-    return this.filterList.filter( f => f.hasValue() === true).length > 0;
+    return this.filters.filter( f => f.hasValue() === true).length > 0;
   }
 
   @HostBinding('class.show-trigger')
@@ -65,8 +76,8 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (TableCore.isNull(this.filterList)) {
-      this.filterList = [];
+    if (TableCore.isNull(this.filters)) {
+      this.filters = [];
       this.addNewFilter(this.field.type);
     }
   }
@@ -91,8 +102,8 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
       }
       default: this.filterList.push(new TextFilter(this.service));
     }
-    this.filterList[this.filterList.length - 1].selectedIndex = 0;
-    return this.filterList[this.filterList.length - 1];
+    this.filters[this.filters.length - 1].selectedIndex = 0;
+    return this.filters[this.filters.length - 1];
   }
 
   ngAfterViewInit() {
@@ -109,14 +120,14 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   filterAction_OnClick(index, action) {
     if (action === 0 || action === 1) { // and or
-      this.filterList[index].type = action === 0 ? 'and' : 'or';
-      if (this.filterList.length === index + 1) {
+      this.filters[index].type = action === 0 ? 'and' : 'or';
+      if (this.filters.length === index + 1) {
         this.addNewFilter(this.field.type);
         this.focusToLastInput();
       }
-    } else if (action === 2 && this.filterList.length > 1) { // delete
+    } else if (action === 2 && this.filters.length > 1) { // delete
       window.requestAnimationFrame(() => {
-        this.filterList.splice(index, 1);
+        this.filters.splice(index, 1);
         this.cdr.detectChanges();
         this.focusToLastInput();
       }); // bug for delete filter item(unwanted reaction close menu)
@@ -133,14 +144,13 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
 
   clearColumn_OnClick() {
-    this.filterList = [];
-    this.addNewFilter(this.field.type || 'text');
-    this.change.emit(this.filterList);
+    this.filters = [];
+    this.change.emit(this.filters);
   }
 
   applyFilter_OnClick() {
-    console.log(this.filterList.filter( f => f.hasValue() === true));
-    this.change.emit(this.filterList);
+    console.log(this.filters.filter( f => f.hasValue() === true));
+    this.change.emit(this.filters);
   }
 
 }

@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component, Output, Input, ElementRef, EventEmi
 import { TableField, AbstractField } from './../../../models/table-field.model';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TableService } from '../../dynamic-mat-table.service';
-import { TableSetting } from '../../../models/table-menu.model';
+import { TableSetting, VisibleActionMenu } from '../../../models/table-menu.model';
+import { Utils } from 'src/dynamic-mat-table/lib/cores/utils';
 
 @Component({
   selector: 'table-menu',
@@ -12,15 +13,6 @@ import { TableSetting } from '../../../models/table-menu.model';
 })
 export class TableMenuComponent implements OnChanges {
   @Output() menuActionChange: EventEmitter<MenuActionChange> = new EventEmitter<MenuActionChange>();
-  // @Input()
-  // get columnInfo(): AbstractField[] {
-  //   return this.tableSetting.columnSetting;
-  // }
-  // set columnInfo(values: AbstractField[]) {
-  //   this.tableSetting.columnSetting = values.map(obj => Object.assign({}, obj));
-  // }
-
-  // private tableColumns: AbstractField[] = [];
   @Input()
   get tableSetting(): TableSetting {
     return this.currentTableSetting;
@@ -28,13 +20,9 @@ export class TableMenuComponent implements OnChanges {
   set tableSetting(value: TableSetting) {
     this.originalTableSetting = value;
     this.reverseDirection = value.direction === 'rtl' ? 'ltr' : 'rtl';
-    console.log('reverseDirection', this.reverseDirection);
-    this.currentTableSetting = {
-      visibaleActionMenu: Object.assign({}, value.visibaleActionMenu || null ),
-      columnSetting: (value.columnSetting || []).map(obj => Object.assign({}, obj)),
-      direction: Object.assign({}, value.direction)
-     };
+    this.currentTableSetting = Utils.deepClone<TableSetting>(value);
   }
+
   currentColumn: number = null;
   reverseDirection: string = null;
   originalTableSetting: TableSetting;
@@ -67,11 +55,16 @@ export class TableMenuComponent implements OnChanges {
     e.stopPropagation(); e.preventDefault();
     window.requestAnimationFrame(() => {
       this.menuActionChange.emit({
-        type: 'ColumnSetting',
-        data: this.tableSetting
+        type: 'TableSetting',
+        data: this.currentTableSetting
       });
       this.tableService.saveColumnInfo(this.tableSetting.columnSetting);
     });
+  }
+
+  cancel_OnClick() {
+    console.log('cancel');
+    this.currentTableSetting = Utils.deepClone(this.originalTableSetting);
   }
 
   /*****  Save ********/
@@ -117,6 +110,6 @@ export class TableMenuComponent implements OnChanges {
 }
 
 export interface MenuActionChange {
-  type: 'FilterClear' | 'ColumnSetting' | 'Download' | 'SaveSetting' | 'Print';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print';
   data?: any;
 }

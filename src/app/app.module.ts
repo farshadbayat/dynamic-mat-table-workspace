@@ -6,8 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule, MatCheckboxModule, MatCardModule, MatExpansionModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
-import { DynamicMatTableModule } from '../dynamic-mat-table/index';
 // import { DynamicMatTableModule } from 'dynamic-mat-table';
+import { DynamicMatTableModule } from '../dynamic-mat-table/public-api';
 
 @NgModule({
   declarations: [
