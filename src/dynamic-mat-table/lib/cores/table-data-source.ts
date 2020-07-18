@@ -5,11 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
 import { OnInit } from '@angular/core';
-import { TableCore } from './table.core';
-import { Utils } from './utils';
 
-
-// const CHANGE_STRING = ' ';
 export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> implements OnInit {
 
   public dataToRender$: Subject<T[]>;

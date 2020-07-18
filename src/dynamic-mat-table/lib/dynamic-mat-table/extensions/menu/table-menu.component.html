@@ -38,7 +38,7 @@
       <div *ngFor="let column of currentTableSetting.columnSetting; let i = index" (click)="$event.stopPropagation(); $event.preventDefault();"
         class="dragable-row" cdkDrag [cdkDragData]="{columnIndex: i, columnTitle: column.header}"
         (cdkDragDropped)="columnMenuDropped($event)">
-        <button mat-icon-button class="column-setting-button" (click)="columnSetting_onClick(i)">
+        <button mat-icon-button class="column-setting-button" (click)="setting_onClick(i)">
           <mat-icon #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="columnSettingMenu" >settings</mat-icon>
         </button>
         <mat-icon cdkDragHandle>drag_indicator</mat-icon>
@@ -60,7 +60,7 @@
       <button mat-menu-item color="primary" class="done-setting" (click)="apply_OnClick($event)">
         <mat-icon color="primary">done</mat-icon>
       </button>
-      <button mat-menu-item color="primary" class="done-setting" (click)="cancel_OnClick($event)">
+      <button mat-menu-item color="primary" class="done-setting" (click)="cancel_OnClick()">
         <mat-icon color="primary">clear</mat-icon>
       </button>
     </div>

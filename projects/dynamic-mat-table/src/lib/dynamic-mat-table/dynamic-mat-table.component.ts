@@ -30,22 +30,20 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
 
   constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {
     super(tableService, cdr);
-    tableService.language.subscribe( languagePack => {
-        this.languageText = languagePack;
-      }
+    tableService.language.subscribe(languagePack => {
+      this.languageText = languagePack;
+    }
     );
 
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort.sortChange.subscribe( resp => {
+    this.dataSource.sort.sortChange.subscribe(resp => {
       console.log(resp);
       this.pagination.pageIndex = 0;
     });
-    this.dataSource.dataOfRange$.subscribe( data => {
+    this.dataSource.dataOfRange$.subscribe(data => {
       console.log('dataOfRange');
-      // this.cdr.detectChanges();
-      // this.table.renderRows();
     });
   }
 
@@ -61,16 +59,16 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
   }
 
   filter_OnChanged(column: TableField<T>, filter: AbstractFilter[]) {
+    console.log('Change filter');
+
     this.pending = true;
-    this.dataSource.setFilter(column.name, filter).subscribe( () => {
+    this.dataSource.setFilter(column.name, filter).subscribe(() => {
       this.pending = false;
     });
   }
 
   menuActionChange(e: MenuActionChange) {
-    console.log(e);
-    if (e.type === 'ColumnSetting') {
-      // this.refreshColumn(e.data.columnSetting);
+    if (e.type === 'TableSetting') {
       this.saveSetting(e.data, false);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
@@ -80,13 +78,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
       }
     } else if (e.type === 'FilterClear') {
       this.dataSource.clearFilter();
-      this.headerFilterList.forEach( hf => hf.clearColumn_OnClick() );
-    }  else if (e.type === 'Print') {
+      this.headerFilterList.forEach(hf => hf.clearColumn_OnClick());
+    } else if (e.type === 'Print') {
       this.printing = true;
-      setTimeout( () => {
-                          window.print();
-                          this.printing = false;
-                          }, 50);
+      setTimeout(() => {
+        window.print();
+        this.printing = false;
+      }, 50);
     } else if (e.type === 'SaveSetting') {
       this.saveSetting(null, true);
     }

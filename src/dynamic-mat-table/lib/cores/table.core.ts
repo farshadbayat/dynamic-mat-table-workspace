@@ -4,13 +4,14 @@ import { MatSort, MatTable, MatPaginator } from '@angular/material';
 import { ViewChild, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, HostBinding } from '@angular/core';
 import { TableMenu, TableSetting } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
-import { titleCase } from '../utilies/text.utility';
+import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination } from '../models/table-pagination.model';
-import { Utils } from './utils';
+import { isNull, clone } from '../utilies/utils';
+
 
 
 export class TableCore<T extends TableRow> implements OnInit {
@@ -66,10 +67,10 @@ export class TableCore<T extends TableRow> implements OnInit {
   set pagination(value: TablePagination) {
     if (value && value !== null) {
       this.tablePagination = value;
-      if ( Utils.isNull(this.tablePagination.pageSizeOptions)) {
+      if ( isNull(this.tablePagination.pageSizeOptions)) {
         this.tablePagination.pageSizeOptions = [5, 10, 25, 100];
       }
-      if ( Utils.isNull(this.tablePagination.pageSizeOptions)) {
+      if ( isNull(this.tablePagination.pageSizeOptions)) {
         this.tablePagination.pageSize = this.tablePagination.pageSizeOptions[0];
       }
       this.updatePagination();
@@ -147,7 +148,7 @@ export class TableCore<T extends TableRow> implements OnInit {
       f.sticky = f.sticky ? f.sticky : 'none';
     });
     this.tableColumns = fields;
-    this.tableSetting.columnSetting = Utils.clone(fields);
+    this.tableSetting.columnSetting = clone(fields);
     this.setDisplayedColumns();
   }
 
@@ -205,7 +206,7 @@ export class TableCore<T extends TableRow> implements OnInit {
     window.requestAnimationFrame(() => {
       if (this.tablePagingEnable === true) {
         this.viewportClass = 'viewport-with-pagination';
-        if ( !Utils.isNull(this.tvsDataSource.paginator)) {
+        if ( !isNull(this.tvsDataSource.paginator)) {
           this.tvsDataSource.paginator.length = this.dataSource.data.length;
         }
       } else {
