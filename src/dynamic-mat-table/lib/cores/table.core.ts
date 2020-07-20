@@ -123,7 +123,7 @@ export class TableCore<T extends TableRow> implements OnInit {
     this.clear();
     if (value && value != null) {
       this.tvsDataSource.data = value.data;
-      this.cdr.detectChanges();
+      // this.cdr.detectChanges();
     }
   }
 
@@ -152,7 +152,7 @@ export class TableCore<T extends TableRow> implements OnInit {
     this.setDisplayedColumns();
   }
 
-  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {
+  constructor(public tableService: TableService) {
     this.showProgress = true;
   }
   // Variables //

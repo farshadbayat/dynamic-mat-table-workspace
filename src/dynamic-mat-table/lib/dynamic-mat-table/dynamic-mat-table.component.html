@@ -1,7 +1,6 @@
 <cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight" [class.printpreview]="printing"
   [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable" (requestRendering)="doRendering($event)">
   <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy">
-
     <!-- Checkbox Column -->
 
     <ng-container matColumnDef="table-select">
@@ -72,4 +71,5 @@
 <div *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)" class="no-records">
   <mat-icon>web</mat-icon> {{languageText?.Table.NoData}}
 </div>
+
 

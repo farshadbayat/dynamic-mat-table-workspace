@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, ChangeDetectorRef, ViewChildren, QueryList, ElementRef, ViewChild } from '@angular/core';
 import { TableCore } from '../cores/table.core';
 import { TableService } from './dynamic-mat-table.service';
 import { LanguagePack } from '../models/language-pack.model';
@@ -17,6 +17,7 @@ import { HeaderFilterComponent } from './extensions/filter/header-filter.compone
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> implements OnInit, AfterViewInit {
   @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
+  @ViewChild('loadingRender', {static: true}) loading: ElementRef;
   public languageText: LanguagePack;
   printing = true;
   @Input()
@@ -28,8 +29,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
     this.tableService.loadLanguagePack(language);
   }
 
-  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {
-    super(tableService, cdr);
+  constructor(public tableService: TableService, public er: ElementRef) {
+    super(tableService);
     tableService.language.subscribe(languagePack => {
       this.languageText = languagePack;
     }
@@ -92,7 +93,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> i
 
   doRendering(e) {
     this.pending = false;
-    // console.log(e);
+    if ( this.viewport.getViewportSize() === 0) {
+      console.log('zero');
+    }
   }
 
   pagination_onChange(e: TablePagination) {
