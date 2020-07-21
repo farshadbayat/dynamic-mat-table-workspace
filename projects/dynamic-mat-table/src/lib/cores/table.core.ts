@@ -11,6 +11,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination } from '../models/table-pagination.model';
 import { isNull, clone } from '../utilies/utils';
+import { PrintConfig } from '../models/print-config.model';
 
 
 
@@ -123,7 +124,7 @@ export class TableCore<T extends TableRow> implements OnInit {
     this.clear();
     if (value && value != null) {
       this.tvsDataSource.data = value.data;
-      this.cdr.detectChanges();
+      // this.cdr.detectChanges();
     }
   }
 
@@ -152,7 +153,7 @@ export class TableCore<T extends TableRow> implements OnInit {
     this.setDisplayedColumns();
   }
 
-  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {
+  constructor(public tableService: TableService) {
     this.showProgress = true;
   }
   // Variables //
@@ -168,13 +169,13 @@ export class TableCore<T extends TableRow> implements OnInit {
   public tablePagingEnable = false;
   public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
   public tableSetting: TableSetting = {};
-  // private direction: 'ltr' | 'rtl';
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
   // @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
 
   /************************************ Input & Output parameters ************************************/
+  @Input() printTable: PrintConfig = {};
   @Input()
   get dir(): 'ltr' | 'rtl' {
     return this.direction;
@@ -212,7 +213,6 @@ export class TableCore<T extends TableRow> implements OnInit {
       } else {
         this.viewportClass = 'viewport';
         if ((this.tvsDataSource as any)._paginator !== undefined) {
-          console.log('delete');
           delete (this.tvsDataSource as any)._paginator;
         }
       }
@@ -283,7 +283,6 @@ export class TableCore<T extends TableRow> implements OnInit {
   }
 
   saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {
-    console.log(tableSetting);
     if (tableSetting !== null) {
       this.tableSetting = tableSetting;
       this.refreshColumn(tableSetting.columnSetting);
@@ -311,7 +310,6 @@ export class TableCore<T extends TableRow> implements OnInit {
   }
 
   onRowSelectionChange(e, row) {
-    console.log(e);
     if (e) {
       this.rowSelection.toggle(row);
       this.rowSelectionChange.emit(this.rowSelection);

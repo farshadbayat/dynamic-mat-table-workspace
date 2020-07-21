@@ -11,6 +11,7 @@ const notEmpty = '!!a';
 const operations = [equals, notEquals, greaterThan, lessThan, empty, notEmpty];
 
 export class NumberFilter extends AbstractFilter<number> {
+  private static sql = ['=', '<>', '>', '<', 'IS NULL', 'IS NOT NULL'];
   private static operationList: FilterOperation[] = [];
   private languageText: LanguagePack;
 
@@ -75,5 +76,12 @@ export class NumberFilter extends AbstractFilter<number> {
       return statement;
     }
   }
-}
 
+  public toPrint(): string {
+    return NumberFilter.operationList[this._selectedIndex].text + ' ' + this.parameters[0].value + ' ' + (this.type || '') + ' ';
+  }
+
+  public toSql(): string {
+    return NumberFilter.sql[this._selectedIndex] + ' ' + (this.parameters[0].value || '') + ' ' + (this.type || '') + ' ';
+  }
+}

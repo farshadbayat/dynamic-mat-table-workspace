@@ -4,19 +4,19 @@
 
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
-  <button mat-menu-item color="primary" [matMenuTriggerFor]="convertMenu" >
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="convertMenu" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
     <mat-icon>save</mat-icon>
     <span>Save Data</span>
   </button>
-  <button mat-menu-item color="primary" [matMenuTriggerFor]="columnMenu" >
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="columnMenu" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
     <mat-icon>view_column</mat-icon>
     <span>Columns Setting</span>
   </button>
-  <button mat-menu-item (click)="saveSetting_OnClick()" >
+  <button mat-menu-item (click)="saveSetting_OnClick()" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
     <mat-icon>grading</mat-icon>
     <span>Save Table Setting</span>
   </button>
-  <button mat-menu-item (click)="clearFilter_OnClick()" >
+  <button mat-menu-item (click)="clearFilter_OnClick()" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
     <mat-icon style="margin-top: -3px">clear</mat-icon>
     <span>Clear filters</span>
   </button>
@@ -24,10 +24,16 @@
 
 <!-- Convert Sub Menu -->
 
-<mat-menu #convertMenu="matMenu" >
-  <button mat-menu-item (click)="download_OnClick('JSON')" >Json File</button>
-  <button mat-menu-item (click)="download_OnClick('CSV')" >CSV File</button>
-  <button mat-menu-item (click)="print_OnClick(menuTrigger)" >Print Table</button>
+<mat-menu #convertMenu="matMenu">
+  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+    <span>Json File</span>
+  </button>
+  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+    <span>CSV File</span>
+  </button>
+  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+    <span>Print Table</span>
+  </button>
 </mat-menu>
 
 <!-- Column Setting Sub Menu -->

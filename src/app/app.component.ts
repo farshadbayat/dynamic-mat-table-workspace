@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
- import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/public-api';
+import { TableField, TableRow, PrintConfig, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/public-api';
 // import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
 const DATA = getData(1000);
 
@@ -22,13 +22,14 @@ export class AppComponent {
   pagination: TablePagination = { pageIndex: 0, pageSize: 10 };
   enablingPagination = false;
   direction: 'rtl' | 'ltr' = 'ltr';
+  printConfig: PrintConfig = { title: 'Print All Test Data' , showParameters: true };
   @ViewChild(DynamicMatTableComponent, {static: true}) table: DynamicMatTableComponent<TestElement>;
 
   constructor() {
     this.fields = [
       {name: 'row', type: 'number'},
       {name: 'name', header: 'Element Name' , sticky: 'start'},
-      {name: 'weight'},
+      {name: 'weight',  minWidth: 600},
       {name: 'color'},
       {name: 'brand'}
     ];

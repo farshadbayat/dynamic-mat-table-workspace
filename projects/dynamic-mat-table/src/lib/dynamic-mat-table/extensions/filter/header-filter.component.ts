@@ -54,7 +54,6 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
   set filters(values: AbstractFilter[]) {
     this.filterList = values;
-    console.log(this.filterList);
   }
 
   @HostBinding('class.has-value')

@@ -1,7 +1,6 @@
 <cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight" [class.printpreview]="printing"
   [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable" (requestRendering)="doRendering($event)">
-  <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy">
-
+  <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy" [@tableAnimation]>
     <!-- Checkbox Column -->
 
     <ng-container matColumnDef="table-select">
@@ -25,7 +24,7 @@
 
     <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.name }}"
       [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
-      <mat-header-cell *matHeaderCellDef cdkDrag cdkDropList cdkDropListLockAxis="x" cdkDropListOrientation="horizontal"
+      <mat-header-cell *matHeaderCellDef cdkDrag cdkDropList cdkDropListLockAxis="x" cdkDropListOrientation="horizontal" [style.minWidth.px]="column.minWidth"
         (cdkDropListDropped)="dropListDropped($event, i)" (cdkDragStarted)="dragStarted($event, i)"
         [cdkDragData]="{name: column.name, columIndex: i}">
         <header-filter [field]="column" (filterChanged)="filter_OnChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
@@ -33,7 +32,7 @@
           <div mat-sort-header class="header-caption">{{ column.header }}</div>
         </header-filter>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row">
+      <mat-cell *matCellDef="let row" [style.minWidth.px]="column.minWidth">
         <mat-icon></mat-icon>
         <span  #refEl (click)="ellipsis(refEl)">
           {{ row[column.name] }}
@@ -49,7 +48,6 @@
     </ng-container>
 
     <!-- Table Menu[ Sort, Visible, Export] -->
-
     <ng-container matColumnDef="table-menu" [stickyEnd]="true">
       <mat-header-cell *matHeaderCellDef class="table-menu">
         <table-menu [tableSetting]="tableSetting" (menuActionChange)="menuActionChange($event)"></table-menu>
@@ -72,4 +70,3 @@
 <div *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)" class="no-records">
   <mat-icon>web</mat-icon> {{languageText?.Table.NoData}}
 </div>
-

@@ -12,6 +12,7 @@ Model Class
 
 export * from './lib/models/table-row.model';
 export * from './lib/models/table-field.model';
+export * from './lib/models/print-config.model';
 export * from './lib/models/table-pagination.model';
 
 

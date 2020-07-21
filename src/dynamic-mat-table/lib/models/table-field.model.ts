@@ -14,7 +14,9 @@ export interface AbstractField {
   index?: number;
   name: string;
   type?: 'text' | 'number' | 'date' | 'category';
+  minWidth?: number;
   header?: string;
+  isPrintable?: boolean;
   isKey?: boolean;
   inlineEdit?: boolean;
   display?: 'visible' | 'hiden' | 'prevent-hidden';

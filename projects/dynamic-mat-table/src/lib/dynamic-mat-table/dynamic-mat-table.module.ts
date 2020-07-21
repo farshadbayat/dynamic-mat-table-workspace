@@ -5,7 +5,8 @@ import { MatTableModule,
   MatSortModule,
   MatIconModule,
   MatProgressBarModule,
-  MatPaginatorModule} from '@angular/material';
+  MatPaginatorModule,
+  MatButtonModule} from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
@@ -14,6 +15,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TableMenuModule } from './extensions/menu/table-menu.module';
 import { HeaderFilterModule } from './extensions/filter/header-filter.module';
 import { DynamicMatTableComponent } from './dynamic-mat-table.component';
+import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 // const extentionsModule = [HeaderFilterModule];
 @NgModule({
@@ -31,9 +34,12 @@ import { DynamicMatTableComponent } from './dynamic-mat-table.component';
     DragDropModule,
     TableMenuModule,
     MatPaginatorModule,
-    HeaderFilterModule
+    HeaderFilterModule,
+    MatDialogModule,
+    MatButtonModule,
   ],
   exports: [ DynamicMatTableComponent],
-  declarations: [DynamicMatTableComponent]
+  declarations: [ DynamicMatTableComponent, PrintTableDialogComponent ],
+  entryComponents: [ PrintTableDialogComponent ]
 })
 export class DynamicMatTableModule { }

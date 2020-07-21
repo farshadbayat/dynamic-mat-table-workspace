@@ -87,12 +87,22 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     this.onDataLengthChanged();
   }
 
+  // bug fixed some time viewport is zero height (i dont know why!)
+  public getViewportSize() {
+    if (this.viewport.getViewportSize() === 0) {
+      return this.viewport.elementRef.nativeElement.clientHeight + 52;
+    } else {
+      return this.viewport.getViewportSize();
+    }
+  }
+
   private updateContent() {
     if (!this.viewport || !this.rowHeight) {
       return;
     }
+
     const scrollOffset = this.viewport.measureScrollOffset();
-    const amount = Math.ceil(this.viewport.getViewportSize() / this.rowHeight);
+    const amount = Math.ceil(this.getViewportSize() / this.rowHeight);
     const offset = Math.max(scrollOffset - this.headerHeight, 0);
     const buffer = Math.ceil(amount * this.bufferMultiplier);
 

@@ -51,6 +51,10 @@ export class TableMenuComponent {
     });
   }
 
+  setting_onClick(i) {
+    this.currentColumn = i;
+  }
+
   cancel_OnClick() {
     this.currentTableSetting = deepClone(this.originalTableSetting);
   }

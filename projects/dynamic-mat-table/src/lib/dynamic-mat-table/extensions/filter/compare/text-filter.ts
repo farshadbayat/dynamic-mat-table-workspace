@@ -11,6 +11,7 @@ const notEmpty = '!!a';
 const operations = [contains, equals, startsWith, endsWith, empty, notEmpty];
 
 export class TextFilter extends AbstractFilter<string> {
+  private static sql = ['LIKE "%[*]%"', '= "[*]"', 'LIKE "%[*]"', 'LIKE "[*]%"', 'IS NULL', 'IS NOT NULL'];
   private static operationList: FilterOperation[] = [];
   private languageText: LanguagePack;
 
@@ -77,5 +78,12 @@ export class TextFilter extends AbstractFilter<string> {
     }
   }
 
+  public toPrint(): string {
+    return TextFilter.operationList[this._selectedIndex].text + ' ' + this.parameters[0].value + ' ' + (this.type || '') + ' ';
+  }
+
+  public toSql(): string {
+    return TextFilter.sql[this._selectedIndex].replace('[*]', (this.parameters[0].value || '')) + (this.type || '') + ' ';
+  }
 }
 
