@@ -30,7 +30,8 @@
         <header-filter [field]="column" (filterChanged)="filter_OnChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
           <mat-icon class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
           <div mat-sort-header class="header-caption">{{ column.header }}</div>
-        </header-filter>
+        </header-filter> 
+        <div class="resizer-handler" cdkDragLockAxis="x" cdkDrag></div>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" [style.minWidth.px]="column.minWidth">
         <mat-icon></mat-icon>

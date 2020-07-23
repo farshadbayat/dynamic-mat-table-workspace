@@ -17,6 +17,17 @@ mat-cell:first-of-type:not(.table-select) {
   padding-left: 0 !important;
 }
 
+.resizer-handler {
+  display: inline-block;
+  min-width: 2px;
+  height: calc( 100% - 8px);
+  border: solid gray;
+  border-width: 0 1px;
+  position: sticky;
+  right: 0;
+  cursor: col-resize;
+}
+
 .table-paginator {
   position: sticky;
   bottom: 0;
