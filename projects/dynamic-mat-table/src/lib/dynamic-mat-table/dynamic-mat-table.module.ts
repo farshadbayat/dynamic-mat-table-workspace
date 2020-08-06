@@ -29,7 +29,7 @@ export function paginatorLabels(tableIntl: TableIntl) {
   paginatorIntl.previousPageLabel = 'صفحه قبل';
   // paginatorIntl.getRangeLabel = dutchRangeLabel;
 
-  return paginatorIntl; // tableIntl.paginatorLabels;
+  return tableIntl.paginatorLabels || null;
 }
 
 export class PaginatorIntl  {

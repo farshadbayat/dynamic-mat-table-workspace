@@ -1,6 +1,6 @@
 import { TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
-import { ViewChild, Input, Output, EventEmitter, HostBinding, Injectable } from '@angular/core';
+import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { TableMenu } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
@@ -15,9 +15,13 @@ import { TableSetting, Direction } from '../models/table-setting.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
+import { Directive } from '@angular/core';
 
-@Injectable()
-export class TableCore<T extends TableRow> {
+@Directive({
+  // tslint:disable-next-line:directive-selector
+  selector: '[core]'
+})
+export class TableCoreDirective<T extends TableRow> {
 
   @ViewChild(MatSort, { static: true }) // sort: MatSort;
   set sort(value: MatSort) {

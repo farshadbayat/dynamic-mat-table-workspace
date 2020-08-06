@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2} from '@angular/core';
-import { TableCore } from '../cores/table.core';
+import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
 import { TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
@@ -39,7 +39,7 @@ export const tableAnimation = trigger('tableAnimation', [
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation]
 })
-export class DynamicMatTableComponent<T extends TableRow> extends TableCore<T> implements OnInit, AfterViewInit {
+export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit {
   @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
   @ViewChild('printRef', {static: true}) printRef: TemplateRef<any>;
   @ViewChild('printContentRef', {static: true}) printContentRef: ElementRef;
