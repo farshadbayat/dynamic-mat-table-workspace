@@ -1,5 +1,3 @@
-import { AbstractField } from './table-field.model';
-
 export interface TableMenu {
   enable?: boolean;
   menuItems?: MenuItem[];
@@ -20,16 +18,13 @@ export interface VisibleActionMenu {
   print?: boolean;
   columnSettingPin?: boolean;
   columnSettingOrder?: boolean;
-  columnSettingFilterMode?: boolean;
-  columnSettingSortMode?: boolean;
+  columnSettingFilter?: boolean;
+  columnSettingSort?: boolean;
+  columnSettingPrint?: boolean;
   saveTableSetting?: boolean;
   clearFilter?: boolean;
 }
 
-export interface TableSetting {
-  direction?: 'rtl' | 'ltr';
-  columnSetting?: AbstractField[];
-  visibaleActionMenu?: VisibleActionMenu;
-}
+
 
 

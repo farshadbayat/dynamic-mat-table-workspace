@@ -4,19 +4,19 @@
 
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
-  <button mat-menu-item color="primary" [matMenuTriggerFor]="convertMenu" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="convertMenu" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>save</mat-icon>
     <span>Save Data</span>
   </button>
-  <button mat-menu-item color="primary" [matMenuTriggerFor]="columnMenu" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item color="primary" [matMenuTriggerFor]="columnMenu" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>view_column</mat-icon>
     <span>Columns Setting</span>
   </button>
-  <button mat-menu-item (click)="saveSetting_OnClick()" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item (click)="saveSetting_OnClick()" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>grading</mat-icon>
     <span>Save Table Setting</span>
   </button>
-  <button mat-menu-item (click)="clearFilter_OnClick()" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item (click)="clearFilter_OnClick()" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon style="margin-top: -3px">clear</mat-icon>
     <span>Clear filters</span>
   </button>
@@ -25,13 +25,13 @@
 <!-- Convert Sub Menu -->
 
 <mat-menu #convertMenu="matMenu">
-  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>Json File</span>
   </button>
-  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>CSV File</span>
   </button>
-  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction === 'ltr'">
+  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>Print Table</span>
   </button>
 </mat-menu>
@@ -82,22 +82,46 @@
 
 <mat-menu #columnSettingMenu="matMenu" [overlapTrigger]="false" style="padding: 10px !important;">
   <div *ngIf="currentColumn !== null" (click)="$event.stopPropagation(); $event.preventDefault();" class="column-setting">
-    <div class="column-setting-header column-setting-header-first"><mat-icon color="primary">filter_alt</mat-icon>Filtering Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter">
-      <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
-      <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
-    </mat-radio-group>
-    <div class="column-setting-header"><mat-icon color="primary">sort</mat-icon>Sorting Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort">
-      <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
-      <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
-    </mat-radio-group>
-    <div class="column-setting-header"><mat-icon color="primary">push_pin</mat-icon>Pin Mode:</div>
-    <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky">
-      <mat-radio-button value='none' (click)="$event.stopPropagation()">None</mat-radio-button>
-      <mat-radio-button value='start' (click)="$event.stopPropagation()">Start</mat-radio-button>
-      <mat-radio-button value='end' (click)="$event.stopPropagation()">End</mat-radio-button>
-    </mat-radio-group>
+    <ng-container *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingFilter)">
+      <div class="column-setting-header column-setting-header-first">
+        <mat-icon color="primary">filter_alt</mat-icon>Filtering Mode:
+      </div>
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter">
+        <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
+        <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingSort)">
+      <div class="column-setting-header">
+        <mat-icon color="primary">sort</mat-icon>Sorting Mode:
+      </div>
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort">
+        <mat-radio-button value='client-side' (click)="$event.stopPropagation()">Local</mat-radio-button>
+        <mat-radio-button value='server-side' (click)="$event.stopPropagation()">Server</mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingFilter)">
+      <div class="column-setting-header">
+        <mat-icon color="primary">print</mat-icon>Print Mode:
+      </div>
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].print">
+        <mat-radio-button value=true (click)="$event.stopPropagation()">Yes</mat-radio-button>
+        <mat-radio-button value=false (click)="$event.stopPropagation()">No</mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
+
+    <ng-container *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingPin)">
+      <div class="column-setting-header">
+        <mat-icon color="primary">push_pin</mat-icon>Pin Mode:
+      </div>
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky">
+        <mat-radio-button value='none' (click)="$event.stopPropagation()">None</mat-radio-button>
+        <mat-radio-button value='start' (click)="$event.stopPropagation()">Start</mat-radio-button>
+        <mat-radio-button value='end' (click)="$event.stopPropagation()">End</mat-radio-button>
+      </mat-radio-group>
+    </ng-container>
   </div>
 </mat-menu>
 

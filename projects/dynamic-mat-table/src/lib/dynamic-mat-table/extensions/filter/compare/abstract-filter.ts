@@ -1,5 +1,9 @@
 export abstract class AbstractFilter<T = any> {
-  public parameters?: [{value: T, text: string}]; // type variable is array because in future may be control have two or more parameters such as ranger[from, to]
+  /*
+    type variable is array because in future may be
+    control have two or more parameters such as ranger[from, to]
+  */
+  public parameters?: [{value: T, text: string}];
   public type: 'and' | 'or';
   abstract selectedIndex: number;
   abstract readonly selectedValue: FilterOperation;

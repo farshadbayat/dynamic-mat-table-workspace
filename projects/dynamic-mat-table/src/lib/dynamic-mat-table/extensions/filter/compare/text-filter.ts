@@ -1,6 +1,5 @@
-import { TableService } from '../../../dynamic-mat-table.service';
-import { LanguagePack } from './../../../../models/language-pack.model';
 import { AbstractFilter, FilterOperation } from './abstract-filter';
+import { TableIntl } from '../../../../international/table-Intl';
 
 const contains = 'a.includes(b)';
 const equals = 'a === b';
@@ -13,9 +12,8 @@ const operations = [contains, equals, startsWith, endsWith, empty, notEmpty];
 export class TextFilter extends AbstractFilter<string> {
   private static sql = ['LIKE "%[*]%"', '= "[*]"', 'LIKE "%[*]"', 'LIKE "[*]%"', 'IS NULL', 'IS NOT NULL'];
   private static operationList: FilterOperation[] = [];
-  private languageText: LanguagePack;
 
-  constructor(private service: TableService) {
+  constructor(public languagePack: TableIntl) {
     super();
     this._selectedIndex = 0;
     if ( TextFilter.operationList.length === 0) { // init for first time
@@ -23,15 +21,12 @@ export class TextFilter extends AbstractFilter<string> {
         TextFilter.operationList.push({ predicate: fn, text: null});
       });
     }
-    service.language.subscribe(languagePack => {
-      this.languageText = languagePack;
-      TextFilter.operationList[0].text = languagePack.Filter.TextContains;    // contains //
-      TextFilter.operationList[1].text = languagePack.Filter.TextEquals;      // equals //
-      TextFilter.operationList[2].text = languagePack.Filter.TextStartsWith;  // startsWith //
-      TextFilter.operationList[3].text = languagePack.Filter.TextEndsWith;    // endsWith //
-      TextFilter.operationList[4].text = languagePack.Filter.TextEmpty;       // empty //
-      TextFilter.operationList[5].text = languagePack.Filter.TextNotEmpty;    // notEmpty //
-    });
+    TextFilter.operationList[0].text = languagePack.filterLabels.TextContains;    // contains //
+    TextFilter.operationList[1].text = languagePack.filterLabels.TextEquals;      // equals //
+    TextFilter.operationList[2].text = languagePack.filterLabels.TextStartsWith;  // startsWith //
+    TextFilter.operationList[3].text = languagePack.filterLabels.TextEndsWith;    // endsWith //
+    TextFilter.operationList[4].text = languagePack.filterLabels.TextEmpty;       // empty //
+    TextFilter.operationList[5].text = languagePack.filterLabels.TextNotEmpty;    // notEmpty //
   }
 
   // tslint:disable-next-line:variable-name
@@ -43,7 +38,7 @@ export class TextFilter extends AbstractFilter<string> {
     this._selectedIndex = value;
     // init filter parameters
     if (value === 0 || value === 1 || value === 2 || value === 3 ) { // contains equals startsWith endsWith
-      this.parameters = [{ value: '', text: this.languageText.Filter.Text }];
+      this.parameters = [{ value: '', text: this.languagePack.filterLabels.Text }];
     } else { // empty notEmpty
       this.parameters = null;
     }
@@ -65,7 +60,7 @@ export class TextFilter extends AbstractFilter<string> {
     const a = '_a$';
     const b = '_b$';
     const predicate = this.selectedValue.predicate.replace('a', a).replace('b', b);
-    const statement = predicate.replace(a, `${a}['${dynamicVariable}'].toLowerCase()`);
+    const statement = predicate.replace(a, `${a}['${dynamicVariable}']?.toLowerCase()`);
     // one static parameters equals  notEquals greaterThan lessThan //
     if (this._selectedIndex === 0 ||
       this._selectedIndex === 1 ||

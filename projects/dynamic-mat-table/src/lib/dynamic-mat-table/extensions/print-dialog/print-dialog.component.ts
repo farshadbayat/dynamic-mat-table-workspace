@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PrintConfig } from '../../../models/print-config.model';
 
 // tslint:disable-next-line:max-line-length

@@ -1,5 +1,8 @@
 <mat-card style="margin: 8px; padding: 8px;">
   <h2>Demo Dynamic Mat Table</h2>
+<!-- minimal use -->
+<!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
+
   <dynamic-mat-table tableName="demo_table"
                       [columns]="fields"
                       [dataSource]="dataSource"
@@ -9,12 +12,12 @@
                       [pending]="pending"
                       [selection]="tableSelection"
                       [pagination]="pagination"
-                      [pagingEnable]="enablingPagination"
+                      [pagingMode]="'server'"
                       [class.conditional-class]="conditinalClass"
                       (settingChange)="table_onChangeSetting($event)"
                       [dir]="direction"
-                      [printTable]="printConfig"
-                      >
+                      [printConfig]="printConfig"
+                      > 
   </dynamic-mat-table>
 </mat-card>
 

@@ -47,3 +47,17 @@ export function deepClone<T>(obj: any) {
   }
 }
 
+export function getValue(fieldName: string, defaultValue: any, ...variable: any[]) {
+  // variable.forEach( v => {
+  //   if (v && !isNull(v[fieldName])) {
+  //     return v[fieldName];
+  //   }
+  // });
+  for (const v in variable) {
+    if (variable[v] && !isNull(variable[v][fieldName])) {
+      return variable[v][fieldName];
+    }
+  }
+  return defaultValue;
+}
+

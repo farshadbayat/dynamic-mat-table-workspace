@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TableService } from '../../dynamic-mat-table.service';
-import { TableSetting } from '../../../models/table-menu.model';
-import { deepClone } from '../../../utilies/utils';
+import { TableSetting } from '../../../models/table-setting.model';
+import { deepClone, isNull } from '../../../utilies/utils';
 
 @Component({
   selector: 'table-menu',
@@ -57,6 +57,10 @@ export class TableMenuComponent {
 
   cancel_OnClick() {
     this.currentTableSetting = deepClone(this.originalTableSetting);
+  }
+
+  isVisible( visible: boolean) {
+    return isNull(visible) ? true : visible;
   }
 
   /*****  Save ********/

@@ -1,13 +1,26 @@
+import { MatPaginatorIntl } from '@angular/material/paginator';
+
 export interface LanguagePack {
-  Table: Table;
-  Filter: Filter;
+  tableLabels: TableLabels;
+  filterLabels: FilterLabels;
+  paginatorLabels: MatPaginatorIntl;
+  menuLabels: MenuLabels;
 }
 
-export interface Table {
+export interface TableLabels {
   NoData: string;
 }
 
-export interface Filter {
+export interface PaginatorLabels {
+  itemsPerPageLabel: string;
+  nextPageLabel: string;
+  previousPageLabel: string;
+  firstPageLabel: string;
+  lastPageLabel: string;
+  getRangeLabel: (page: number, pageSize: number, length: number) => string;
+}
+
+export interface FilterLabels {
   Clear: string;
   Search: string;
   And: string;
@@ -29,6 +42,33 @@ export interface Filter {
   NumberEmpty: string;
   NumberNotEmpty: string;
   /* Category List Compare */
+  CategoryContains: string;
+  CategoryNotContains: string;
   /* Boolean Compare */
   /* Date Compare */
+
+  /* Paginator */
+}
+
+export interface MenuLabels {
+  saveData: string;
+  columnSetting: string;
+  saveTableSetting: string;
+  clearFilter: string;
+  jsonFile: string;
+  csvFile: string;
+  printTable: string;
+  filterMode: string;
+  filterLocalMode: string;
+  filterServerMode: string;
+  sortMode: string;
+  sortLocalMode: string;
+  sortServerMode: string;
+  printMode: string;
+  printYesMode: string;
+  printNoMode: string;
+  pinMode: string;
+  pinNoneMode: string;
+  pinStartMode: string;
+  pinEndMode: string;
 }

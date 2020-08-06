@@ -1,4 +1,5 @@
 import { AbstractField } from './table-field.model';
+import { Direction } from './table-setting.model';
 
 export interface PrintConfig {
   displayedFields?: string[];
@@ -8,7 +9,7 @@ export interface PrintConfig {
   showParameters?: boolean;
   data?: any[];
   columns?: AbstractField[];
-  direction?: 'rtl' | 'ltr';
+  direction?: Direction;
 }
 
 

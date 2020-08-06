@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { TableField, TableRow, PrintConfig, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from '../dynamic-mat-table/public-api';
+import { TableField, TableRow, PrintConfig,
+  TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
 // import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
 const DATA = getData(1000);
-
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,8 +10,10 @@ const DATA = getData(1000);
 })
 export class AppComponent {
   title = 'dynamic-mat-table';
-  fields: TableField<TestElement>[] = [];
+  // required
+  fields: TableField<any>[] = [];
   dataSource = new TableVirtualScrollDataSource([]);
+  // optinaol
   stickyHeader = true;
   showNoData = true;
   showProgress = true;
@@ -29,7 +30,7 @@ export class AppComponent {
     this.fields = [
       {name: 'row', type: 'number'},
       {name: 'name', header: 'Element Name' , sticky: 'start'},
-      {name: 'weight',  minWidth: 600},
+      {name: 'weight'},
       {name: 'color'},
       {name: 'brand'}
     ];
@@ -95,7 +96,6 @@ export class AppComponent {
       this.direction = 'ltr';
     }
   }
-
 
 
 }

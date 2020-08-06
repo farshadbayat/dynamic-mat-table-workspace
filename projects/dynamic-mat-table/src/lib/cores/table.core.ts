@@ -1,8 +1,7 @@
 import { TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
-import { MatSort, MatTable, MatPaginator } from '@angular/material';
-import { ViewChild, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, HostBinding } from '@angular/core';
-import { TableMenu, TableSetting } from '../models/table-menu.model';
+import { ViewChild, Input, Output, EventEmitter, HostBinding, Injectable } from '@angular/core';
+import { TableMenu } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -10,12 +9,16 @@ import { CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-dr
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination } from '../models/table-pagination.model';
-import { isNull, clone } from '../utilies/utils';
+import { isNull, clone, getValue } from '../utilies/utils';
 import { PrintConfig } from '../models/print-config.model';
+import { TableSetting, Direction } from '../models/table-setting.model';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTable } from '@angular/material/table';
 
+@Injectable()
+export class TableCore<T extends TableRow> {
 
-
-export class TableCore<T extends TableRow> implements OnInit {
   @ViewChild(MatSort, { static: true }) // sort: MatSort;
   set sort(value: MatSort) {
     if (value && value !== null) {
@@ -25,9 +28,10 @@ export class TableCore<T extends TableRow> implements OnInit {
       this.tvsDataSource.sort = value;
     }
   }
+
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
-    if (value && value !== null) {
+    if (!isNull(value) && this.tablePagingMode === 'client') {
       if (this.tvsDataSource === undefined || this.tvsDataSource === null) {
         this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
       }
@@ -37,10 +41,10 @@ export class TableCore<T extends TableRow> implements OnInit {
   }
 
   @HostBinding('style.direction')
-  get direction(): 'rtl' | 'ltr' {
+  get direction(): Direction {
     return this.tableSetting.direction;
   }
-  set direction(value: 'rtl' | 'ltr') {
+  set direction(value: Direction) {
     this.tableSetting.direction = value;
   }
 
@@ -49,15 +53,17 @@ export class TableCore<T extends TableRow> implements OnInit {
     return this.tableSetting;
   }
   set setting(value: TableSetting) {
-    this.tableSetting = value;
+    if ( !isNull(value) ) {
+      this.tableSetting = value;
+    }
   }
 
   @Input()
-  get pagingEnable() {
-    return this.tablePagingEnable;
+  get pagingMode() {
+    return this.tablePagingMode;
   }
-  set pagingEnable(value: boolean) {
-    this.tablePagingEnable = value;
+  set pagingMode(value: 'none' | 'client' | 'server') {
+    this.tablePagingMode = value;
     this.updatePagination();
   }
 
@@ -135,47 +141,38 @@ export class TableCore<T extends TableRow> implements OnInit {
   set menu(menus: TableMenu[]) {
     this.menus = menus;
   }
+
+  @Input() defaultWidth: number = null;
+
+  @Input() minWidth = 100;
+
   @Input()
   get columns() {
     return this.tableColumns;
   }
   set columns(fields: TableField<T>[]) {
-    fields.forEach(f => {
+    fields.forEach((f, i) => {
+      const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
+      const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
       f.header = f.header ? f.header : titleCase(f.name);
-      f.display = f.display ? f.display : 'visible';
-      f.filter = f.filter ? f.filter : 'client-side';
-      f.sort = f.sort ? f.sort : 'client-side';
-      f.sticky = f.sticky ? f.sticky : 'none';
+      f.display = getValue('display', 'visible' , settingField, f ); // f.display ? f.display : 'visible';
+      f.filter = getValue('filter', 'client-side' , settingField, f ); // f.filter ? f.filter : 'client-side';
+      f.sort = getValue('sort', 'client-side' , settingField, f ); // f.sort ? f.sort : 'client-side';
+      f.sticky = getValue('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
+      f.width =  getValue('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
     });
     this.tableColumns = fields;
-    this.tableSetting.columnSetting = clone(fields);
+    if (isNull(this.tableSetting.columnSetting) ) {
+      this.tableSetting.columnSetting = clone(fields);
+    }
     this.setDisplayedColumns();
   }
 
-  constructor(public tableService: TableService) {
-    this.showProgress = true;
-  }
-  // Variables //
-  progressColumn: string[] = [];
-  displayedColumns: string[] = [];
-  private selectionRow: TableSelectionMode;
-  private menus: TableMenu[] = [];
-  public tableColumns: TableField<T>[];
-  private previousIndex: number; // Drag & Drop
-  public tvsDataSource: TableVirtualScrollDataSource<T>;
-  private tableSelection = new SelectionModel<T>(true, []);
-  private tablePagination: TablePagination = { pageSizeOptions: [] };
-  public tablePagingEnable = false;
-  public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
-  public tableSetting: TableSetting = {};
-  /**************************************** Refrence Variables ***************************************/
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
-  // @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
+
 
   /************************************ Input & Output parameters ************************************/
-  @Input() printTable: PrintConfig = {};
+  @Input() printConfig: PrintConfig = {};
   @Input()
   get dir(): 'ltr' | 'rtl' {
     return this.direction;
@@ -201,14 +198,47 @@ export class TableCore<T extends TableRow> implements OnInit {
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
   @Input() showNoData: boolean;
 
+  constructor(public tableService: TableService) {
+    this.showProgress = true;
+    this.tableSetting = {
+      direction: 'ltr',
+      columnSetting: null,
+      visibaleActionMenu: null
+    };
+  }
+  // Variables //
+  progressColumn: string[] = [];
+  displayedColumns: string[] = [];
+  private selectionRow: TableSelectionMode;
+  private menus: TableMenu[] = [];
+  public tableColumns: TableField<T>[];
+  private previousIndex: number; // Drag & Drop
+  public tvsDataSource: TableVirtualScrollDataSource<T>;
+  private tableSelection = new SelectionModel<T>(true, []);
+  private tablePagination: TablePagination = { };
+  public tablePagingMode: 'none' | 'client' | 'server'  = 'none';
+  public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
+  public tableSetting: TableSetting = {};
+  /**************************************** Refrence Variables ***************************************/
+  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
+  // @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
   /**************************************** Methods **********************************************/
+
+  refreshTableSetting() {
+    this.tableSetting = clone(this.tableSetting);
+  }
 
   updatePagination() {
     window.requestAnimationFrame(() => {
-      if (this.tablePagingEnable === true) {
+      if (this.tablePagingMode === 'client' || this.tablePagingMode === 'server') {
         this.viewportClass = 'viewport-with-pagination';
         if ( !isNull(this.tvsDataSource.paginator)) {
-          this.tvsDataSource.paginator.length = this.dataSource.data.length;
+          let dataLen = this.tvsDataSource.paginator.length;
+          if (!isNull(this.tablePagination.length) && this.tablePagination.length > dataLen) {
+            dataLen = this.tablePagination.length;
+          }
+          this.tvsDataSource.paginator.length = dataLen;
         }
       } else {
         this.viewportClass = 'viewport';
@@ -218,9 +248,6 @@ export class TableCore<T extends TableRow> implements OnInit {
       }
       this.tvsDataSource.refreshFilterPredicate();
     });
-  }
-
-  ngOnInit(): void {
   }
 
   clear() {
