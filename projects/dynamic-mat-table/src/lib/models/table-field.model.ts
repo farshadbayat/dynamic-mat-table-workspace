@@ -1,4 +1,5 @@
 import { TableRow } from './table-row.model';
+
 export declare type AtRenderFunc<R extends TableRow> = (row: R) => string;
 export declare type AtClassFunc = (row: any, col: any) => string;
 export declare type AtSortFunc<R extends TableRow> = (data: R[], col: any) => string;
@@ -10,6 +11,7 @@ export interface TableField<R extends TableRow> extends AbstractField {
     customSortFunction?: AtSortFunc<R>;
     customFilterFunction?: AtSortFunc<R>;
 }
+
 export interface AbstractField {
   index?: number;
   name: string;
@@ -24,3 +26,4 @@ export interface AbstractField {
   filter?: 'client-side' | 'server-side' | 'none';
   sort?: 'client-side' | 'server-side' | 'none';
 }
+

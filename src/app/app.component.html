@@ -14,10 +14,12 @@
                       [pagination]="pagination"
                       [pagingMode]="'server'"
                       [class.conditional-class]="conditinalClass"
+                      [setting]="setting"
                       (settingChange)="table_onChangeSetting($event)"
+                      (rowActionMenuChange)="tableonRowActionChange($event)"
                       [dir]="direction"
                       [printConfig]="printConfig"
-                      > 
+                      [rowActionMenu]="rowActionMenu"> 
   </dynamic-mat-table>
 </mat-card>
 
@@ -39,3 +41,7 @@
   <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
   <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>
 </section>
+
+<div *ngFor="let item of eventLog">
+  {{ eventLog | json}}
+</div>

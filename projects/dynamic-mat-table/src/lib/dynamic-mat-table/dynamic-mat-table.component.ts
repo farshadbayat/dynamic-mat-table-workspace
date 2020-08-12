@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
-import { TableRow } from '../models/table-row.model';
+import { RowActionMenu, TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
-import { MenuActionChange } from './extensions/menu/table-menu.component';
 import { TablePagination } from '../models/table-pagination.model';
 import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
 import { isNull } from '../utilies/utils';
@@ -13,6 +12,7 @@ import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialo
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { ResizeColumn } from '../models/resize-column.mode';
 import { TableIntl } from '../international/table-Intl';
+import { MenuActionChange } from './extensions/table-menu/table-menu.component';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -125,6 +125,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     } else if (e.type === 'SaveSetting') {
       this.saveSetting(null, true);
     }
+  }
+
+  rowActionChange(e: RowActionMenu, row) {
+    console.log(e,row);
+    
+    window.requestAnimationFrame(() => {
+      this.rowActionMenuChange.emit({actionItem: e, rowItem: row});
+    });
   }
 
   doRendering(e) {

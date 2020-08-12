@@ -53,7 +53,9 @@
       <mat-header-cell *matHeaderCellDef class="table-menu">
         <table-menu [tableSetting]="tableSetting" (menuActionChange)="menuActionChange($event)"></table-menu>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row" class="table-menu" style="width: 0px !important;"></mat-cell>
+      <mat-cell *matCellDef="let row" class="table-menu">
+        <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [tableSetting]="tableSetting" [rowActionMenus]="rowActionMenu" (rowActionChange)="rowActionChange($event, row)"></row-menu>
+      </mat-cell>
     </ng-container>
 
     <!-- Row Table[Header, Data, Footer] -->
@@ -72,3 +74,4 @@
 <div *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)" class="no-records">
   <mat-icon>web</mat-icon> {{languagePack?.tableLabels.NoData}}
 </div>
+

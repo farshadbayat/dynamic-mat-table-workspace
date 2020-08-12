@@ -26,7 +26,7 @@
     </div>
 
     <div class="or-and">
-      <span *ngIf="filters?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? language.filterLabels.And : language.filterLabels.Or}}</span>
+      <span *ngIf="filters?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? languagePack.filterLabels.And : languagePack.filterLabels.Or}}</span>
       <span class="svg">
         <mat-icon (click)="filterAction_OnClick(index,0)">add</mat-icon>
       </span>

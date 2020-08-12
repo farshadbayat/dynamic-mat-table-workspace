@@ -13,7 +13,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 
-export function languageIntl() {
+export function languageIntl() {  
   return new PersionLanguage();
 }
 
@@ -37,4 +37,5 @@ export function languageIntl() {
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {  
+}

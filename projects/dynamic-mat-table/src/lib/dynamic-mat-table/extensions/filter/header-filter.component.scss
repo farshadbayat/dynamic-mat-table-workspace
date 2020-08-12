@@ -41,15 +41,17 @@
 
 .menu-title{
   font-weight: bolder;
-  height: 32px;
-  top:0;
+  height: 24px;
+  top: -8px;
   position: sticky;
   background-color: white;
+  z-index: 1;
+  padding-top: 5px;
 }
 
 .menu-action{
   position: sticky;
-  bottom: 0;
+  bottom: -8px;
   padding-top: 10px;
   padding-bottom: 0px;
   background-color: white;

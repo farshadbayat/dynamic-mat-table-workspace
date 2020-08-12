@@ -1,7 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { TableField, TableRow, PrintConfig,
-  TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
-// import { TableField, TableRow, TableVirtualScrollDataSource, TableSelectionMode, DynamicMatTableComponent, TablePagination } from 'dynamic-mat-table';
+  TableVirtualScrollDataSource, TableSelectionMode,
+  DynamicMatTableComponent, TablePagination, TableSetting, RowActionMenu } from 'dynamic-mat-table';
+
 const DATA = getData(1000);
 @Component({
   selector: 'app-root',
@@ -10,10 +11,13 @@ const DATA = getData(1000);
 })
 export class AppComponent {
   title = 'dynamic-mat-table';
+  eventLog = [];
   // required
   fields: TableField<any>[] = [];
   dataSource = new TableVirtualScrollDataSource([]);
   // optinaol
+  // setting: TableSetting;
+  rowActionMenu: RowActionMenu[] = [];
   stickyHeader = true;
   showNoData = true;
   showProgress = true;
@@ -34,6 +38,25 @@ export class AppComponent {
       {name: 'color'},
       {name: 'brand'}
     ];
+
+    this.rowActionMenu.push(
+      {
+        name: 'Edit',
+        text: 'ویرایش',
+        color: 'primary',
+        icon: 'edit',
+        disabled: false,
+        visible: true
+      },
+      {
+        name: 'Delete',
+        text: 'حذف',
+        color: 'warn',
+        icon: 'delete',
+        disabled: false,
+        visible: true
+      }
+    );
   }
 
   fetchData_onClick() {
@@ -42,6 +65,10 @@ export class AppComponent {
 
   table_onChangeSetting(setting) {
     console.log(setting);
+  }
+
+  tableonRowActionChange(e) {
+    this.eventLog.push(e);
   }
 
   columnSticky_onClick(columnSticky, type) {

@@ -67,9 +67,9 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   get showTrigger(): boolean {
     return this.menu.menuOpen || this.hasValue;
   }
-
-  language: LanguagePack;
+  
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
+    console.log(languagePack);
   }
 
   ngOnInit(): void {

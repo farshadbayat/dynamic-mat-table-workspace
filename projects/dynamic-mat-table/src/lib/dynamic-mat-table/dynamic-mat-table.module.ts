@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TableMenuModule } from './extensions/menu/table-menu.module';
 import { HeaderFilterModule } from './extensions/filter/header-filter.module';
 import { DynamicMatTableComponent } from './dynamic-mat-table.component';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
@@ -17,45 +16,22 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TableMenuModule } from './extensions/table-menu/table-menu.module';
+import { RowMenuModule } from './extensions/row-menu/row-menu.module';
+import { TableCoreDirective } from '../cores/table.core.directive';
 
 export function paginatorLabels(tableIntl: TableIntl) {
-  console.log('sss');
-  console.log(tableIntl);
-  // return new TableIntl().paginatorLabels;
   const paginatorIntl = new MatPaginatorIntl();
   paginatorIntl.itemsPerPageLabel = 'آیتم در هر صفحه:';
   paginatorIntl.nextPageLabel = 'صفحه بعد';
   paginatorIntl.previousPageLabel = 'صفحه قبل';
-  // paginatorIntl.getRangeLabel = dutchRangeLabel;
+  paginatorIntl.getRangeLabel = paginatorIntl.getRangeLabel;
 
-  return tableIntl.paginatorLabels || null;
+  return paginatorIntl || null;
 }
 
-export class PaginatorIntl  {
-  itemsPerPageLabel = 'Items per page:';
-  nextPageLabel = 'Next Page:';
-  previousPageLabel = 'Previous Page:';
-  firstPageLabel = 'First Page:';
-  lastPageLabel = 'Last Page:';
-  getRangeLabel = (page: number, pageSize: number, length: number) => {
-    if (length === 0 || pageSize === 0) { return `0 of ${length}`; }
-    length = Math.max(length, 0);
-    const startIndex = page * pageSize;
-    const endIndex = startIndex < length ?
-        Math.min(startIndex + pageSize, length) :
-        startIndex + pageSize;
-    return `${startIndex + 1} - ${endIndex} of ${length}`;
-  }
-
-  constructor() {
-    // super();
-    console.log('dd');
-  }
-}
-
-
-// const extentionsModule = [HeaderFilterModule];
+const extentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
   imports: [
     CommonModule,
@@ -71,16 +47,16 @@ export class PaginatorIntl  {
     DragDropModule,
     TableMenuModule,
     MatPaginatorModule,
-    HeaderFilterModule,
     MatDialogModule,
     MatButtonModule,
+    extentionsModule
   ],
   exports: [ DynamicMatTableComponent],
   providers: [
-    // { provide: TableIntl, useClass: TableIntl} ,
+    TableIntl ,
     { provide: MatPaginatorIntl, useFactory: paginatorLabels, deps: [TableIntl] }
   ],
-  declarations: [ DynamicMatTableComponent, PrintTableDialogComponent ],
+  declarations: [ DynamicMatTableComponent, PrintTableDialogComponent, TableCoreDirective ],
   entryComponents: [ PrintTableDialogComponent ]
 })
 export class DynamicMatTableModule { }

@@ -80,10 +80,11 @@ mat-header-cell {
   max-width: 42px;
   min-width: initial;
   padding: 0 !important;
+  background-color: inherit;
 }
 
 .table-menu:hover {
-  background-color: white !important;
+  // background-color: white !important;
 }
 
 // Drag Column

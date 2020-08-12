@@ -1,7 +1,6 @@
-import { TableRow, TableSelectionMode } from '../models/table-row.model';
+import { RowActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
-import { TableMenu } from '../models/table-menu.model';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -139,12 +138,15 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input()
-  get menu() {
-    return this.menus;
-  }
-  set menu(menus: TableMenu[]) {
-    this.menus = menus;
-  }
+  rowActionMenu: RowActionMenu[];
+
+  // @Input()
+  // get menu() {
+  //   return this.menus;
+  // }
+  // set menu(menus: TableMenu[]) {
+  //   this.menus = menus;
+  // }
 
   @Input() defaultWidth: number = null;
 
@@ -197,10 +199,11 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() headerEnable = true;
   @Input() footerEnable = false;
   @Input() sticky: boolean;
+  @Input() showNoData: boolean;
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
-  @Input() showNoData: boolean;
+  @Output() rowActionMenuChange: EventEmitter<{actionItem: RowActionMenu, rowItem: T}> = new EventEmitter();
 
   constructor(public tableService: TableService) {
     this.showProgress = true;
@@ -214,7 +217,7 @@ export class TableCoreDirective<T extends TableRow> {
   progressColumn: string[] = [];
   displayedColumns: string[] = [];
   private selectionRow: TableSelectionMode;
-  private menus: TableMenu[] = [];
+  // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
   private previousIndex: number; // Drag & Drop
   public tvsDataSource: TableVirtualScrollDataSource<T>;
