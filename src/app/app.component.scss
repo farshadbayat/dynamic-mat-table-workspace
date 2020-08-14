@@ -19,3 +19,23 @@ dynamic-mat-table {
 .section button {
   margin: 5px;
 }
+
+
+
+::ng-deep .green span {
+  background-color: lightgreen;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px; 
+}
+
+::ng-deep .pink span {
+  background-color: lightpink;
+  padding-left: 7px;
+  padding-right: 7px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  border-radius: 3px; 
+}

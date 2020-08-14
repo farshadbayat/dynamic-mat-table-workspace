@@ -1,15 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Output,
-  Input,
-  EventEmitter,
-} from "@angular/core";
-import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
-
-import { deepClone, isNull } from "../../../utilies/utils";
-import { TableService } from "../../dynamic-mat-table.service";
-import { TableSetting } from "../../../models/table-setting.model";
+import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { TableService } from '../../dynamic-mat-table.service';
+import { TableSetting } from '../../../models/table-setting.model';
+import { deepClone, isNull } from '../../../utilies/utils';
+import { TableIntl } from '../../../international/table-Intl';
 
 @Component({
   selector: "table-menu",
@@ -36,7 +30,8 @@ export class TableMenuComponent {
   originalTableSetting: TableSetting;
   currentTableSetting: TableSetting;
 
-  constructor(private tableService: TableService) {}
+  constructor(public languagePack: TableIntl, private tableService: TableService) {
+  }
 
   /***** Column Setting ******/
   columnMenuDropped(event: CdkDragDrop<any>): void {

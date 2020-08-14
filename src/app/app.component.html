@@ -90,6 +90,6 @@
   <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>
 </section>
 
-<div *ngFor="let item of eventLog">
-  {{ eventLog | json }}
+<div *ngFor="let item of eventLog" style="margin: 10px; background-color: aqua;">
+  {{ item | json}}
 </div>

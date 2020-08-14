@@ -1,0 +1,77 @@
+<cdk-virtual-scroll-viewport [ngClass]="viewportClass" [tvsItemSize]="rowHeight" [headerHeight]="headerHeight" [class.printpreview]="printing"
+  [footerHeight]="headerHeight" [headerEnabled]="headerEnable" [footerEnabled]="footerEnable" (requestRendering)="doRendering($event)">
+  <mat-table class="table" matSort cdkDropListGroup [dataSource]="dataSource" [trackBy]="trackBy" [@tableAnimation] cdkDropListGroup>
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="table-select">
+      <mat-header-cell *matHeaderCellDef class="table-select">
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="rowSelection.hasValue() && isAllSelected()"
+                      [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()" *ngIf="selection === 'multi'">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="table-select">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="onRowSelectionChange($event, row)"
+                      [checked]="rowSelection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Table Columns -->
+    <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.name }}"
+      [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
+      <mat-header-cell *matHeaderCellDef cdkDrag cdkDropList cdkDropListLockAxis="x" cdkDropListOrientation="horizontal" [style.maxWidth.px]="column.width" [style.minWidth.px]="column.width"
+        (cdkDropListDropped)="dropListDropped($event, i)" (cdkDragStarted)="dragStarted($event, i)"
+        [class.active-resize]="resizeColumn.currentResizeIndex===i"
+        [cdkDragData]="{name: column.name, columIndex: i}">
+        <div class="left-resizer-handler" (mousedown)="onResizeColumn($event, i, 'left')"></div>
+        <header-filter [field]="column" (filterChanged)="filter_OnChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
+          <mat-icon class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
+          <div mat-sort-header class="header-caption">{{ column.header }}</div>
+        </header-filter>
+        <div class="right-resizer-handler" (mousedown)="onResizeColumn($event, i, 'right')"></div>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" [style.maxWidth.px]="column.width" [style.minWidth.px]="column.width" [class]="row[column.cellClass]" [attr.data-label]="column.header">
+        <mat-icon></mat-icon>
+        <span  #refEl (click)="ellipsis(refEl)">
+          {{ row[column.name] }}
+        </span>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="progress">
+      <mat-header-cell *matHeaderCellDef [attr.colspan]="displayedColumns.length">
+        <mat-progress-bar mode="indeterminate" [class.show]="pending">
+        </mat-progress-bar>
+      </mat-header-cell>
+    </ng-container>
+
+    <!-- Table Menu[ Sort, Visible, Export] -->
+    <ng-container matColumnDef="table-menu" [stickyEnd]="true">
+      <mat-header-cell *matHeaderCellDef class="table-menu">
+        <table-menu [tableSetting]="tableSetting" (menuActionChange)="menuActionChange($event)"></table-menu>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row" class="table-menu">
+        <row-menu *ngIf="actionMenu && actionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="actionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Row Table[Header, Data, Footer] -->
+    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky"></mat-header-row>
+    <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="rowOnClick(row)"
+    [style.height.px]="rowHeight" [class.row-selection]="rowSelection ? rowSelection.isSelected(row) : false"></mat-row>
+
+  </mat-table>
+</cdk-virtual-scroll-viewport>
+
+<mat-paginator class="table-paginator" *ngIf="pagingMode" [pageSizeOptions]="pagination?.pageSizeOptions"
+[length]="pagination?.length" [pageSize]="pagination?.pageSize" [pageIndex]="pagination?.pageIndex" (page)="pagination_onChange($event)">
+</mat-paginator>
+
+<div *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)" class="no-records">
+  <mat-icon>web</mat-icon> {{languagePack?.tableLabels.NoData}}
+</div>
+

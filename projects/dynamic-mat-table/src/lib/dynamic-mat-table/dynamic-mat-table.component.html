@@ -79,11 +79,7 @@
           (mousedown)="onResizeColumn($event, i, 'right')"
         ></div>
       </mat-header-cell>
-      <mat-cell
-        *matCellDef="let row"
-        [style.maxWidth.px]="column.width"
-        [style.minWidth.px]="column.width"
-      >
+      <mat-cell *matCellDef="let row" [style.maxWidth.px]="column.width" [style.minWidth.px]="column.width" [class]="row[column.cellClass]" [attr.data-label]="column.header">
         <mat-icon></mat-icon>
         <span #refEl (click)="ellipsis(refEl)">
           {{ row[column.name] }}
@@ -110,32 +106,16 @@
         ></table-menu>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" class="table-menu">
-        <row-menu
-          *ngIf="rowActionMenu && rowActionMenu.length > 0"
-          [tableSetting]="tableSetting"
-          [rowActionMenus]="rowActionMenu"
-          (rowActionChange)="rowActionChange($event, row)"
-        ></row-menu>
+        <row-menu *ngIf="actionMenu && actionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="actionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
     </ng-container>
 
     <!-- Row Table[Header, Data, Footer] -->
-    <mat-header-row
-      class="header"
-      *matHeaderRowDef="displayedColumns; sticky: sticky"
-    ></mat-header-row>
-    <mat-header-row
-      class="progress"
-      *matHeaderRowDef="progressColumn; sticky: sticky"
-    ></mat-header-row>
-    <mat-row
-      (click)="onRowClick(row)"
-      [style.height.px]="rowHeight"
-      *matRowDef="let row; columns: displayedColumns"
-      [class.row-selection]="
-        rowSelection ? rowSelection.isSelected(row) : false
-      "
-    ></mat-row>
+    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky"></mat-header-row>
+    <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns" (click)="rowOnClick(row)"
+    [style.height.px]="rowHeight" [class.row-selection]="rowSelection ? rowSelection.isSelected(row) : false"></mat-row>
+
   </mat-table>
 </cdk-virtual-scroll-viewport>
 

@@ -54,7 +54,7 @@ export class AppComponent {
       { name: "brand" },
     ];
 
-    this.rowActionMenu.push(
+    this.actionMenu.push(
       {
         name: "Edit",
         text: "ویرایش",
@@ -69,20 +69,37 @@ export class AppComponent {
         color: "warn",
         icon: "delete",
         disabled: false,
-        visible: true,
+        visible: true
+      },
+      {
+        name: 'View',
+        text: 'مشاهده',
+        color: 'accent',
+        icon: 'all_inbox',
+        disabled: false,
+        visible: true
       }
     );
   }
 
   fetchData_onClick() {
+
     this.dataSource = new TableVirtualScrollDataSource(DATA);
+    this.dataSource.allData[0].actionMenu = {
+      View: { text: 'View', color: 'primary', icon: 'build_circle'},
+      Delete: {visible: false}
+    };
   }
 
   table_onChangeSetting(setting) {
     console.log(setting);
   }
 
-  tableonRowActionChange(e) {
+  table_onRowActionChange(e) {
+    this.eventLog.push(e);
+  }
+
+  table_onRowClick(e) {
     this.eventLog.push(e);
   }
 

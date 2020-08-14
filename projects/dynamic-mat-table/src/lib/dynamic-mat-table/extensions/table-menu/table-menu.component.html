@@ -16,7 +16,7 @@
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>save</mat-icon>
-    <span>Save Data</span>
+    <span>{{ languagePack.menuLabels.saveData }}</span>
   </button>
   <button
     mat-menu-item
@@ -25,7 +25,7 @@
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>view_column</mat-icon>
-    <span>Columns Setting</span>
+    <span>{{ languagePack.menuLabels.columnSetting }}</span>
   </button>
   <button
     mat-menu-item
@@ -33,7 +33,7 @@
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon>grading</mat-icon>
-    <span>Save Table Setting</span>
+    <span>{{ languagePack.menuLabels.saveTableSetting }}</span>
   </button>
   <button
     mat-menu-item
@@ -41,33 +41,21 @@
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
   >
     <mat-icon style="margin-top: -3px">clear</mat-icon>
-    <span>Clear filters</span>
+    <span>{{ languagePack.menuLabels.clearFilter }}</span>
   </button>
 </mat-menu>
 
 <!-- Convert Sub Menu -->
 
 <mat-menu #convertMenu="matMenu">
-  <button
-    mat-menu-item
-    (click)="download_OnClick('JSON')"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <span>Json File</span>
+  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <span>{{ languagePack.menuLabels.jsonFile }}</span>
   </button>
-  <button
-    mat-menu-item
-    (click)="download_OnClick('CSV')"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <span>CSV File</span>
+  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <span>{{ languagePack.menuLabels.csvFile }}</span>
   </button>
-  <button
-    mat-menu-item
-    (click)="print_OnClick(menuTrigger)"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
-  >
-    <span>Print Table</span>
+  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <span>{{ languagePack.menuLabels.printTable }}</span>
   </button>
 </mat-menu>
 
@@ -143,7 +131,9 @@
   </ng-container>
 
   <ng-template #noColumns>
-    <div mat-menu-item>No Columns</div>
+    <div mat-menu-item>
+      {{ languagePack.menuLabels.thereIsNoColumn }}
+    </div>
   </ng-template>
 </mat-menu>
 
@@ -163,18 +153,11 @@
       "
     >
       <div class="column-setting-header column-setting-header-first">
-        <mat-icon color="primary">filter_alt</mat-icon>Filtering Mode:
+        <mat-icon color="primary">filter_alt</mat-icon>{{ languagePack.menuLabels.filterMode }}
       </div>
-      <mat-radio-group
-        class="radio"
-        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter"
-      >
-        <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
-          >Local</mat-radio-button
-        >
-        <mat-radio-button value="server-side" (click)="$event.stopPropagation()"
-          >Server</mat-radio-button
-        >
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].filter">
+        <mat-radio-button value='client-side' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.filterLocalMode }}</mat-radio-button>
+        <mat-radio-button value='server-side' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.filterServerMode }}</mat-radio-button>
       </mat-radio-group>
     </ng-container>
 
@@ -184,18 +167,11 @@
       "
     >
       <div class="column-setting-header">
-        <mat-icon color="primary">sort</mat-icon>Sorting Mode:
+        <mat-icon color="primary">sort</mat-icon>{{ languagePack.menuLabels.sortMode }}
       </div>
-      <mat-radio-group
-        class="radio"
-        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort"
-      >
-        <mat-radio-button value="client-side" (click)="$event.stopPropagation()"
-          >Local</mat-radio-button
-        >
-        <mat-radio-button value="server-side" (click)="$event.stopPropagation()"
-          >Server</mat-radio-button
-        >
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sort">
+        <mat-radio-button value='client-side' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.sortLocalMode }}</mat-radio-button>
+        <mat-radio-button value='server-side' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.sortServerMode }}</mat-radio-button>
       </mat-radio-group>
     </ng-container>
 
@@ -205,18 +181,11 @@
       "
     >
       <div class="column-setting-header">
-        <mat-icon color="primary">print</mat-icon>Print Mode:
+        <mat-icon color="primary">print</mat-icon>{{ languagePack.menuLabels.printMode }}
       </div>
-      <mat-radio-group
-        class="radio"
-        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].print"
-      >
-        <mat-radio-button value="true" (click)="$event.stopPropagation()"
-          >Yes</mat-radio-button
-        >
-        <mat-radio-button value="false" (click)="$event.stopPropagation()"
-          >No</mat-radio-button
-        >
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].print">
+        <mat-radio-button value=true (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printYesMode }}</mat-radio-button>
+        <mat-radio-button value=false (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printNoMode }}</mat-radio-button>
       </mat-radio-group>
     </ng-container>
 
@@ -226,21 +195,12 @@
       "
     >
       <div class="column-setting-header">
-        <mat-icon color="primary">push_pin</mat-icon>Pin Mode:
+        <mat-icon color="primary">push_pin</mat-icon>{{ languagePack.menuLabels.pinMode }}
       </div>
-      <mat-radio-group
-        class="radio"
-        [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky"
-      >
-        <mat-radio-button value="none" (click)="$event.stopPropagation()"
-          >None</mat-radio-button
-        >
-        <mat-radio-button value="start" (click)="$event.stopPropagation()"
-          >Start</mat-radio-button
-        >
-        <mat-radio-button value="end" (click)="$event.stopPropagation()"
-          >End</mat-radio-button
-        >
+      <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].sticky">
+        <mat-radio-button value='none' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.pinNoneMode }}</mat-radio-button>
+        <mat-radio-button value='start' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.pinStartMode }}</mat-radio-button>
+        <mat-radio-button value='end' (click)="$event.stopPropagation()">{{ languagePack.menuLabels.pinEndMode }}</mat-radio-button>
       </mat-radio-group>
     </ng-container>
   </div>

@@ -1,21 +1,19 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { MatCardModule } from '@angular/material/card';
+import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { PersionLanguage } from './persion.language';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { AppComponent } from './app.component';
-import { PersianLanguage } from './persian.language';
-/* import { DynamicMatTableModule } from 'dynamic-mat-table'; */
+// import { DynamicMatTableModule, TableIntl } from './dynamic-mat-table/public-api';
 import { DynamicMatTableModule, TableIntl } from 'dynamic-mat-table';
+import { BrowserModule } from '@angular/platform-browser';
+import { MatCardModule } from '@angular/material';
 
 export function languageIntl() {
-  return new TableIntl(); /* For EN */
-  // return new PersianLanguage(); /* For FA */
+  return new PersionLanguage();
 }
 
 @NgModule({

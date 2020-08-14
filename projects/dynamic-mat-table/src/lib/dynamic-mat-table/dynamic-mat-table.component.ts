@@ -1,30 +1,22 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2 } from "@angular/core";
-import {
-  trigger,
-  transition,
-  style,
-  animate,
-  query,
-  stagger,
-} from "@angular/animations";
-import { MatDialog } from "@angular/material/dialog";
-import { TableField } from "../models/table-field.model";
-import { TableService } from "./dynamic-mat-table.service";
-import { TableCoreDirective } from "../cores/table.core.directive";
-import { RowActionMenu, TableRow } from "../models/table-row.model";
+import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2} from '@angular/core';
+import { TableCoreDirective } from '../cores/table.core.directive';
+import { TableService } from './dynamic-mat-table.service';
+import { ActionMenu, TableRow } from '../models/table-row.model';
+import { TableField } from '../models/table-field.model';
+import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
+import { TablePagination } from '../models/table-pagination.model';
+import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
+import { isNull } from '../utilies/utils';
+import { MatDialog } from '@angular/material/dialog';
+import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
+import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { ResizeColumn } from '../models/resize-column.mode';
+import { TableIntl } from '../international/table-Intl';
+import { MenuActionChange } from './extensions/table-menu/table-menu.component';
 
-import { isNull } from "../utilies/utils";
-import { TableIntl } from "../international/table-Intl";
-import { ResizeColumn } from "../models/resize-column.mode";
-import { TablePagination } from "../models/table-pagination.model";
-import { AbstractFilter } from "./extensions/filter/compare/abstract-filter";
-import { MenuActionChange } from "./extensions/table-menu/table-menu.component";
-import { HeaderFilterComponent } from "./extensions/filter/header-filter.component";
-import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
-
-export const tableAnimation = trigger("tableAnimation", [
-  transition("* => *", [
-    query(":enter", style({ transform: "translateX(-50%)", opacity: 0 }), {
+export const tableAnimation = trigger('tableAnimation', [
+  transition('* => *', [
+    query(':enter', style({ transform: 'translateX(-50%)', opacity: 0 }), {
       limit: 11,
       optional: true,
     }),
@@ -158,6 +150,13 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (this.viewport.getViewportSize() === 0) {
       // console.log('zero');
     }
+  }
+
+  rowOnClick(row) {
+    if (this.selection !== 'none' ) {
+      this.rowSelection.toggle(row);
+    }
+    this.rowClick.emit(row);
   }
 
   pagination_onChange(e: TablePagination) {
