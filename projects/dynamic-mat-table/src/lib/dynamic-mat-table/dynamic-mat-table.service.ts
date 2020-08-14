@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { LanguagePack } from '../models/language-pack.model';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { DefualtLanguage } from '../localize/defualt.language';
 import { TableField } from '../models/table-field.model';
 import { SelectionModel } from '@angular/cdk/collections';
 
@@ -9,14 +6,9 @@ import { SelectionModel } from '@angular/cdk/collections';
   providedIn: 'root'
 })
 export class TableService {
-  get language(): Observable<LanguagePack> {
-    return this.languagePack$.asObservable();
-  }
-  public languagePack$: BehaviorSubject<LanguagePack> = new BehaviorSubject<LanguagePack>(null);
   public tableName: string;
 
   constructor() {
-    this.languagePack$.next(new DefualtLanguage());
   }
 
   /************************************* Local Export *****************************************/
@@ -80,11 +72,6 @@ export class TableService {
     filename = filename === '' ? this.tableName + TableService.getFormattedTime() + '.json' : filename;
     const blob = new Blob([ JSON.stringify(rows) ], { type: 'text/csv;charset=utf-8;' });
     this.downloadBlob(blob, filename);
-  }
-
-  /********************************************* Language Text *********************************************/
-  public loadLanguagePack(language: LanguagePack) {
-    this.languagePack$.next(language);
   }
 
   /************************************* Save Setting into storage *****************************************/

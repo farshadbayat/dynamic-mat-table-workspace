@@ -1,6 +1,5 @@
-import { TableService } from '../../../dynamic-mat-table.service';
-import { LanguagePack } from './../../../../models/language-pack.model';
 import { AbstractFilter, FilterOperation } from './abstract-filter';
+import { TableIntl } from '../../../../international/table-Intl';
 
 const equals = 'a === b';
 const notEquals = 'a !== b';
@@ -11,25 +10,23 @@ const notEmpty = '!!a';
 const operations = [equals, notEquals, greaterThan, lessThan, empty, notEmpty];
 
 export class NumberFilter extends AbstractFilter<number> {
+  private static sql = ['=', '<>', '>', '<', 'IS NULL', 'IS NOT NULL'];
   private static operationList: FilterOperation[] = [];
-  private languageText: LanguagePack;
+  // private languageText: LanguagePack;
 
-  constructor(public service: TableService) {
+  constructor(public languagePack: TableIntl) {
     super();
     if ( NumberFilter.operationList.length === 0) {
       operations.forEach(fn => {
         NumberFilter.operationList.push({ predicate: fn, text: null});
       });
     }
-    service.language.subscribe(languagePack => {
-      this.languageText = languagePack;
-      NumberFilter.operationList[0].text = languagePack.Filter.NumberEquals;      // equals //
-      NumberFilter.operationList[1].text = languagePack.Filter.NumberNotEquals;   // notEquals //
-      NumberFilter.operationList[2].text = languagePack.Filter.NumberGreaterThan; // greaterThan //
-      NumberFilter.operationList[3].text = languagePack.Filter.NumberLessThan;    // lessThan //
-      NumberFilter.operationList[4].text = languagePack.Filter.NumberEmpty;       // empty //
-      NumberFilter.operationList[5].text = languagePack.Filter.NumberNotEmpty;    // notEmpty //
-    });
+    NumberFilter.operationList[0].text = languagePack.filterLabels.NumberEquals;      // equals //
+    NumberFilter.operationList[1].text = languagePack.filterLabels.NumberNotEquals;   // notEquals //
+    NumberFilter.operationList[2].text = languagePack.filterLabels.NumberGreaterThan; // greaterThan //
+    NumberFilter.operationList[3].text = languagePack.filterLabels.NumberLessThan;    // lessThan //
+    NumberFilter.operationList[4].text = languagePack.filterLabels.NumberEmpty;       // empty //
+    NumberFilter.operationList[5].text = languagePack.filterLabels.NumberNotEmpty;    // notEmpty //
   }
 
   // tslint:disable-next-line:variable-name
@@ -41,7 +38,7 @@ export class NumberFilter extends AbstractFilter<number> {
     this._selectedIndex = value;
     // init filter parameters
     if (value === 0 || value === 1 || value === 2 || value === 3 ) { // equals notEquals greaterThan lessThan
-      this.parameters = [{ value: null, text: this.languageText.Filter.Number }];
+      this.parameters = [{ value: null, text: this.languagePack.filterLabels.Number }];
     } else { // empty notEmpty
       this.parameters = null;
     }
@@ -75,5 +72,12 @@ export class NumberFilter extends AbstractFilter<number> {
       return statement;
     }
   }
-}
 
+  public toPrint(): string {
+    return NumberFilter.operationList[this._selectedIndex].text + ' ' + this.parameters[0].value + ' ' + (this.type || '') + ' ';
+  }
+
+  public toSql(): string {
+    return NumberFilter.sql[this._selectedIndex] + ' ' + (this.parameters[0].value || '') + ' ' + (this.type || '') + ' ';
+  }
+}

@@ -26,7 +26,7 @@
     </div>
 
     <div class="or-and">
-      <span *ngIf="filters?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? language.Filter.And : language.Filter.Or}}</span>
+      <span *ngIf="filters?.length !== index+1" class="selected-filter-type">{{ filter?.type === 'and' ? languagePack.filterLabels.And : languagePack.filterLabels.Or}}</span>
       <span class="svg">
         <mat-icon (click)="filterAction_OnClick(index,0)">add</mat-icon>
       </span>
@@ -41,8 +41,8 @@
   </div>
 
   <div filter-event class="menu-action">
-    <button mat-raised-button (click)="clearColumn_OnClick()">{{(service.language | async).Filter.Clear}}</button>
-    <button mat-raised-button color="primary" (click)="applyFilter_OnClick()">{{(service.language | async).Filter.Search}}</button>
+    <button mat-raised-button (click)="clearColumn_OnClick()">{{ languagePack.filterLabels.Clear }}</button>
+    <button mat-raised-button color="primary" (click)="applyFilter_OnClick()">{{ languagePack.filterLabels.Search}}</button>
   </div>
 </ng-template>
 </mat-menu>

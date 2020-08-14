@@ -5,6 +5,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
 import { OnInit } from '@angular/core';
+import { titleCase } from '../utilies/text.utils';
 
 export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> implements OnInit {
 
@@ -13,13 +14,30 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
   private streamsReady: boolean;
   private filterMap: HashMap<AbstractFilter[]> = {};
 
+  get allData(): T[] {
+    return this.data;
+  }
+
+  toTranslate(): any[] {
+    const tranList = [];
+    const keys: string[] = Object.keys( this.filterMap );
+    for ( const k of keys) {
+      let fieldTotalTran = '';
+      for ( const f of this.filterMap[k]) {
+        fieldTotalTran += f.toPrint();
+      }
+      if ( fieldTotalTran !== '') {
+        tranList.push( { key: titleCase(k) , value: fieldTotalTran} );
+      }
+    }
+    return tranList;
+  }
 
   getFilter(fieldName: string): AbstractFilter[] {
     return this.filterMap[fieldName];
   }
 
   setFilter(fieldName: string, filters: AbstractFilter[]): Observable<null> {
-    console.log(fieldName);
     this.filterMap[fieldName] = filters;
     return new Observable(subscriber => {
       setTimeout(() => {
@@ -45,8 +63,6 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
 
   public refreshFilterPredicate() {
     let conditionsString = '';
-    console.log(this.filterMap);
-
     Object.keys(this.filterMap).forEach(key => {
       let fieldCondition = '';
       this.filterMap[key].forEach((fieldFilter, row, array) => {
@@ -66,8 +82,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     } else {
       this.filterPredicate = (data: T, filter: string) => true;
     }
-    this.filter = conditionsString; // CHANGE_STRING;
-    console.log('refreshFilterPredicate');
+    this.filter = conditionsString;
   }
 
   ngOnInit(): void {

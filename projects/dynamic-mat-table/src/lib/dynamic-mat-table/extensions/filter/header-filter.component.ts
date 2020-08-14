@@ -9,7 +9,6 @@ import {
   QueryList,
   ViewChildren,
 } from '@angular/core';
-import { MatInput, MatMenuTrigger } from '@angular/material';
 import { TableField } from './../../../models/table-field.model';
 import { LanguagePack } from './../../../models/language-pack.model';
 import { TableService } from '../../dynamic-mat-table.service';
@@ -18,6 +17,9 @@ import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
 import { isNull } from '../../../utilies/utils';
+import { TableIntl } from '../../../international/table-Intl';
+import { MatInput } from '@angular/material/input';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -54,7 +56,6 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
   set filters(values: AbstractFilter[]) {
     this.filterList = values;
-    console.log(this.filterList);
   }
 
   @HostBinding('class.has-value')
@@ -66,12 +67,9 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   get showTrigger(): boolean {
     return this.menu.menuOpen || this.hasValue;
   }
-
-  language: LanguagePack;
-  constructor(public service: TableService, private cdr: ChangeDetectorRef) {
-    service.language.subscribe(languagePack => {
-      this.language = languagePack;
-    });
+  
+  constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
+    console.log(languagePack);
   }
 
   ngOnInit(): void {
@@ -84,11 +82,11 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   addNewFilter(type: string = 'text') {
     switch (type || 'text') {
       case 'text': {
-        this.filterList.push(new TextFilter(this.service));
+        this.filterList.push(new TextFilter(this.languagePack));
         break;
       }
       case 'number': {
-        this.filterList.push(new NumberFilter(this.service));
+        this.filterList.push(new NumberFilter(this.languagePack));
         break;
       }
       case 'date': {
@@ -99,7 +97,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
         // this.compare = new BooleanCompare(service);
         break;
       }
-      default: this.filterList.push(new TextFilter(this.service));
+      default: this.filterList.push(new TextFilter(this.languagePack));
     }
     this.filters[this.filters.length - 1].selectedIndex = 0;
     return this.filters[this.filters.length - 1];

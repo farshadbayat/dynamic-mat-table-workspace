@@ -1,0 +1,12 @@
+<button class="clear" mat-icon-button #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="menu" [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'">
+  <mat-icon>more_horiz</mat-icon>
+</button>
+ 
+<mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="tableSetting.direction === 'rtl' ? 'ltr' : 'rtl'">
+  <button mat-button [class.ltr-menu]="tableSetting.direction === 'rtl'" [color]="menu.color" class="button-menu"
+  *ngFor="let menu of rowActionMenus" [disabled]="menu.disabled" (click)="menuButton_OnClick(menu)">
+    <mat-icon>{{menu.icon}}</mat-icon>
+    <span [style.text-align]="{'text-align': tableSetting.direction === 'rtl' ? 'right' : 'left' }">{{menu.text}}</span>
+  </button> 
+</mat-menu>
+ 

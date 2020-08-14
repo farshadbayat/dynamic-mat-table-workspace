@@ -9,11 +9,12 @@
   transition-property: opacity, transform;
 }
 
+mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
+  padding-right: 0 !important;
+}
+
 @mixin table-base {
   .mat-table {
-    mat-header-cell:hover {
-      background-color: #f5f5f566;
-    }
 
     .row-selection {
       background-color: #f7f5f5;

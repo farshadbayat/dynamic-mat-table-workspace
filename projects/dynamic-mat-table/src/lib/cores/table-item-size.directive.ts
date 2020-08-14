@@ -1,4 +1,5 @@
-import { AfterContentInit, ContentChild, Directive, forwardRef, Input, NgZone, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { AfterContentInit, ContentChild, Directive, forwardRef,
+         Input, NgZone, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import { distinctUntilChanged, filter, map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { TableVirtualScrollDataSource } from './table-data-source';

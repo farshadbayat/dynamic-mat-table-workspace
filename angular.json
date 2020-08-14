@@ -131,13 +131,18 @@
       "projectType": "library",
       "root": "projects/dynamic-mat-table",
       "sourceRoot": "projects/dynamic-mat-table/src",
-      "prefix": "lib",
+      "prefix": "",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/dynamic-mat-table/tsconfig.lib.json",
             "project": "projects/dynamic-mat-table/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/dynamic-mat-table/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {

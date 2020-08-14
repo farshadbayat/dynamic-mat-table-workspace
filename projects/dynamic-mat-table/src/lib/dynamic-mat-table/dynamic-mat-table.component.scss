@@ -9,7 +9,8 @@
 @import './dynamic-mat-table.style.scss';
 
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   table-layout: fixed;
 }
 
@@ -79,10 +80,11 @@ mat-header-cell {
   max-width: 42px;
   min-width: initial;
   padding: 0 !important;
+  background-color: inherit;
 }
 
 .table-menu:hover {
-  background-color: white !important;
+  // background-color: white !important;
 }
 
 // Drag Column
@@ -122,4 +124,48 @@ mat-header-cell {
 
 .cdk-drop-list-dragging {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+mat-header-cell:hover {
+  .left-resizer-handler {
+    height: calc( 100% - 10px);
+    transition: height 0.2s ease-out;
+  }
+
+  .right-resizer-handler {
+    height: calc( 100% - 10px);
+    transition: height 0.2s ease-out;
+  }
+}
+
+
+.left-resizer-handler {
+  display: inline-block;
+  min-width: 3px;
+  height: 0;
+  border: solid #d2d2d2;
+  position: sticky;
+  cursor: col-resize;
+  border-width: 0 0 0 1px;
+  left: 0;
+}
+
+.right-resizer-handler {
+  display: inline-block;
+  min-width: 3px;
+  height: 0;
+  border: solid #d2d2d2;
+  position: sticky;
+  cursor: col-resize;
+  border-width: 0 1px 0 0;
+  right: 0;
+}
+
+// .active-resizing {
+
+// }
+
+.active-resize {
+  background-color: #f5f5f566;
 }

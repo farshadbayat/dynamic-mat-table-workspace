@@ -1,5 +1,8 @@
 <mat-card style="margin: 8px; padding: 8px;">
   <h2>Demo Dynamic Mat Table</h2>
+<!-- minimal use -->
+<!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
+
   <dynamic-mat-table tableName="demo_table"
                       [columns]="fields"
                       [dataSource]="dataSource"
@@ -9,11 +12,14 @@
                       [pending]="pending"
                       [selection]="tableSelection"
                       [pagination]="pagination"
-                      [pagingEnable]="enablingPagination"
+                      [pagingMode]="'server'"
                       [class.conditional-class]="conditinalClass"
+                      [setting]="setting"
                       (settingChange)="table_onChangeSetting($event)"
+                      (rowActionMenuChange)="tableonRowActionChange($event)"
                       [dir]="direction"
-                      >
+                      [printConfig]="printConfig"
+                      [rowActionMenu]="rowActionMenu"> 
   </dynamic-mat-table>
 </mat-card>
 
@@ -35,3 +41,7 @@
   <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
   <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>
 </section>
+
+<div *ngFor="let item of eventLog">
+  {{ eventLog | json}}
+</div>

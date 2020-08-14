@@ -1,21 +1,37 @@
-import { MatTableModule,
-  MatCheckboxModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatSortModule,
-  MatIconModule,
-  MatProgressBarModule,
-  MatPaginatorModule} from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { TableMenuModule } from './extensions/menu/table-menu.module';
 import { HeaderFilterModule } from './extensions/filter/header-filter.module';
 import { DynamicMatTableComponent } from './dynamic-mat-table.component';
+import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { TableIntl } from '../international/table-Intl';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { TableMenuModule } from './extensions/table-menu/table-menu.module';
+import { RowMenuModule } from './extensions/row-menu/row-menu.module';
+import { TableCoreDirective } from '../cores/table.core.directive';
 
-// const extentionsModule = [HeaderFilterModule];
+export function paginatorLabels(tableIntl: TableIntl) {
+  const paginatorIntl = new MatPaginatorIntl();
+  paginatorIntl.itemsPerPageLabel = 'آیتم در هر صفحه:';
+  paginatorIntl.nextPageLabel = 'صفحه بعد';
+  paginatorIntl.previousPageLabel = 'صفحه قبل';
+  paginatorIntl.getRangeLabel = paginatorIntl.getRangeLabel;
+
+  return paginatorIntl || null;
+}
+
+const extentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
   imports: [
     CommonModule,
@@ -31,9 +47,18 @@ import { DynamicMatTableComponent } from './dynamic-mat-table.component';
     DragDropModule,
     TableMenuModule,
     MatPaginatorModule,
-    HeaderFilterModule
+    MatDialogModule,
+    MatButtonModule,
+    extentionsModule
   ],
   exports: [ DynamicMatTableComponent],
-  declarations: [DynamicMatTableComponent]
+  providers: [
+    TableIntl ,
+    { provide: MatPaginatorIntl, useFactory: paginatorLabels, deps: [TableIntl] }
+  ],
+  declarations: [ DynamicMatTableComponent, PrintTableDialogComponent, TableCoreDirective ],
+  entryComponents: [ PrintTableDialogComponent ]
 })
 export class DynamicMatTableModule { }
+
+
