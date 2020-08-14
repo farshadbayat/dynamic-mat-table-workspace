@@ -1,9 +1,12 @@
 import { Component, ViewChild } from '@angular/core';
-import { TableField, TableRow, PrintConfig,
-  TableVirtualScrollDataSource, TableSelectionMode,
-  DynamicMatTableComponent, TablePagination, TableSetting, RowActionMenu } from 'dynamic-mat-table';
+// import { TableField, TableRow, PrintConfig,
+//   TableVirtualScrollDataSource, TableSelectionMode,
+//   DynamicMatTableComponent, TablePagination, TableSetting, ActionMenu } from './dynamic-mat-table/public-api';
+import {TableField, TableRow, PrintConfig,
+        TableVirtualScrollDataSource, TableSelectionMode,
+        DynamicMatTableComponent, TablePagination, TableSetting, ActionMenu } from 'dynamic-mat-table';
 
-const DATA = getData(1000);
+const DATA = getData(500);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,19 +15,20 @@ const DATA = getData(1000);
 export class AppComponent {
   title = 'dynamic-mat-table';
   eventLog = [];
+  setting: any;
   // required
   fields: TableField<any>[] = [];
   dataSource = new TableVirtualScrollDataSource([]);
   // optinaol
   // setting: TableSetting;
-  rowActionMenu: RowActionMenu[] = [];
+  actionMenu: ActionMenu[] = [];
   stickyHeader = true;
   showNoData = true;
   showProgress = true;
   pending = false;
   tableSelection: TableSelectionMode = 'none';
   conditinalClass = false;
-  pagination: TablePagination = { pageIndex: 0, pageSize: 10 };
+  pagination: TablePagination = { pageIndex: 0, pageSize: 10, pageSizeOptions: [ 5, 10, 100, 1000], showFirstLastButtons: true };
   enablingPagination = false;
   direction: 'rtl' | 'ltr' = 'ltr';
   printConfig: PrintConfig = { title: 'Print All Test Data' , showParameters: true };
@@ -39,14 +43,15 @@ export class AppComponent {
       {name: 'brand'}
     ];
 
-    this.rowActionMenu.push(
+    this.actionMenu.push(
       {
         name: 'Edit',
         text: 'ویرایش',
         color: 'primary',
         icon: 'edit',
         disabled: false,
-        visible: true
+        visible: true,
+
       },
       {
         name: 'Delete',
@@ -55,19 +60,36 @@ export class AppComponent {
         icon: 'delete',
         disabled: false,
         visible: true
+      },
+      {
+        name: 'View',
+        text: 'مشاهده',
+        color: 'accent',
+        icon: 'all_inbox',
+        disabled: false,
+        visible: true
       }
     );
   }
 
   fetchData_onClick() {
+
     this.dataSource = new TableVirtualScrollDataSource(DATA);
+    this.dataSource.allData[0].actionMenu = {
+      View: { text: 'View', color: 'primary', icon: 'build_circle'},
+      Delete: {visible: false}
+    };
   }
 
   table_onChangeSetting(setting) {
     console.log(setting);
   }
 
-  tableonRowActionChange(e) {
+  table_onRowActionChange(e) {
+    this.eventLog.push(e);
+  }
+
+  table_onRowClick(e) {
     this.eventLog.push(e);
   }
 

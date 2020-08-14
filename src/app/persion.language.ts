@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import { FilterLabels, LanguagePack, MenuLabels, TableLabels } from 'dynamic-mat-table';
+import { FilterLabels, LanguagePack, MenuLabels, TableLabels } from './dynamic-mat-table/public-api';
 export class PersionLanguage implements LanguagePack {
 
   constructor() {
@@ -28,6 +28,7 @@ export class PersionLanguage implements LanguagePack {
     pinNoneMode: 'هیچ کدام',
     pinStartMode: 'شروع',
     pinEndMode: 'پایان',
+    thereIsNoColumn: 'ستونی وجود ندارد'
   };
 
   paginatorLabels: MatPaginatorIntl = {
