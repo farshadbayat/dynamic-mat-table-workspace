@@ -61,19 +61,6 @@ let data = [
 this.dataSource = new TableVirtualScrollDataSource(data);
 ```
 
-In your component define the columns:
-
-```javascript
-columns: DynamicTableColumnDefinition[] = [
-    {
-      columnDef: 'name',
-      columnTitle: 'Name',
-      search: true
-    }
-    ...
-]
-```
-
 In the HTML add the selector:
 
 ```html
@@ -112,30 +99,33 @@ Inputs:
 `pagingMode` = paging mode ('none' | 'client' | 'server')
 
 `class.conditional-class` = apply custom style. eg:
-                  /* Conditional Class & Overwrite Style */
-                  :host ::ng-deep .conditional-class .mat-table .row-selection{
-                    background-color:rgb(7, 140, 163) !important; /* for over write */
-                    border-radius: 5px;
-                    .mat-cell {
-                      color: white !important;
-                    }
-                  }
+```style
+  /* Conditional Class & Overwrite Style */
+  :host ::ng-deep .conditional-class .mat-table .row-selection{
+    background-color:rgb(7, 140, 163) !important; /* for over write */
+    border-radius: 5px;
+    .mat-cell {
+      color: white !important;
+    }
+  }
 
-                  /* Style Element Inside Table */
-                  :host ::ng-deep dynamic-mat-table .mat-table mat-row{
-                    cursor: pointer;
-                  }
+  /* Style Element Inside Table */
+  :host ::ng-deep dynamic-mat-table .mat-table mat-row{
+    cursor: pointer;
+  }
+```
 
 `setting` = can restore column setting(width, order, visible, ...) with this parameter.
 `dir` = rtl/ltr.
 `printConfig` = print configuration. eg: { title: 'Print All Test Data' , showParameters: true }
 `actionMenu` = show action menu on each row and can change menu parameters: suppose
-               this.actionMenu.push(
-                 { name: 'Edit', text: 'Edit', color: 'primary', icon: 'edit', disabled: false, visible: true},
-                 { name: 'Delete',text: 'Delete Record', color: 'warn', icon: 'delete', disabled: false, visible: true});
-               Customize for one record:
-               this.dataSource.allData[0].actionMenu = { Edit: { text: 'View', color: 'primary', icon: 'build_circle'}, Delete: {visible: false}};
-
+```javascript
+  this.actionMenu.push(
+    { name: 'Edit', text: 'Edit', color: 'primary', icon: 'edit', disabled: false, visible: true},
+    { name: 'Delete',text: 'Delete Record', color: 'warn', icon: 'delete', disabled: false, visible: true});
+  Customize for one record:
+  this.dataSource.allData[0].actionMenu = { Edit: { text: 'View', color: 'primary', icon: 'build_circle'}, Delete: {visible: false}};
+```
 `settingChange` = Output all configuration of columns
 `rowActionMenuChange` = Output for action menu that clicked
 `rowClick` = Output for the click event on the row
