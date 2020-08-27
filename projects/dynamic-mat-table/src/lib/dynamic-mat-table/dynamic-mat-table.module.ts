@@ -23,9 +23,9 @@ import { TableCoreDirective } from '../cores/table.core.directive';
 
 export function paginatorLabels(tableIntl: TableIntl) {
   const paginatorIntl = new MatPaginatorIntl();
-  paginatorIntl.itemsPerPageLabel = 'آیتم در هر صفحه:';
-  paginatorIntl.nextPageLabel = 'صفحه بعد';
-  paginatorIntl.previousPageLabel = 'صفحه قبل';
+  // paginatorIntl.itemsPerPageLabel = 'آیتم در هر صفحه:';
+  // paginatorIntl.nextPageLabel = 'صفحه بعد';
+  // paginatorIntl.previousPageLabel = 'صفحه قبل';
   paginatorIntl.getRangeLabel = paginatorIntl.getRangeLabel;
 
   return paginatorIntl || null;
