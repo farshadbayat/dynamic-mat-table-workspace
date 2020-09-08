@@ -1,4 +1,3 @@
-import { Injectable } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { FilterLabels, LanguagePack, MenuLabels, TableLabels } from 'dynamic-mat-table';
 export class PersionLanguage implements LanguagePack {
