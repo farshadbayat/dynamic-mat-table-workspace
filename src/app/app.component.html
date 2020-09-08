@@ -1,41 +1,87 @@
-<mat-card style="margin: 8px; padding: 8px;">
+<mat-card style="margin: 8px; padding: 8px">
   <h2>Demo Dynamic Mat Table</h2>
-<!-- minimal use -->
-<!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
+  <!-- minimal use -->
+  <!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
 
-  <dynamic-mat-table tableName="demo_table"
-                      [columns]="fields"
-                      [dataSource]="dataSource"
-                      [sticky]="stickyHeader"
-                      [showNoData]="showNoData"
-                      [showProgress]="showProgress"
-                      [pending]="pending"
-                      [selection]="tableSelection"
-                      [pagination]="pagination"
-                      [pagingMode]="'server'"
-                      [class.conditional-class]="conditinalClass"
-                      [setting]="setting"
-                      (settingChange)="table_onChangeSetting($event)"
-                      (rowActionMenuChange)="tableonRowActionChange($event)"
-                      [dir]="direction"
-                      [printConfig]="printConfig"
-                      [rowActionMenu]="rowActionMenu"> 
+  <dynamic-mat-table
+    tableName="demo_table"
+    [columns]="fields"
+    [dataSource]="dataSource"
+    [sticky]="stickyHeader"
+    [showNoData]="showNoData"
+    [showProgress]="showProgress"
+    [pending]="pending"
+    [selection]="tableSelection"
+    [pagination]="pagination"
+    [pagingMode]="'server'"
+    [class.conditional-class]="conditinalClass"
+    [setting]="setting"
+    (settingChange)="table_onChangeSetting($event)"
+    (rowSelectionChange)="table_onRowSelectionChange($event)"
+    [dir]="direction"
+    [printConfig]="printConfig"
+    [rowActionMenu]="rowActionMenu"
+  >
   </dynamic-mat-table>
 </mat-card>
 
 <section class="section">
-  <button mat-raised-button color="primary" (click)="fetchData_onClick()"> Fetch Car Data</button>
-  <button mat-raised-button color="primary" (click)="pending = !pending"> Pending {{pending}}</button>
-  <button mat-raised-button color="primary" (click)="stickyHeader = !stickyHeader"> Header Sticky: {{stickyHeader}}</button>
-  <button mat-raised-button color="primary" (click)="columnSticky_onClick(1, 'strat')"> {{ fields[1]?.name + ':' + fields[1]?.sticky}}</button>
-  <button mat-raised-button color="primary" (click)="columnSticky_onClick(3, 'end')"> {{ fields[3]?.name + ':' + fields[3]?.sticky}}</button>
-  <button mat-raised-button color="primary" (click)="tableSelection_onClick()"> Table Selection ({{ tableSelection}})</button>
-  <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass;"> Conditional Class ({{ conditinalClass}})</button>
-  <button mat-raised-button color="primary" (click)="table.clear();"> Clear Data</button>
-  <button mat-raised-button color="primary" (click)="addNewColumn_onClick();"> Add New Column</button>
-  <button mat-raised-button color="primary" (click)="addNewLongColumn_onClick();"> Add Long Content Column</button>
-  <button mat-raised-button color="primary" (click)="paginationMode_onClick();"> Pagination Mode ({{ enablingPagination}})</button>
-  <button mat-raised-button color="primary" (click)="direction_onClick();"> Direction ({{ direction}})</button>
+  <button mat-raised-button color="primary" (click)="fetchData_onClick()">
+    Fetch Car Data
+  </button>
+  <button mat-raised-button color="primary" (click)="pending = !pending">
+    Pending {{ pending }}
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="stickyHeader = !stickyHeader"
+  >
+    Header Sticky: {{ stickyHeader }}
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="columnSticky_onClick(1, 'strat')"
+  >
+    {{ fields[1]?.name + ":" + fields[1]?.sticky }}
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="columnSticky_onClick(3, 'end')"
+  >
+    {{ fields[3]?.name + ":" + fields[3]?.sticky }}
+  </button>
+  <button mat-raised-button color="primary" (click)="tableSelection_onClick()">
+    Table Selection ({{ tableSelection }})
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="conditinalClass = !conditinalClass"
+  >
+    Conditional Class ({{ conditinalClass }})
+  </button>
+  <button mat-raised-button color="primary" (click)="table.clear()">
+    Clear Data
+  </button>
+  <button mat-raised-button color="primary" (click)="addNewColumn_onClick()">
+    Add New Column
+  </button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="addNewLongColumn_onClick()"
+  >
+    Add Long Content Column
+  </button>
+  <button mat-raised-button color="primary" (click)="paginationMode_onClick()">
+    Pagination Mode ({{ enablingPagination }})
+  </button>
+  <button mat-raised-button color="primary" (click)="direction_onClick()">
+    Direction ({{ direction }})
+  </button>
 </section>
 <section class="section">
   <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
@@ -43,5 +89,5 @@
 </section>
 
 <div *ngFor="let item of eventLog">
-  {{ eventLog | json}}
+  {{ eventLog | json }}
 </div>

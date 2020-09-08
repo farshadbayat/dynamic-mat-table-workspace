@@ -16,7 +16,7 @@ export class AppComponent {
   fields: TableField<any>[] = [];
   dataSource = new TableVirtualScrollDataSource([]);
   // optinaol
-  // setting: TableSetting;
+  setting: TableSetting;
   rowActionMenu: RowActionMenu[] = [];
   stickyHeader = true;
   showNoData = true;
@@ -90,6 +90,10 @@ export class AppComponent {
     } else {
       this.tableSelection = 'multi';
     }
+  }
+
+  table_onRowSelectionChange(e) {
+    console.log(e);
   }
 
   addNewColumn_onClick() {
