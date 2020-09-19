@@ -4,23 +4,23 @@
   <!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
 
   <dynamic-mat-table
-    tableName="demo_table"
+    [dir]="direction"
     [columns]="fields"
-    [dataSource]="dataSource"
-    [sticky]="stickyHeader"
-    [showNoData]="showNoData"
-    [showProgress]="showProgress"
     [pending]="pending"
-    [selection]="tableSelection"
-    [pagination]="pagination"
-    [pagingMode]="'server'"
-    [class.conditional-class]="conditinalClass"
     [setting]="setting"
+    tableName="demo_table"
+    [pagingMode]="'server'"
+    [sticky]="stickyHeader"
+    [dataSource]="dataSource"
+    [pagination]="pagination"
+    [showNoData]="showNoData"
+    [printConfig]="printConfig"
+    [selection]="tableSelection"
+    [showProgress]="showProgress"
+    [rowActionMenu]="rowActionMenu"
+    [class.conditional-class]="conditinalClass"
     (settingChange)="table_onChangeSetting($event)"
     (rowSelectionChange)="table_onRowSelectionChange($event)"
-    [dir]="direction"
-    [printConfig]="printConfig"
-    [rowActionMenu]="rowActionMenu"
   >
   </dynamic-mat-table>
 </mat-card>
@@ -83,6 +83,7 @@
     Direction ({{ direction }})
   </button>
 </section>
+
 <section class="section">
   <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
   <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>

@@ -4,13 +4,13 @@
   justify-content: space-between;
 }
 
-.ltr-menu{
+.ltr-menu {
   span {
     float: left;
   }
 }
 
-.button-menu {  
+.button-menu {
   width: 100%;
   line-height: 48px;
   &::ng-deep .mat-button-wrapper {
@@ -18,10 +18,10 @@
 
     span {
       display: inline-block;
-      width: 100%;  
-      text-align: left; 
+      width: 100%;
+      text-align: left;
     }
-    mat-icon{
+    mat-icon {
       line-height: 48px;
     }
   }
@@ -30,5 +30,3 @@
 mat-button-wrapper .button-menu {
   display: inline-block !important;
 }
-
-
