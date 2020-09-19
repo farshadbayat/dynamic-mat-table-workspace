@@ -177,7 +177,7 @@ export class TableCoreDirective<T extends TableRow> {
 
 
 
-  /************************************ Input & Output parameters ************************************/
+  /*************************************** I/O parameters *********************************/
   @Input() printConfig: PrintConfig = {};
   @Input()
   get dir(): 'ltr' | 'rtl' {
@@ -192,14 +192,15 @@ export class TableCoreDirective<T extends TableRow> {
       columnSetting: this.tableColumns
     };
   }
+  @Input() sticky: boolean;
   @Input() pending: boolean;
   @Input() rowHeight = 48;
   @Input() headerHeight = 56;
   @Input() footerHeight = 48;
   @Input() headerEnable = true;
   @Input() footerEnable = false;
-  @Input() sticky: boolean;
   @Input() showNoData: boolean;
+  @Output() onRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();

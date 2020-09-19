@@ -129,9 +129,9 @@
       *matHeaderRowDef="progressColumn; sticky: sticky"
     ></mat-header-row>
     <mat-row
+      (click)="onRowClick(row)"
       [style.height.px]="rowHeight"
       *matRowDef="let row; columns: displayedColumns"
-      (click)="selection === 'none' ? null : rowSelection.toggle(row)"
       [class.row-selection]="
         rowSelection ? rowSelection.isSelected(row) : false
       "
