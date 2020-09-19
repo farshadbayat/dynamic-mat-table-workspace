@@ -30,7 +30,7 @@ export class AppComponent {
   stickyHeader = true;
   showProgress = true;
   conditinalClass = false;
-  enablingPagination = false;
+  paginationMode: string = 'server';
   direction: "rtl" | "ltr" = "ltr";
   rowActionMenu: RowActionMenu[] = [];
   tableSelection: TableSelectionMode = "none";
@@ -130,15 +130,19 @@ export class AppComponent {
   }
 
   paginationMode_onClick() {
-    this.enablingPagination
-      ? (this.enablingPagination = false)
-      : (this.enablingPagination = true);
+    this.paginationMode == 'client'
+      ? (this.paginationMode = 'server')
+      : (this.paginationMode = 'client');
   }
 
   direction_onClick() {
     this.direction === "ltr"
       ? (this.direction = "rtl")
       : (this.direction = "ltr");
+  }
+  
+  row_onClick($event) {
+    console.log(`row ${$event.row} clicked!`);
   }
 }
 

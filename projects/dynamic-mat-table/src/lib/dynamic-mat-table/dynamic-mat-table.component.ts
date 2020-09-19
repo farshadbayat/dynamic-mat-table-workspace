@@ -1,11 +1,17 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, } from "@angular/core";
-import { trigger, transition, style, animate, query, stagger, } from "@angular/animations";
+import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2 } from "@angular/core";
+import {
+  trigger,
+  transition,
+  style,
+  animate,
+  query,
+  stagger,
+} from "@angular/animations";
 import { MatDialog } from "@angular/material/dialog";
 import { TableField } from "../models/table-field.model";
 import { TableService } from "./dynamic-mat-table.service";
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { RowActionMenu, TableRow } from "../models/table-row.model";
-
 
 import { isNull } from "../utilies/utils";
 import { TableIntl } from "../international/table-Intl";
@@ -44,13 +50,11 @@ export const tableAnimation = trigger("tableAnimation", [
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
   implements OnInit, AfterViewInit {
-  
-  
-  @ViewChild("printRef", { static: true }) 
+  @ViewChild("printRef", { static: true })
   printRef: TemplateRef<any>;
-  @ViewChild("printContentRef", { static: true }) 
+  @ViewChild("printContentRef", { static: true })
   printContentRef: ElementRef;
-  @ViewChildren(HeaderFilterComponent) 
+  @ViewChildren(HeaderFilterComponent)
   headerFilterList: QueryList<HeaderFilterComponent>;
 
   printing = true;
@@ -65,7 +69,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     public dialog: MatDialog,
     private renderer: Renderer2,
     public languagePack: TableIntl,
-    public tableService: TableService,
+    public tableService: TableService
   ) {
     super(tableService);
 
@@ -77,7 +81,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   ngOnInit() {}
-  
+
   ngAfterViewInit(): void {
     this.dataSource.sort.sortChange.subscribe((resp) => {
       this.pagination.pageIndex = 0;
@@ -246,6 +250,11 @@ export class DynamicMatTableComponent<T extends TableRow>
       column.width *= scale;
       this.setColumnWidth(column);
     });
+  }
+
+  onRowClick(row) {
+    this.selection === "none" ? null : this.rowSelection.toggle(row);
+    this.onRowEvent.emit(row);
   }
 
   // @HostListener('window:resize', ['$event'])
