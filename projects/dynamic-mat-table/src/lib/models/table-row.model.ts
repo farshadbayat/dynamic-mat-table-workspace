@@ -5,6 +5,7 @@ export interface TableRow {
   id?: number;
   isOpen?: boolean;
   rowClass?: string;
+  style?: string;
   actionMenu?: { [key: string]: ActionMenu; };
 }
 

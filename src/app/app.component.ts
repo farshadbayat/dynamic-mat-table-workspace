@@ -40,7 +40,7 @@ export class AppComponent {
       {name: 'name', header: 'Element Name' , sticky: 'start'},
       {name: 'weight'},
       {name: 'color'},
-      {name: 'brand'}
+      {name: 'brand', icon: 'commute', iconColor: 'red'}
     ];
 
     this.actionMenu.push(

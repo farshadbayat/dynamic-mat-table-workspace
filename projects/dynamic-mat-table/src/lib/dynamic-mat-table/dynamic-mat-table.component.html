@@ -17,8 +17,8 @@
                       [aria-label]="checkboxLabel(row)">
         </mat-checkbox>
       </mat-cell>
-    </ng-container>
-
+    </ng-container> 
+  
     <!-- Table Columns -->
     <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.name }}"
       [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
@@ -28,6 +28,7 @@
         [cdkDragData]="{name: column.name, columIndex: i}">
         <div class="left-resizer-handler" (mousedown)="onResizeColumn($event, i, 'left')"></div>
         <header-filter [field]="column" (filterChanged)="filter_OnChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
+          <mat-icon class="column-icon" [ngStyle]="{ 'color': column?.iconColor }">{{column?.icon}}</mat-icon>          
           <mat-icon class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
           <div mat-sort-header class="header-caption">{{ column.header }}</div>
         </header-filter>
