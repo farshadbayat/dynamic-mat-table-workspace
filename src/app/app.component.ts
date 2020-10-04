@@ -47,11 +47,19 @@ export class AppComponent {
 
   constructor() {
     this.fields = [
+<<<<<<< HEAD
       { name: "row", type: "number" },
       { name: "name", header: "Element Name", sticky: "start" },
       { name: "weight" },
       { name: "color" },
       { name: "brand" },
+=======
+      {name: 'row', type: 'number'},
+      {name: 'name', header: 'Element Name' , sticky: 'start'},
+      {name: 'weight'},
+      {name: 'color'},
+      {name: 'brand', icon: 'commute', iconColor: 'red'}
+>>>>>>> some row style
     ];
 
     this.actionMenu.push(
