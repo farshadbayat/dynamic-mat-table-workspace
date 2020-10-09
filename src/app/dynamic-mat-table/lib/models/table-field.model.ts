@@ -26,5 +26,8 @@ export interface AbstractField {
   filter?: 'client-side' | 'server-side' | 'none';
   sort?: 'client-side' | 'server-side' | 'none';
   cellClass?: string;
+  style?: string;
+  icon?: string;
+  iconColor?: string;
 }
 

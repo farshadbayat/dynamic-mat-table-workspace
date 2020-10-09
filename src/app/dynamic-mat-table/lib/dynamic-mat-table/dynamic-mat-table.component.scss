@@ -81,20 +81,30 @@ mat-header-cell {
   min-width: initial;
   padding: 0 !important;
   background-color: inherit;
-}
+} 
 
 .table-menu:hover {
   // background-color: white !important;
 }
 
+.column-icon {
+  :host .mat-header-row > .mat-header-cell:hover &{
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.2s;
+  }  
+}
+
 // Drag Column
 .drag-indicator{
+  // margin-left: -24px;
+  position: absolute;
   @include header-icon-base;
   cursor: move;
   :host .mat-header-row > .mat-header-cell:hover &{
-    opacity: 1;
-    transform: translateY(-1px);
+    opacity: 1;    
     pointer-events: fill;
+    transform: translateY(0px);
   }
 }
 .drag-indicator:hover {

@@ -31,38 +31,28 @@ export class AppComponent {
   showProgress = true;
   conditinalClass = false;
   paginationMode: string = 'server';
-  direction: "rtl" | "ltr" = "ltr";
   rowActionMenu: RowActionMenu[] = [];
   tableSelection: TableSelectionMode = "none";
   dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
 
-  pagination: TablePagination = {
-    pageIndex: 0,
-    pageSize: 10,
-  };
   printConfig: PrintConfig = {
     title: "Print All Test Data",
     showParameters: true,
   };
+  pagination: TablePagination = { pageIndex: 0, pageSize: 10, pageSizeOptions: [ 5, 10, 100, 1000], showFirstLastButtons: true };
+  enablingPagination = false;
+  direction: 'rtl' | 'ltr' = 'ltr';
 
   constructor() {
     this.fields = [
-<<<<<<< HEAD
-      { name: "row", type: "number" },
-      { name: "name", header: "Element Name", sticky: "start" },
-      { name: "weight" },
-      { name: "color" },
-      { name: "brand" },
-=======
       {name: 'row', type: 'number'},
       {name: 'name', header: 'Element Name' , sticky: 'start'},
       {name: 'weight'},
       {name: 'color'},
       {name: 'brand', icon: 'commute', iconColor: 'red'}
->>>>>>> some row style
     ];
 
-    this.actionMenu.push(
+    this.rowActionMenu.push(
       {
         name: "Edit",
         text: "ویرایش",
