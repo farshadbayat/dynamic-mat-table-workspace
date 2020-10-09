@@ -179,3 +179,19 @@ mat-header-cell:hover {
 .active-resize {
   background-color: #f5f5f566;
 }
+
+
+// ::ng-deep .mat-row {
+//   background-color: red;
+//   mat-cell:nth-last-child(2){
+//     max-width: initial !important;
+//     background-color: aqua;    
+//   }  
+// }
+
+// ::ng-deep .mat-header {
+//   mat-header-cell:nth-last-child(2){
+//     max-width: initial !important;
+//     background-color: aqua;    
+//   }  
+// }

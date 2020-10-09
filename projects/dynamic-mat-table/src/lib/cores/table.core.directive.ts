@@ -1,4 +1,4 @@
-import { ActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
+import { RowActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { TableField } from '../models/table-field.model';
@@ -138,7 +138,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input()
-  actionMenu: ActionMenu[];
+  rowActionMenu: RowActionMenu[];
 
   // @Input()
   // get menu() {
@@ -205,7 +205,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   @Output() rowClick: EventEmitter<T> = new EventEmitter();
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
-  @Output() rowActionMenuChange: EventEmitter<{actionItem: ActionMenu, rowItem: T}> = new EventEmitter();
+  @Output() rowActionMenuChange: EventEmitter<{actionItem: RowActionMenu, rowItem: T}> = new EventEmitter();
 
   constructor(public tableService: TableService) {
     this.showProgress = true;

@@ -85,7 +85,7 @@
         ></table-menu>
       </mat-header-cell>
       <mat-cell *matCellDef="let row" class="table-menu">
-        <row-menu *ngIf="actionMenu && actionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="actionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
+        <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowActionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
     </ng-container>
 

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
-import { ActionMenu } from '../../../models/table-row.model';
+import { RowActionMenu } from '../../../models/table-row.model';
 import { TableSetting } from '../../../models/table-setting.model';
 import { isNull } from '../../../utilies/utils';
 
@@ -10,11 +10,11 @@ import { isNull } from '../../../utilies/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RowMenuComponent<T> {
-  @Output() rowActionChange: EventEmitter<ActionMenu> = new EventEmitter<ActionMenu>();
-  @Input() actionMenus: ActionMenu[] = [];
+  @Output() rowActionChange: EventEmitter<RowActionMenu> = new EventEmitter<RowActionMenu>();
+  @Input() actionMenus: RowActionMenu[] = [];
   @Input() tableSetting: TableSetting;
-  @Input() rowActionMenu?: { [key: string]: ActionMenu; };
-  visibleActionMenus: ActionMenu[] = [];
+  @Input() rowActionMenu?: { [key: string]: RowActionMenu; };
+  visibleActionMenus: RowActionMenu[] = [];
 
   constructor() {
     console.log('s', this.rowActionMenu);
@@ -25,7 +25,7 @@ export class RowMenuComponent<T> {
     e.preventDefault();
     this.visibleActionMenus = [];
     this.actionMenus.forEach(menu => {
-      const am: ActionMenu = isNull(this.rowActionMenu) || isNull(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
+      const am: RowActionMenu = isNull(this.rowActionMenu) || isNull(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
       if ( isNull(am.visible) || am.visible) {
 
         this.visibleActionMenus.push({
@@ -40,7 +40,7 @@ export class RowMenuComponent<T> {
 
   }
 
-  menuButton_OnClick(menu: ActionMenu) {
+  menuButton_OnClick(menu: RowActionMenu) {
     window.requestAnimationFrame(() => {
       this.rowActionChange.emit(menu);
     });

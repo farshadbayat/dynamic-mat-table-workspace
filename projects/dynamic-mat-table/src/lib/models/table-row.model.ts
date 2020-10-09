@@ -6,10 +6,10 @@ export interface TableRow {
   isOpen?: boolean;
   rowClass?: string;
   style?: string;
-  actionMenu?: { [key: string]: ActionMenu; };
+  actionMenu?: { [key: string]: RowActionMenu; };
 }
 
-export interface ActionMenu {
+export interface RowActionMenu {
   name: string;
   text: string;
   color: ThemePalette;
