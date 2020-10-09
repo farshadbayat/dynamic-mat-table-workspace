@@ -85,6 +85,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
+
+  // TO DO
   ellipsis(cellRef) {
     console.log(cellRef.clientHeight);
     console.log(cellRef.scrollHeight);
@@ -139,8 +141,6 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   rowActionChange(e: RowActionMenu, row) {
-    console.log(e, row);
-
     window.requestAnimationFrame(() => {
       this.rowActionMenuChange.emit({ actionItem: e, rowItem: row });
     });
@@ -253,7 +253,9 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   onRowClick(row) {
-    this.selection === 'none' ? null : this.rowSelection.toggle(row);
+    if (this.selection !== 'none') {
+      this.rowSelection.toggle(row);
+    }
     this.onRowEvent.emit(row);
   }
 

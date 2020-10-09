@@ -40,6 +40,7 @@ export class RowMenuComponent<T> {
 
   }
 
+
   menuButton_OnClick(menu: RowActionMenu) {
     window.requestAnimationFrame(() => {
       this.rowActionChange.emit(menu);

@@ -6,7 +6,7 @@ export interface TableRow {
   isOpen?: boolean;
   rowClass?: string;
   style?: string;
-  actionMenu?: { [key: string]: RowActionMenu; };
+  rowActionMenu?: { [key: string]: RowActionMenu; };
 }
 
 export interface RowActionMenu {
