@@ -1,5 +1,14 @@
 import { ThemePalette } from '@angular/material/core';
 
+// this fields are for each row data
+export interface TableRow {
+  id?: number;
+  isOpen?: boolean;
+  rowClass?: string;
+  style?: string;
+  rowActionMenu?: { [key: string]: RowActionMenu; };
+}
+
 export interface RowActionMenu {
   name: string;
   text: string;
@@ -8,10 +17,6 @@ export interface RowActionMenu {
   disabled?: boolean;
   visible?: boolean;
 }
-export interface TableRow {
-  id?: number;
-  isOpen?: boolean;
-  rowClass?: string;
-}
+
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';

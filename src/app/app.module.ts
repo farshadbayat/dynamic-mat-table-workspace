@@ -14,8 +14,8 @@ import { PersianLanguage } from './persian.language';
 import { DynamicMatTableModule, TableIntl } from 'dynamic-mat-table';
 
 export function languageIntl() {
-  return new TableIntl(); /* For EN */
-  // return new PersianLanguage(); /* For FA */
+  // return new TableIntl(); /* For EN */
+  return new PersianLanguage(); /* For FA */
 }
 
 @NgModule({

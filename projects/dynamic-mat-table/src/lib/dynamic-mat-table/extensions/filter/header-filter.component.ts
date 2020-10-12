@@ -69,7 +69,6 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
   
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
-    console.log(languagePack);
   }
 
   ngOnInit(): void {

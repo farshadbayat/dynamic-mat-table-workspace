@@ -137,8 +137,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  @Input()
-  rowActionMenu: RowActionMenu[];
+  @Input() public rowActionMenu: RowActionMenu[];
 
   // @Input()
   // get menu() {
@@ -203,6 +202,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() onRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
+  @Output() rowClick: EventEmitter<T> = new EventEmitter();
   @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
   @Output() rowActionMenuChange: EventEmitter<{actionItem: RowActionMenu, rowItem: T}> = new EventEmitter();
 
@@ -290,18 +290,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
 
-  /************************************ Drag & Drop Column *******************************************/
-
-  dragStarted(event: CdkDragStart, index: number) {
-    this.previousIndex = index;
-    const offset = this.viewport.measureScrollOffset();
-  }
-
-  dropListDropped(event: CdkDropList, index: number) {
-    if (event) {
-      this.moveColumn(this.previousIndex, index);
-    }
-  }
+  /************************************ Drag & Drop Column *******************************************/ 
 
   moveColumn(from: number, to: number) {
     window.requestAnimationFrame(() => {

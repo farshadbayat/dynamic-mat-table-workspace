@@ -71,4 +71,5 @@ export interface MenuLabels {
   pinNoneMode: string;
   pinStartMode: string;
   pinEndMode: string;
+  thereIsNoColumn: string;
 }

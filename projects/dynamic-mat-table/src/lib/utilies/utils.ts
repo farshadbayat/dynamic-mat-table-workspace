@@ -47,6 +47,12 @@ export function deepClone<T>(obj: any) {
   }
 }
 
+/**
+ * get value from dictionary if not found set default value
+ * @param fieldName 
+ * @param defaultValue 
+ * @param variable 
+ */
 export function getValue(fieldName: string, defaultValue: any, ...variable: any[]) {
   // variable.forEach( v => {
   //   if (v && !isNull(v[fieldName])) {
