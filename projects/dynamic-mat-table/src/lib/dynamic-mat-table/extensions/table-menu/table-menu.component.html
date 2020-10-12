@@ -3,17 +3,16 @@
   mat-icon-button
   #menuTrigger="matMenuTrigger"
   [matMenuTriggerFor]="menu"
-  [dir]="reverseDirection"
 >
   <mat-icon>more_vert</mat-icon>
 </button>
 
-<mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
+<mat-menu #menu="matMenu" [overlapTrigger]="false">
   <button
     mat-menu-item
     color="primary"
     [matMenuTriggerFor]="convertMenu"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+    
   >
     <mat-icon>save</mat-icon>
     <span>{{ languagePack.menuLabels.saveData }}</span>
@@ -22,7 +21,7 @@
     mat-menu-item
     color="primary"
     [matMenuTriggerFor]="columnMenu"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+    
   >
     <mat-icon>view_column</mat-icon>
     <span>{{ languagePack.menuLabels.columnSetting }}</span>
@@ -30,7 +29,7 @@
   <button
     mat-menu-item
     (click)="saveSetting_OnClick()"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+    
   >
     <mat-icon>grading</mat-icon>
     <span>{{ languagePack.menuLabels.saveTableSetting }}</span>
@@ -38,7 +37,7 @@
   <button
     mat-menu-item
     (click)="clearFilter_OnClick()"
-    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'"
+    
   >
     <mat-icon style="margin-top: -3px">clear</mat-icon>
     <span>{{ languagePack.menuLabels.clearFilter }}</span>
@@ -48,13 +47,13 @@
 <!-- Convert Sub Menu -->
 
 <mat-menu #convertMenu="matMenu">
-  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="download_OnClick('JSON')" >
     <span>{{ languagePack.menuLabels.jsonFile }}</span>
   </button>
-  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="download_OnClick('CSV')" >
     <span>{{ languagePack.menuLabels.csvFile }}</span>
   </button>
-  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="print_OnClick(menuTrigger)" >
     <span>{{ languagePack.menuLabels.printTable }}</span>
   </button>
 </mat-menu>
@@ -62,16 +61,12 @@
 <!-- Column Setting Sub Menu -->
 
 <mat-menu #columnMenu="matMenu">
-  <ng-container
-    *ngIf="currentTableSetting?.columnSetting?.length > 0; else noColumns"
-  >
+  <ng-container *ngIf="currentTableSetting?.columnSetting?.length > 0; else noColumns">
     <div
       class="va-mat-table-dragable-container"
       cdkDropList
       dkDropListLockAxis="y"
-      cdkDropListOrientation="vertical"
-      dir="ltr"
-    >
+      cdkDropListOrientation="vertical">
       <div
         *ngFor="let column of currentTableSetting.columnSetting; let i = index"
         (click)="$event.stopPropagation(); $event.preventDefault()"

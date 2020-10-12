@@ -54,7 +54,7 @@ export class PersianLanguage implements LanguagePack {
           : startIndex + pageSize;
       return `${startIndex + 1} - ${endIndex} از ${length}`;
     },
-  };
+  }; 
 
   tableLabels: TableLabels = {
     NoData: 'هیچ رکوردی پیدا نشد',
