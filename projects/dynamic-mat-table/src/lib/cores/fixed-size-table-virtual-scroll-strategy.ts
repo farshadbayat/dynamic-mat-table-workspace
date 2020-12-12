@@ -99,7 +99,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     if (!this.viewport || !this.rowHeight) {
       return;
     }
-    console.log('this.viewport',this.viewport);
+    // console.log('this.viewport',this.viewport);
 
     const scrollOffset = this.viewport.measureScrollOffset();
     const amount = Math.ceil(this.getViewportSize() / this.rowHeight);
