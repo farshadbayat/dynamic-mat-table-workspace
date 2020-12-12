@@ -12,7 +12,7 @@
 
 .va-mat-button-no-input {
   border: none;
-  background: transparent;
+  background-color: transparent;
   outline: none;
 }
 
@@ -20,6 +20,18 @@
   min-width: 200px;
   padding: 8px 0 8px 0;
   user-select: none;
+}
+
+.va-mat-table-dragable-container:dir(rtl) {
+  background-color: green !important;
+}
+
+.dragable-row {
+  display: inline-flex;
+  mat-checkbox {
+    width: 100%;
+    display: inline-flex;
+  }
 }
 
 .va-mat-table-dragable-container .dragable-row {
@@ -30,11 +42,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  direction: ltr;
 }
 
 .va-mat-table-dragable-container .dragable-row .column-setting-button {
-  float: right;
+  //float: right;
   margin: 0 5px;
   cursor: pointer;
   width: 26px;
@@ -166,6 +177,3 @@
   margin-right: 5px !important;
 }
 
-mat-icon {
-  font-size: 22px !important;
-}

@@ -1,25 +1,15 @@
-import {
-  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding,
-  Output,
-  ViewChild,
-  Input,
-  EventEmitter,
-  OnInit,
-  ChangeDetectorRef,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Output, ViewChild,
+         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
 import { TableField } from './../../../models/table-field.model';
-import { LanguagePack } from './../../../models/language-pack.model';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TextFilter } from './compare/text-filter';
 import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
-import { isNull } from '../../../utilies/utils';
 import { TableIntl } from '../../../international/table-Intl';
 import { MatInput } from '@angular/material/input';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { isNullorUndefined } from '../../../cores/type';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -48,7 +38,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   private filterList: AbstractFilter[] = [];
   @Input()
   get filters(): AbstractFilter[] {
-    if ( isNull(this.filterList) === true || this.filterList.length === 0) {
+    if ( isNullorUndefined(this.filterList) === true || this.filterList.length === 0) {
       this.filterList = [];
       this.addNewFilter(this.field.type || 'text');
     }
@@ -67,12 +57,12 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   get showTrigger(): boolean {
     return this.menu.menuOpen || this.hasValue;
   }
-  
+
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
-    if (isNull(this.filters)) {
+    if (isNullorUndefined(this.filters)) {
       this.filters = [];
       this.addNewFilter(this.field.type);
     }

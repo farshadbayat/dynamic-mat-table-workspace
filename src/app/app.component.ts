@@ -10,6 +10,7 @@ import {
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
 } from 'dynamic-mat-table';
+import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 
 const DATA = getData(1000);
 @Component({
@@ -53,6 +54,12 @@ export class AppComponent {
       { name: 'weight' },
       { name: 'color' },
       { name: 'brand' },
+      {
+        name: 'setting',
+        icon: 'chrome_reader_mode',
+        iconColor: 'blue',
+        dynamicCellComponent: DynamicCellComponent,
+      }
     ];
 
     this.rowActionMenu.push(

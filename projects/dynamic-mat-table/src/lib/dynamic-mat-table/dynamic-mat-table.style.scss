@@ -15,13 +15,16 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
 
 @mixin table-base {
   .mat-table {
-
     .row-selection {
       background-color: #f7f5f5;
     }
 
     .mat-row:hover {
       background-color: #fafafa;
+    }
+
+    mat-cell {
+      background-color: white;
     }
   }
 }
@@ -65,11 +68,27 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
       margin-right: 15px;
       line-height: 22px;
     }
+  } 
+}
+
+@mixin dmf-class {
+  // remove botton padding
+  ::ng-deep .dmf {
+    min-width: 100%;
+  }
+
+  ::ng-deep dynamic-mat-table cdk-virtual-scroll-viewport .cdk-virtual-scroll-content-wrapper .mat-table mat-row .mat-cell mat-form-field {
+     max-width: 100%;
+    .mat-form-field-wrapper {
+        padding-bottom: 0 !important;
+    }  
+    ::ng-deep .mat-form-field-underline {
+        bottom: 0 !important;
+    }
   }
 }
 
 @media print {
-
   .printpreview {
     background-color: white;
     position: fixed;

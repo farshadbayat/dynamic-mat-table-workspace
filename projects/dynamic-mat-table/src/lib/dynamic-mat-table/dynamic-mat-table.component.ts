@@ -1,4 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ElementRef, ViewChild, TemplateRef, Renderer2} from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren,
+         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
 import { RowActionMenu, TableRow } from '../models/table-row.model';
@@ -6,14 +7,15 @@ import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { TablePagination } from '../models/table-pagination.model';
 import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
-import { isNull } from '../utilies/utils';
 import { MatDialog } from '@angular/material/dialog';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
-import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
+import { trigger, transition, style, animate, query, stagger, state } from '@angular/animations';
 import { ResizeColumn } from '../models/resize-column.mode';
 import { TableIntl } from '../international/table-Intl';
 import { MenuActionChange } from './extensions/table-menu/table-menu.component';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { isNullorUndefined } from '../cores/type';
+import 'hammerjs';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -34,12 +36,18 @@ export const tableAnimation = trigger('tableAnimation', [
   ]),
 ]);
 
+export const expandAnimation = trigger('detailExpand', [
+  state('collapsed', style({height: '0px', minHeight: '0'})),
+  state('expanded', style({height: '*'})),
+  transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+]);
 @Component({
   // tslint:disable-next-line: component-selector
   selector: 'dynamic-mat-table',
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
-  animations: [tableAnimation],
+  animations: [tableAnimation, expandAnimation],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
@@ -50,11 +58,12 @@ export class DynamicMatTableComponent<T extends TableRow>
   printContentRef: ElementRef;
   @ViewChildren(HeaderFilterComponent)
   headerFilterList: QueryList<HeaderFilterComponent>;
-
+  private dragDropData = {dragColumnIndex: -1, dropColumnIndex: -1};
   printing = true;
   printTemplate: TemplateRef<any> = null;
   resizeColumn: ResizeColumn = new ResizeColumn();
 
+  expandedElement: any | null;
   // mouse resize
   resizableMousemove: () => void;
   resizableMouseup: () => void;
@@ -63,7 +72,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     public dialog: MatDialog,
     private renderer: Renderer2,
     public languagePack: TableIntl,
-    public tableService: TableService
+    public tableService: TableService,
+    private cd: ChangeDetectorRef
   ) {
     super(tableService);
 
@@ -86,6 +96,21 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
+  test(s) {
+    console.log(s);
+    
+  }
+
+  public refreshGrid() {
+    console.log('change');
+    this.cd.markForCheck();
+    this.refreshTableSetting();
+    console.log('change finished');
+  }
+
+  // public getCellOption(column: TableField<any>, row: any) {
+  //    return row?.option[column.name] || column?.option;    
+  // }
 
   // TO DO
   ellipsis(cellRef) {
@@ -120,7 +145,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === 'Print') {
       this.printConfig.displayedFields = this.columns
-        .filter((c) => isNull(c.print) || c.print === true)
+        .filter((c) => isNullorUndefined(c.print) || c.print === true)
         .map((o) => o.name);
       this.printConfig.title = this.printConfig.title || this.tableName;
       this.printConfig.direction = this.tableSetting.direction || 'ltr';
@@ -143,7 +168,8 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   rowActionChange(e: RowActionMenu, row) {
     window.requestAnimationFrame(() => {
-      this.rowActionMenuChange.emit({ actionItem: e, rowItem: row });
+      // actionItem: e, rowItem: row
+      this.rowActionMenuChange.emit({actionItem: e, rowItem: row });
     });
   }
 
@@ -154,19 +180,12 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
-  rowOnClick(row) {
-    if (this.selection !== 'none' ) {
-      this.rowSelection.toggle(row);
-    }
-    this.rowClick.emit(row);
-  }
-
   pagination_onChange(e: TablePagination) {
     console.log(e);
     this.pending = true;
     this.dataSource.refreshFilterPredicate(); // pagination Bugfixed
     this.paginationChange.emit(e);
-  }
+  } 
 
   /////////////////////////////////////////////////////////////////
 
@@ -253,14 +272,43 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
-  onRowClick(row) {
+  onRowClick(e, row) {
     if (this.selection !== 'none') {
       this.rowSelection.toggle(row);
-    }
-    this.onRowEvent.emit(row);
+    }    
+    this.expandedElement = this.expandedElement === row ? null : row
+    this.onRowEvent.emit({ event: e, sender: row });
   }
 
-  tableDrop(event: CdkDragDrop<string[]>) {
-    this.moveColumn(event.previousIndex, event.currentIndex);
+  /************************************ Drag & Drop Column *******************************************/
+
+  dragStarted(event: CdkDragStart, index: number) {
+    this.dragDropData.dragColumnIndex = index;
+  }
+
+  dropListDropped(event: CdkDropList, index: number) {
+    if (event) {
+      this.dragDropData.dropColumnIndex = index;
+      this.moveColumn(this.dragDropData.dragColumnIndex, this.dragDropData.dropColumnIndex);
+    }
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+
+    // updates moved data and table, but not dynamic if more dropzones
+    // this.dataSource.data = clonedeep(this.dataSource.data);
+  }
+  /************************************  *******************************************/
+ 
+  copyProperty(from: any, to: any) {
+    const keys = Object.keys(from);
+    keys.forEach( key => {
+      if (from[key] !== undefined && from[key] === null) {
+        to[key] = Array.isArray(from[key]) ? Object.assign([], from[key]) : Object.assign({}, from[key]);
+      }
+    });
   }
 }
+
+

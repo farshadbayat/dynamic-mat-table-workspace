@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
+import { isNullorUndefined } from '../../../cores/type';
 import { RowActionMenu } from '../../../models/table-row.model';
 import { TableSetting } from '../../../models/table-setting.model';
-import { isNull } from '../../../utilies/utils';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'row-menu',
   templateUrl: './row-menu.component.html',
   styleUrls: ['./row-menu.component.scss'],
@@ -17,7 +18,6 @@ export class RowMenuComponent<T> {
   visibleActionMenus: RowActionMenu[] = [];
 
   constructor() {
-    console.log('s', this.rowActionMenu);
   }
 
   menuOnClick(e) {
@@ -25,8 +25,8 @@ export class RowMenuComponent<T> {
     e.preventDefault();
     this.visibleActionMenus = [];
     this.actionMenus.forEach(menu => {
-      const am: RowActionMenu = isNull(this.rowActionMenu) || isNull(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
-      if ( isNull(am.visible) || am.visible) {
+      const am: RowActionMenu = isNullorUndefined(this.rowActionMenu) || isNullorUndefined(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
+      if ( isNullorUndefined(am.visible) || am.visible) {
 
         this.visibleActionMenus.push({
           name: menu.name,

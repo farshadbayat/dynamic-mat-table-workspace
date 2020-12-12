@@ -13,6 +13,7 @@ export interface TSVStrategyConfigs {
 
 @Injectable()
 export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrategy {
+  private length = 0;
   private rowHeight!: number;
   private headerHeight!: number;
   private footerHeight!: number;
@@ -27,15 +28,13 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
   public scrolledIndexChange = this.indexChange.pipe(distinctUntilChanged());
 
   get dataLength(): number {
-    return this._dataLength;
+    return this.length;
   }
 
   set dataLength(value: number) {
-    this._dataLength = value;
+    this.length = value;
     this.onDataLengthChanged();
   }
-
-  private _dataLength = 0;
 
   public attach(viewport: CdkVirtualScrollViewport): void {
     this.viewport = viewport;
@@ -100,6 +99,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     if (!this.viewport || !this.rowHeight) {
       return;
     }
+    console.log('this.viewport',this.viewport);
 
     const scrollOffset = this.viewport.measureScrollOffset();
     const amount = Math.ceil(this.getViewportSize() / this.rowHeight);
@@ -110,6 +110,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     const index = Math.max(0, skip);
     const start = Math.max(0, index - buffer);
     const end = Math.min(this.dataLength, index + amount + buffer);
+    console.log('end', end);
     const renderedOffset = start * this.rowHeight;
     this.viewport.setRenderedContentOffset(renderedOffset);
     this.viewport.setRenderedRange({start, end});

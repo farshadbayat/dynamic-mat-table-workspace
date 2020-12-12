@@ -16,6 +16,7 @@ export interface AbstractField {
   index?: number;
   name: string;
   type?: 'text' | 'number' | 'date' | 'category';
+  option?: any;
   width?: number;
   header?: string;
   print?: boolean;
@@ -29,5 +30,6 @@ export interface AbstractField {
   style?: string;
   icon?: string;
   iconColor?: string;
+  dynamicCellComponent?: any;
 }
 

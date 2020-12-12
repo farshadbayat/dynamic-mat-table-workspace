@@ -12,6 +12,11 @@ import { AppComponent } from './app.component';
 import { PersianLanguage } from './persian.language';
 /* import { DynamicMatTableModule } from 'dynamic-mat-table'; */
 import { DynamicMatTableModule, TableIntl } from 'dynamic-mat-table';
+import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
+import {MatSliderModule} from '@angular/material/slider';
+import { OrderTableComponent } from './order-table/order-table.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTableModule } from '@angular/material';
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
@@ -19,9 +24,11 @@ export function languageIntl() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [	
+    AppComponent,
+    DynamicCellComponent,
+      OrderTableComponent
+   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -32,6 +39,12 @@ export function languageIntl() {
     FormsModule,
     MatExpansionModule,
     DynamicMatTableModule,
+    MatSliderModule,
+    DragDropModule,
+    MatTableModule,
+  ],
+  entryComponents:[
+    DynamicCellComponent
   ],
   providers: [
     { provide: TableIntl, useFactory: languageIntl}

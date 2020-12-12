@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { Compiler, CompilerFactory, COMPILER_OPTIONS, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
@@ -21,6 +21,12 @@ import { TableMenuModule } from './extensions/table-menu/table-menu.module';
 import { HeaderFilterModule } from './extensions/filter/header-filter.module';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
+import { DynamicCellDirective } from '../cores/dynamic-cell/dynamic-cell.directive';
+import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
+
+export function createCompiler(compilerFactory: CompilerFactory): Compiler {
+  return compilerFactory.createCompiler();
+}
 
 export function paginatorLabels(tableIntl: TableIntl) {
   const paginatorIntl = new MatPaginatorIntl();
@@ -32,7 +38,7 @@ export function paginatorLabels(tableIntl: TableIntl) {
   return paginatorIntl || null;
 }
 
-const extentionsModule = [HeaderFilterModule, RowMenuModule];
+const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
   imports: [
     CommonModule,
@@ -50,10 +56,15 @@ const extentionsModule = [HeaderFilterModule, RowMenuModule];
     MatPaginatorModule,
     MatDialogModule,
     MatButtonModule,
-    extentionsModule,
+    ExtentionsModule,
+    // NoopAnimationsModule
   ],
   exports: [DynamicMatTableComponent],
   providers: [
+    // bugfixed in library compiler not load and must create library
+    {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
+    {provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
+    {provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory]},
     TableIntl,
     {
       provide: MatPaginatorIntl,
@@ -65,6 +76,7 @@ const extentionsModule = [HeaderFilterModule, RowMenuModule];
     DynamicMatTableComponent,
     PrintTableDialogComponent,
     TableCoreDirective,
+    DynamicCellDirective
   ],
   entryComponents: [PrintTableDialogComponent],
 })

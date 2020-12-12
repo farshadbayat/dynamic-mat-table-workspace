@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from 
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TableSetting } from '../../../models/table-setting.model';
-import { deepClone, isNull } from '../../../utilies/utils';
 import { TableIntl } from '../../../international/table-Intl';
+import { clone, deepClone, isNullorUndefined } from '../../../cores/type';
 
 @Component({
-  selector: "table-menu",
-  templateUrl: "./table-menu.component.html",
-  styleUrls: ["./table-menu.component.scss"],
+  // tslint:disable-next-line: component-selector
+  selector: 'table-menu',
+  templateUrl: './table-menu.component.html',
+  styleUrls: ['./table-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableMenuComponent {
@@ -21,8 +22,8 @@ export class TableMenuComponent {
   }
   set tableSetting(value: TableSetting) {
     this.originalTableSetting = value;
-    this.reverseDirection = value.direction === "rtl" ? "ltr" : "rtl";
-    this.currentTableSetting = deepClone<TableSetting>(value);
+    this.reverseDirection = value.direction === 'rtl' ? 'ltr' : 'rtl';
+    this.currentTableSetting = clone<TableSetting>(value);
   }
 
   currentColumn: number = null;
@@ -46,7 +47,7 @@ export class TableMenuComponent {
     const colFound = this.currentTableSetting.columnSetting.find(
       (col) => col.index === columnIndex
     );
-    colFound.display = colFound.display === "visible" ? "hiden" : "visible";
+    colFound.display = colFound.display === 'visible' ? 'hiden' : 'visible';
   }
 
   apply_OnClick(e) {
@@ -54,7 +55,7 @@ export class TableMenuComponent {
     e.preventDefault();
     window.requestAnimationFrame(() => {
       this.menuActionChange.emit({
-        type: "TableSetting",
+        type: 'TableSetting',
         data: this.currentTableSetting,
       });
       this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
@@ -70,39 +71,39 @@ export class TableMenuComponent {
   }
 
   isVisible(visible: boolean) {
-    return isNull(visible) ? true : visible;
+    return isNullorUndefined(visible) ? true : visible;
   }
 
   /*****  Save ********/
   saveSetting_OnClick() {
     window.requestAnimationFrame(() => {
-      this.menuActionChange.emit({ type: "SaveSetting" });
+      this.menuActionChange.emit({ type: 'SaveSetting' });
     });
   }
 
   /*****  Filter ********/
   clearFilter_OnClick() {
     window.requestAnimationFrame(() => {
-      this.menuActionChange.emit({ type: "FilterClear" });
+      this.menuActionChange.emit({ type: 'FilterClear' });
     });
   }
 
   /******* Save File ***********/
   download_OnClick(type: string) {
     window.requestAnimationFrame(() => {
-      this.menuActionChange.emit({ type: "Download", data: type });
+      this.menuActionChange.emit({ type: 'Download', data: type });
     });
   }
 
   print_OnClick(menu) {
     menu._overlayRef._host.parentElement.click();
     window.requestAnimationFrame(() => {
-      this.menuActionChange.emit({ type: "Print", data: null });
+      this.menuActionChange.emit({ type: 'Print', data: null });
     });
   }
 }
 
 export interface MenuActionChange {
-  type: "FilterClear" | "TableSetting" | "Download" | "SaveSetting" | "Print";
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print';
   data?: any;
 }

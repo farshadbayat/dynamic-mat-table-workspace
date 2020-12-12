@@ -4,17 +4,17 @@ import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/co
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination } from '../models/table-pagination.model';
-import { isNull, clone, getValue } from '../utilies/utils';
 import { PrintConfig } from '../models/print-config.model';
 import { TableSetting, Direction } from '../models/table-setting.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
+import { clone, getObjectProp, isNullorUndefined } from './type';
 
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -34,7 +34,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
-    if (!isNull(value) && this.tablePagingMode === 'client') {
+    if (!isNullorUndefined(value) && this.tablePagingMode === 'client') {
       if (this.tvsDataSource === undefined || this.tvsDataSource === null) {
         this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
       }
@@ -56,7 +56,7 @@ export class TableCoreDirective<T extends TableRow> {
     return this.tableSetting;
   }
   set setting(value: TableSetting) {
-    if ( !isNull(value) ) {
+    if ( !isNullorUndefined(value) ) {
       this.tableSetting = value;
     }
   }
@@ -77,10 +77,10 @@ export class TableCoreDirective<T extends TableRow> {
   set pagination(value: TablePagination) {
     if (value && value !== null) {
       this.tablePagination = value;
-      if ( isNull(this.tablePagination.pageSizeOptions)) {
+      if ( isNullorUndefined(this.tablePagination.pageSizeOptions)) {
         this.tablePagination.pageSizeOptions = [5, 10, 25, 100];
       }
-      if ( isNull(this.tablePagination.pageSizeOptions)) {
+      if ( isNullorUndefined(this.tablePagination.pageSizeOptions)) {
         this.tablePagination.pageSize = this.tablePagination.pageSizeOptions[0];
       }
       this.updatePagination();
@@ -93,17 +93,19 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set rowSelection(value: SelectionModel<T>) {
     this.tableSelection = value;
+    console.log(this.tableSelection);
+    
   }
 
   @Input()
   get selection() {
-    return this.selectionRow;
+    return this.rowSelectionMode;
   }
   set selection(selection: TableSelectionMode) {
-    this.selectionRow = selection || 'none';
-    this.tableSelection = this.selectionRow === 'none' ? null : new SelectionModel<T>(this.selectionRow === 'multi', []);
-    this.setDisplayedColumns();
-    this.rowSelectionChange.emit(this.tableSelection);
+    this.rowSelectionMode = selection || 'none';
+    this.tableSelection = this.rowSelectionMode === 'none' ? null : new SelectionModel<T>(this.rowSelectionMode === 'multi', []);
+    this.setDisplayedColumns();    
+    //this.rowSelectionChange.emit(this.tableSelection);
   }
 
   @Input()
@@ -156,25 +158,24 @@ export class TableCoreDirective<T extends TableRow> {
     return this.tableColumns;
   }
   set columns(fields: TableField<T>[]) {
-    fields.forEach((f, i) => {
+    (fields || []).forEach((f, i) => {
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
       f.header = f.header ? f.header : titleCase(f.name);
-      f.display = getValue('display', 'visible' , settingField, f ); // f.display ? f.display : 'visible';
-      f.filter = getValue('filter', 'client-side' , settingField, f ); // f.filter ? f.filter : 'client-side';
-      f.sort = getValue('sort', 'client-side' , settingField, f ); // f.sort ? f.sort : 'client-side';
-      f.sticky = getValue('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
-      f.width =  getValue('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
+      f.display = getObjectProp('display', 'visible' , settingField, f ); // f.display ? f.display : 'visible';
+      f.filter = getObjectProp('filter', 'client-side' , settingField, f ); // f.filter ? f.filter : 'client-side';
+      f.sort = getObjectProp('sort', 'client-side' , settingField, f ); // f.sort ? f.sort : 'client-side';
+      f.sticky = getObjectProp('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
+      f.width =  getObjectProp('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
     });
     this.tableColumns = fields;
-    if (isNull(this.tableSetting.columnSetting) ) {
+    console.log('pp');
+    if (isNullorUndefined(this.tableSetting.columnSetting) ) {
       this.tableSetting.columnSetting = clone(fields);
     }
     this.setDisplayedColumns();
   }
-
-
 
   /*************************************** I/O parameters *********************************/
   @Input() printConfig: PrintConfig = {};
@@ -199,12 +200,12 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() headerEnable = true;
   @Input() footerEnable = false;
   @Input() showNoData: boolean;
-  @Output() onRowEvent: EventEmitter<any> = new EventEmitter();
+  // tslint:disable-next-line: no-output-on-prefix
+  @Output() onRowEvent: EventEmitter<IEvent> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
-  @Output() rowClick: EventEmitter<T> = new EventEmitter();
-  @Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
-  @Output() rowActionMenuChange: EventEmitter<{actionItem: RowActionMenu, rowItem: T}> = new EventEmitter();
+  //@Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
+  @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
 
   constructor(public tableService: TableService) {
     this.showProgress = true;
@@ -217,16 +218,17 @@ export class TableCoreDirective<T extends TableRow> {
   // Variables //
   progressColumn: string[] = [];
   displayedColumns: string[] = [];
-  private selectionRow: TableSelectionMode;
   // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
-  private previousIndex: number; // Drag & Drop
   public tvsDataSource: TableVirtualScrollDataSource<T>;
+
+  private rowSelectionMode: TableSelectionMode;
   private tableSelection = new SelectionModel<T>(true, []);
   private tablePagination: TablePagination = { };
   public tablePagingMode: 'none' | 'client' | 'server'  = 'none';
   public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
   public tableSetting: TableSetting = {};
+
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
@@ -241,9 +243,9 @@ export class TableCoreDirective<T extends TableRow> {
     window.requestAnimationFrame(() => {
       if (this.tablePagingMode === 'client' || this.tablePagingMode === 'server') {
         this.viewportClass = 'viewport-with-pagination';
-        if ( !isNull(this.tvsDataSource.paginator)) {
+        if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
           let dataLen = this.tvsDataSource.paginator.length;
-          if (!isNull(this.tablePagination.length) && this.tablePagination.length > dataLen) {
+          if (!isNullorUndefined(this.tablePagination.length) && this.tablePagination.length > dataLen) {
             dataLen = this.tablePagination.length;
           }
           this.tvsDataSource.paginator.length = dataLen;
@@ -260,7 +262,9 @@ export class TableCoreDirective<T extends TableRow> {
 
   clear() {
     if (this.dataSource && this.dataSource !== null) {
-      this.viewport.scrollTo({ top: 0, behavior: 'auto' });
+      if (this.viewport) {
+        this.viewport.scrollTo({ top: 0, behavior: 'auto' });
+      }
       this.dataSource.clearData();
     }
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
@@ -300,10 +304,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   refreshColumn(columns: TableField<T>[]) {
-    const currentOffset = this.viewport.measureScrollOffset();
-    this.columns = columns;
-    this.setDisplayedColumns();
-    setTimeout(() => this.viewport.scrollTo({ top: currentOffset, behavior: 'auto' }), 0);
+    if (this.viewport) {
+      const currentOffset = this.viewport.measureScrollOffset();
+      this.columns = columns;
+      this.setDisplayedColumns();
+      setTimeout(() => this.viewport.scrollTo({ top: currentOffset, behavior: 'auto' }), 0);
+    }
   }
 
   saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {
@@ -329,14 +335,14 @@ export class TableCoreDirective<T extends TableRow> {
   masterToggle() {
     this.isAllSelected() ?
       this.rowSelection.clear() :
-      this.dataSource.data.forEach(row => this.rowSelection.select(row));
-    this.rowSelectionChange.emit(this.rowSelection);
+      this.dataSource.data.forEach(row => this.rowSelection.select(row));    
+    this.onRowEvent.emit({ event: 'MasterSelectionChange', sender:  this.tableSelection});
   }
 
-  onRowSelectionChange(e, row) {
+  onRowSelectionChange(e: any, row: T) {
     if (e) {
       this.rowSelection.toggle(row);
-      this.rowSelectionChange.emit(this.rowSelection);
+      this.onRowEvent.emit({ event: 'RowSelectionChange', sender:  this.tableSelection});
     }
   }
 
@@ -347,5 +353,15 @@ export class TableCoreDirective<T extends TableRow> {
     }
     return `${this.rowSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
+}
+
+export interface IEvent {
+  event: any | 'MasterSelectionChange' | 'RowSelectionChange';
+  sender: any;
+}
+
+export interface IRowActionMenuEvent<T> {
+  actionItem: RowActionMenu;
+  rowItem: T;
 
 }

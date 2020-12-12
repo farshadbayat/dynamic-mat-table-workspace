@@ -6,6 +6,7 @@ import { PrintConfig } from '../../../models/print-config.model';
 const styles = 'body{margin:15px;}table{width:100%;border-collapse:collapse;}h2{text-align:center;}th.mat-header-cell{text-align:center;}div{text-align:center;margin:30px }tr{border-bottom:1px solid }td,th{padding:10px; text-align: center }.param-list{text-align: left;border:solid gray;border-width: 0px 0px 2px 0;margin-bottom: 10px;padding-bottom: 10px;}.param {display: inline-block;margin: 10px;}';
 
 @Component({
+  // tslint:disable-next-line: component-selector
   selector: 'print-dialog',
   templateUrl: './print-dialog.component.html',
   styleUrls: ['./print-dialog.component.scss']

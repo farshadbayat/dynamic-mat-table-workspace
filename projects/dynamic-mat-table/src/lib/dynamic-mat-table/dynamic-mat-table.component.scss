@@ -14,6 +14,7 @@
   table-layout: fixed;
   min-height: 200px;
   position: relative;
+  overflow: auto;
 }
 
 mat-cell:first-of-type:not(.table-select) {
@@ -45,6 +46,7 @@ mat-cell, mat-footer-cell, mat-header-cell {
 @include table-base;
 @include progress;
 @include no-records;
+@include dmf-class;
 
 cdk-virtual-scroll-viewport {
   min-height: 100px;
@@ -92,59 +94,6 @@ mat-header-cell {
     transition: all 0.2s;
   }  
 }
-
-// Drag Column
-.drag-indicator{
-  // margin-left: -24px;
-  position: absolute;
-  @include header-icon-base;
-  cursor: move;
-  :host .mat-header-row > .mat-header-cell:hover &{
-    opacity: 1;    
-    pointer-events: fill;
-    transform: translateY(0px);
-  }
-}
-.drag-indicator:hover {
-  color: #5f737d !important;
-}
-
-.cdk-drag-preview {
-  color: black;
-  border: solid 1px #d4d4d4;
-  background: rgba(245, 245, 245);
-  box-sizing: border-box;
-  border-radius: 4px;
-  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
-}
-
-.cdk-drag-placeholder {
-  border: dotted 1px gray;
-  background: rgb(250, 250, 250);
-  content: none;
-}
-
-.cdk-drag-placeholder::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 2px;
-  right: 2px;
-  background: rgba(0,0,0,0.1);
-  border: dashed 1px rgba(0,0,0,0.4);
-}
-
-.cdk-drag-animating {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
-.cdk-drop-list-dragging {
-  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
-}
-
 
 mat-header-cell:hover {
   .left-resizer-handler {
@@ -204,3 +153,101 @@ mat-header-cell:hover {
 //     background-color: aqua;    
 //   }  
 // }
+
+.drag-indicator{
+  position: absolute;
+  @include header-icon-base;
+  cursor: move;
+  :host .mat-header-row > .mat-header-cell:hover &{
+    opacity: 1;    
+    pointer-events: fill;
+    transform: translateY(0px);
+  }
+}
+
+.drag-indicator:hover {
+  color: #bfc0c0 !important;
+}
+
+.cdk-drag-preview {
+  color: black;
+  border: solid 1px #d4d4d4;
+  background-color: rgba(245, 245, 245);
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+              0 8px 10px 1px rgba(0, 0, 0, 0.14),
+              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  border: dotted 1px rgb(156, 156, 156);
+  background-color: rgb(211, 211, 211);
+  content: none;
+}
+
+// .cdk-drag-placeholder::after {
+//   content: "";
+//   position: absolute;
+//   top: 0;
+//   bottom: 0;
+//   left: 2px;
+//   right: 2px;
+//   background-color: rgba(0,0,0,0.1);
+//   border: dashed 1px rgba(0,0,0,0.4);
+// }
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-dragging {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+
+
+.detail-row {
+  height: 0px;
+  border-bottom-width: 0px !important;
+}
+
+.table-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+.table-row:not(.expanded-row):active {
+  background: #efefef;
+}
+
+.table-row mat-cell {
+  border-bottom-width: 0;
+}
+
+.element-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.example-element-diagram {
+  min-width: 80px;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: lighter;
+  margin: 8px 0;
+  height: 104px;
+}
+
+.example-element-symbol {
+  font-weight: bold;
+  font-size: 40px;
+  line-height: normal;
+}
+
+.example-element-description {
+  padding: 16px;
+}
+
+.example-element-description-attribution {
+  opacity: 0.5;
+}

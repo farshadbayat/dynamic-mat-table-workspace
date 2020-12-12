@@ -1,6 +1,9 @@
+
 /*
  * Public API Surface of dynamic-mat-table
  */
+export * from './lib/cores/type';
+export * from './lib/cores/dynamic-cell/IDynamicCell';
 
 /*
 Table Component

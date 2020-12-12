@@ -7,6 +7,7 @@ export interface TableRow {
   rowClass?: string;
   style?: string;
   rowActionMenu?: { [key: string]: RowActionMenu; };
+  option?: any;
 }
 
 export interface RowActionMenu {

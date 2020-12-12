@@ -5,6 +5,7 @@
 
   <dynamic-mat-table
     [dir]="direction"
+    [rowHeight]="rowHeight"
     [columns]="fields"
     [pending]="pending"
     [setting]="setting"
@@ -21,8 +22,7 @@
     (onRowEvent)="row_onClick($event)"
     [class.conditional-class]="conditinalClass"
     (settingChange)="table_onChangeSetting($event)"
-    (rowSelectionChange)="table_onRowSelectionChange($event)"
-  >
+    (rowSelectionChange)="table_onRowSelectionChange($event)">
   </dynamic-mat-table>
 </mat-card>
 
@@ -83,6 +83,7 @@
   <button mat-raised-button color="primary" (click)="direction_onClick()">
     Direction ({{ direction }})
   </button>
+  <mat-slider min="40" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 
 <section class="section">
@@ -93,3 +94,6 @@
 <div *ngFor="let item of eventLog">
   {{ eventLog | json }}
 </div>
+
+
+<app-order-table></app-order-table>

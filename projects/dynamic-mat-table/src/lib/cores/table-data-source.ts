@@ -89,6 +89,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
   ngOnInit(): void {
   }
 
+  // When client paging active use for reterive paging data
   pagingData(data) {
     const p: MatPaginator = (this as any)._paginator;
     if ( p && p !== null) {

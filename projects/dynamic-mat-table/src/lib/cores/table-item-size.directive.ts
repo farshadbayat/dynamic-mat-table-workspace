@@ -7,7 +7,6 @@ import { MatTable } from '@angular/material/table';
 import { FixedSizeTableVirtualScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
 import { CdkHeaderRowDef } from '@angular/cdk/table';
 import { Subject } from 'rxjs';
-import { isNumber } from 'util';
 
 export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemSizeDirective) {
   return tableDir.scrollStrategy;
@@ -100,7 +99,7 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
 
   getPage(data, start, end): any[] {
     this.requestRendering.emit({from: start, to: end});
-    return !isNumber(start) || !isNumber(end) ? data : data.slice(start, end);
+    return !(typeof start === 'number') || !(typeof end === 'number') ? data : data.slice(start, end);
   }
 
   connectDataSource(dataSource: any) {
