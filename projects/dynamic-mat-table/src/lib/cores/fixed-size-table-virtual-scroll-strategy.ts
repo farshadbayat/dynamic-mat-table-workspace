@@ -44,6 +44,8 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
 
   public detach(): void {
     // no-op
+    this.renderedRangeStream.complete();
+    this.viewport = null;
   }
 
   public onContentScrolled(): void {
@@ -66,7 +68,10 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
   }
 
   public scrollToIndex(index: number, behavior: ScrollBehavior): void {
-    // no-op
+    // no-op    
+    if (this.viewport) {
+      this.viewport.scrollToOffset( this.rowHeight * index , behavior);
+    }    
   }
 
   public setConfig(configs: TSVStrategyConfigs) {
@@ -109,8 +114,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     const skip = Math.round(offset / this.rowHeight);
     const index = Math.max(0, skip);
     const start = Math.max(0, index - buffer);
-    const end = Math.min(this.dataLength, index + amount + buffer);
-    console.log('end', end);
+    const end = Math.min(this.dataLength, index + amount + buffer);    
     const renderedOffset = start * this.rowHeight;
     this.viewport.setRenderedContentOffset(renderedOffset);
     this.viewport.setRenderedRange({start, end});

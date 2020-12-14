@@ -9,8 +9,10 @@ import {
   TableSelectionMode,
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
+  IEvent
 } from 'dynamic-mat-table';
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
+import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
 const DATA = getData(1000);
 @Component({
@@ -36,6 +38,8 @@ export class AppComponent {
   rowActionMenu: RowActionMenu[] = [];
   tableSelection: TableSelectionMode = 'none';
   dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
+  rowHeight = 48;
+  expandComponent = DynamicExpandCellComponent;
 
   pagination: TablePagination = {
     pageIndex: 0,
@@ -148,9 +152,27 @@ export class AppComponent {
       ? (this.direction = 'rtl')
       : (this.direction = 'ltr');
   }
+
+  expandIndex = 0;
+  expandToggle_onClick() {    
+    this.table.expandRow( this.expandIndex);
+    this.expandIndex++;
+  }
   
-  row_onClick($event) {
-    console.log(`row ${$event.row} clicked!`);
+  row_onClick(e: IEvent) {
+    if (e.event === 'RowSelectionChange') {
+      console.log('Row Selection Change',e.sender);      
+    } else {
+      // change style
+      if(!e.sender.row.option){
+        e.sender.row.option = {};
+      }
+      // if option not defined
+      if (!e.sender.row.option[e.sender.column.name]) {        
+        e.sender.row.option[e.sender.column.name] = {};
+      }
+      e.sender.row.option[e.sender.column.name].style = {'background-color': '#ff4081', 'color':'white'};
+    }
   }
 }
 

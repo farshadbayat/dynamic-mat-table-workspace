@@ -3,8 +3,7 @@
 Dynamic tables built with angular material.
 
 ## Online Demo
-https://stackblitz.com/edit/angular-ivy-kffz4x?file=src%2Fstyles.css
-
+https://stackblitz.com/edit/angular-ivy-nuglh9
 ## Getting Started
 
 A full demo can be found on the github repository.

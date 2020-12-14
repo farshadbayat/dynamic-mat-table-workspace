@@ -16,7 +16,8 @@ import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { OrderTableComponent } from './order-table/order-table.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatTableModule } from '@angular/material';
+import { MatIconModule, MatTableModule } from '@angular/material';
+import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
@@ -24,10 +25,11 @@ export function languageIntl() {
 }
 
 @NgModule({
-  declarations: [	
+  declarations: [		
     AppComponent,
     DynamicCellComponent,
-      OrderTableComponent
+    OrderTableComponent,
+    DynamicExpandCellComponent
    ],
   imports: [
     BrowserModule,
@@ -42,9 +44,11 @@ export function languageIntl() {
     MatSliderModule,
     DragDropModule,
     MatTableModule,
+    MatIconModule
   ],
   entryComponents:[
-    DynamicCellComponent
+    DynamicCellComponent,
+    DynamicExpandCellComponent
   ],
   providers: [
     { provide: TableIntl, useFactory: languageIntl}

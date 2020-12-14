@@ -1,4 +1,4 @@
-import { RowActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
+import { IEvent, IRowActionMenuEvent, RowActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { TableField } from '../models/table-field.model';
@@ -139,6 +139,21 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
+  public expandColumn = [];
+  private expandComponent_: any;
+  @Input()
+  get expandComponent(): any {
+    return this.expandComponent_;
+  }
+  set expandComponent(value: any) {
+    this.expandComponent_ = value;
+    if (this.expandComponent_ !== null && this.expandComponent_ !== undefined) {
+      this.expandColumn = ['expandedDetail'];
+    } else {
+      this.expandColumn = [];
+    }
+  }
+
   @Input() public rowActionMenu: RowActionMenu[];
 
   // @Input()
@@ -206,6 +221,9 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   //@Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
   @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
+  
+  /*************************************** Expand Row *********************************/
+  expandedElement: any | null;
 
   constructor(public tableService: TableService) {
     this.showProgress = true;
@@ -231,8 +249,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;
-  // @ViewChildren(HeaderFilterComponent) headerFilterList: QueryList<HeaderFilterComponent>;
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;  
   /**************************************** Methods **********************************************/
 
   refreshTableSetting() {
@@ -266,9 +283,10 @@ export class TableCoreDirective<T extends TableRow> {
         this.viewport.scrollTo({ top: 0, behavior: 'auto' });
       }
       this.dataSource.clearData();
+      this.expandedElement = null;
     }
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
-  }
+  }  
 
   trackBy = (_: number, item: any) => {
     return item.Id;
@@ -355,13 +373,3 @@ export class TableCoreDirective<T extends TableRow> {
   }
 }
 
-export interface IEvent {
-  event: any | 'MasterSelectionChange' | 'RowSelectionChange';
-  sender: any;
-}
-
-export interface IRowActionMenuEvent<T> {
-  actionItem: RowActionMenu;
-  rowItem: T;
-
-}

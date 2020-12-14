@@ -21,3 +21,13 @@ export interface RowActionMenu {
 
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';
+
+export interface IEvent {
+  event: any | 'MasterSelectionChange' | 'RowSelectionChange';
+  sender: any;
+}
+
+export interface IRowActionMenuEvent<T> {
+  actionItem: RowActionMenu;
+  rowItem: T;
+}

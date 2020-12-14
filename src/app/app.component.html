@@ -5,6 +5,7 @@
 
   <dynamic-mat-table
     [dir]="direction"
+    [expandComponent]="expandComponent"
     [rowHeight]="rowHeight"
     [columns]="fields"
     [pending]="pending"
@@ -33,35 +34,19 @@
   <button mat-raised-button color="primary" (click)="pending = !pending">
     Pending {{ pending }}
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="stickyHeader = !stickyHeader"
-  >
+  <button mat-raised-button color="primary" (click)="stickyHeader = !stickyHeader">
     Header Sticky: {{ stickyHeader }}
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="columnSticky_onClick(1, 'strat')"
-  >
+  <button mat-raised-button color="primary" (click)="columnSticky_onClick(1, 'strat')">
     {{ fields[1]?.name + ":" + fields[1]?.sticky }}
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="columnSticky_onClick(3, 'end')"
-  >
+  <button mat-raised-button color="primary" (click)="columnSticky_onClick(3, 'end')">
     {{ fields[3]?.name + ":" + fields[3]?.sticky }}
   </button>
   <button mat-raised-button color="primary" (click)="tableSelection_onClick()">
     Table Selection ({{ tableSelection }})
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="conditinalClass = !conditinalClass"
-  >
+  <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass">
     Conditional Class ({{ conditinalClass }})
   </button>
   <button mat-raised-button color="primary" (click)="table.clear()">
@@ -70,11 +55,7 @@
   <button mat-raised-button color="primary" (click)="addNewColumn_onClick()">
     Add New Column
   </button>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="addNewLongColumn_onClick()"
-  >
+  <button mat-raised-button color="primary" (click)="addNewLongColumn_onClick()">
     Add Long Content Column
   </button>
   <button mat-raised-button color="primary" (click)="paginationMode_onClick()">
@@ -82,6 +63,9 @@
   </button>
   <button mat-raised-button color="primary" (click)="direction_onClick()">
     Direction ({{ direction }})
+  </button>
+  <button mat-raised-button color="primary" (click)="expandToggle_onClick()">
+    Expand Toggle Row {{ expandIndex }}
   </button>
   <mat-slider min="40" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
@@ -94,6 +78,3 @@
 <div *ngFor="let item of eventLog">
   {{ eventLog | json }}
 </div>
-
-
-<app-order-table></app-order-table>

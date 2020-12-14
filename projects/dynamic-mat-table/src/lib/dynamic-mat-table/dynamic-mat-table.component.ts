@@ -62,8 +62,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   printing = true;
   printTemplate: TemplateRef<any> = null;
   resizeColumn: ResizeColumn = new ResizeColumn();
-
-  expandedElement: any | null;
+    
   // mouse resize
   resizableMousemove: () => void;
   resizableMouseup: () => void;
@@ -73,7 +72,8 @@ export class DynamicMatTableComponent<T extends TableRow>
     private renderer: Renderer2,
     public languagePack: TableIntl,
     public tableService: TableService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    // private fixedSizeTableVirtualScrollStrategy: FixedSizeTableVirtualScrollStrategy
   ) {
     super(tableService);
 
@@ -84,33 +84,30 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.viewport.renderedRangeStream.subscribe( t => {
+      // in expanding row scrolling make not good apperance therefor close it.
+      if (this.expandedElement && this.expandedElement.option && this.expandedElement.option.expand) {
+        console.log('clear', t); 
+        this.expandedElement.option.expand = false;
+        this.expandedElement = null;
+      }
+    })
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.sort.sortChange.subscribe((resp) => {
       this.pagination.pageIndex = 0;
-      console.log(this.pagination);
     });
     this.dataSource.dataOfRange$.subscribe((data) => {
       // console.log('dataOfRange');
     });
   }
 
-  test(s) {
-    console.log(s);
-    
-  }
-
-  public refreshGrid() {
-    console.log('change');
+  public refreshGrid() {    
     this.cd.markForCheck();
     this.refreshTableSetting();
-    console.log('change finished');
   }
-
-  // public getCellOption(column: TableField<any>, row: any) {
-  //    return row?.option[column.name] || column?.option;    
-  // }
 
   // TO DO
   ellipsis(cellRef) {
@@ -121,7 +118,23 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
-  filter_OnChanged(column: TableField<T>, filter: AbstractFilter[]) {
+  cellClass(option, cellName) {
+    if (option && cellName) {
+      return option[cellName] ? option[cellName].class : null;
+    } else {
+      return null;
+    }
+  }
+
+  cellStyle(option, cellName) {
+    if (option && cellName) {
+      return option[cellName] ? option[cellName].style : null;
+    } else {
+      return null;
+    }    
+  }
+
+  filter_onChanged(column: TableField<T>, filter: AbstractFilter[]) {
     this.pending = true;
     this.dataSource.setFilter(column.name, filter).subscribe(() => {
       this.pending = false;
@@ -272,12 +285,34 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
-  onRowClick(e, row) {
+  public expandRow(rowIndex: number, mode: boolean = true) {
+    if (this.expandedElement === this.dataSource.allData[rowIndex]) {
+      this.expandedElement.option.expand = mode;    
+      this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
+    } else {
+      if (this.expandedElement && this.expandedElement !== this.dataSource.allData[rowIndex]) {
+        this.expandedElement.option.expand = false;      
+      }
+      this.expandedElement = null;      
+      if (mode === true) {    
+        this.viewport.scrollToIndex(rowIndex, 'smooth');      
+        setTimeout( () => {
+          this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
+          if (this.expandedElement.option === undefined || this.expandedElement.option === null) {
+            this.expandedElement.option = { expand: false};
+          }
+          this.expandedElement.option.expand = true;
+          this.refreshGrid();
+        }, 300);
+      }
+    }    
+  }
+
+  onCellClick(e, row, column) {
     if (this.selection !== 'none') {
       this.rowSelection.toggle(row);
-    }    
-    this.expandedElement = this.expandedElement === row ? null : row
-    this.onRowEvent.emit({ event: e, sender: row });
+    }
+    this.onRowEvent.emit({ event: e, sender: {row: row, column: column} });
   }
 
   /************************************ Drag & Drop Column *******************************************/

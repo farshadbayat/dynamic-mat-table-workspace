@@ -29,7 +29,8 @@ export interface AbstractField {
   cellClass?: string;
   style?: string;
   icon?: string;
-  iconColor?: string;
+  iconColor?: string;  
   dynamicCellComponent?: any;
+  data?: any; // for store share data show in cell
 }
 
