@@ -104,3 +104,8 @@ export function titleCase(value: string) {
     }
     return sentence.join(' ');
 }
+
+
+export interface Dictionary<T> {
+  [Key: string]: T;
+}

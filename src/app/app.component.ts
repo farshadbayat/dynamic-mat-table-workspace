@@ -23,8 +23,7 @@ const DATA = getData(1000);
 export class AppComponent {
   eventLog = [];
   title = 'dynamic-mat-table';
-  @ViewChild(DynamicMatTableComponent, { static: true })
-  table: DynamicMatTableComponent<TestElement>;
+  @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
 
   fields: TableField<any>[] = []; /* REQUIRED */
   setting: TableSetting;

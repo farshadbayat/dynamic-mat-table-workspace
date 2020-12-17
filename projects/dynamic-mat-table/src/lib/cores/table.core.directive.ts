@@ -1,4 +1,4 @@
-import { IEvent, IRowActionMenuEvent, RowActionMenu, TableRow, TableSelectionMode } from '../models/table-row.model';
+import { IEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
 import { TableField } from '../models/table-field.model';
@@ -223,7 +223,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
   
   /*************************************** Expand Row *********************************/
-  expandedElement: any | null;
+  expandedElement: TableRow | null;
 
   constructor(public tableService: TableService) {
     this.showProgress = true;
@@ -248,8 +248,8 @@ export class TableCoreDirective<T extends TableRow> {
   public tableSetting: TableSetting = {};
 
   /**************************************** Refrence Variables ***************************************/
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport: CdkVirtualScrollViewport;  
+  @ViewChild(MatTable, { static: true }) table !: MatTable<any>;
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;  
   /**************************************** Methods **********************************************/
 
   refreshTableSetting() {

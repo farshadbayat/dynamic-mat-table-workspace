@@ -32,8 +32,8 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   @Input() field?: TableField<any>;
   @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
-  @ViewChildren('filterInput') filterInputList: QueryList<MatInput>;
-  @ViewChild(MatMenuTrigger, { static: true }) menu: MatMenuTrigger;
+  @ViewChildren('filterInput') filterInputList !: QueryList<MatInput>;
+  @ViewChild(MatMenuTrigger, { static: true }) menu !: MatMenuTrigger;
 
   private filterList: AbstractFilter[] = [];
   @Input()

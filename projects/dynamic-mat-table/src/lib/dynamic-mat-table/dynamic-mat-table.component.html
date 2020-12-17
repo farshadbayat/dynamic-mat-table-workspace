@@ -73,7 +73,7 @@
                   (click)="onCellClick($event, row, column)"
                   [ngClass]="cellClass(row?.option, column?.name)"
                   [ngStyle]="cellStyle(row?.option, column?.name)">          
-          <mat-icon></mat-icon>
+          <mat-icon>{{cellIcon(row?.option, column?.name)}}</mat-icon>
           {{row[column.name]}}
         </mat-cell>
       </ng-container>

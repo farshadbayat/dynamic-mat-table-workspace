@@ -52,12 +52,9 @@ export const expandAnimation = trigger('detailExpand', [
 export class DynamicMatTableComponent<T extends TableRow>
   extends TableCoreDirective<T>
   implements OnInit, AfterViewInit {
-  @ViewChild('printRef', { static: true })
-  printRef: TemplateRef<any>;
-  @ViewChild('printContentRef', { static: true })
-  printContentRef: ElementRef;
-  @ViewChildren(HeaderFilterComponent)
-  headerFilterList: QueryList<HeaderFilterComponent>;
+  @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
+  @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
+  @ViewChildren(HeaderFilterComponent) headerFilterList !: QueryList<HeaderFilterComponent>;
   private dragDropData = {dragColumnIndex: -1, dropColumnIndex: -1};
   printing = true;
   printTemplate: TemplateRef<any> = null;
@@ -129,6 +126,15 @@ export class DynamicMatTableComponent<T extends TableRow>
   cellStyle(option, cellName) {
     if (option && cellName) {
       return option[cellName] ? option[cellName].style : null;
+    } else {
+      return null;
+    }    
+  }
+
+  cellIcon(option, cellName) {
+    //debugger;
+    if (option && cellName) {
+      return option[cellName] ? option[cellName].icon : null;
     } else {
       return null;
     }    
@@ -309,8 +315,8 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   onCellClick(e, row, column) {
-    if (this.selection !== 'none') {
-      this.rowSelection.toggle(row);
+    if (this.selection && this.selection !== 'none') {
+      this.onRowSelectionChange(e, row);
     }
     this.onRowEvent.emit({ event: e, sender: {row: row, column: column} });
   }

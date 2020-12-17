@@ -1,13 +1,11 @@
 import { ThemePalette } from '@angular/material/core';
+import { Dictionary } from '../cores/type';
 
 // this fields are for each row data
 export interface TableRow {
-  id?: number;
-  isOpen?: boolean;
-  rowClass?: string;
-  style?: string;
+  id?: number;  
   rowActionMenu?: { [key: string]: RowActionMenu; };
-  option?: any;
+  option?: RowOption;
 }
 
 export interface RowActionMenu {
@@ -30,4 +28,10 @@ export interface IEvent {
 export interface IRowActionMenuEvent<T> {
   actionItem: RowActionMenu;
   rowItem: T;
+}
+
+export interface RowOption extends Dictionary<any> {
+  style?: any;
+  class?: any; 
+  expand?: boolean; 
 }

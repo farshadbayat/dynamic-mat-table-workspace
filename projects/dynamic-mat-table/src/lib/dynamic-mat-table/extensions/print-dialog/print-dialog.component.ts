@@ -12,7 +12,7 @@ const styles = 'body{margin:15px;}table{width:100%;border-collapse:collapse;}h2{
   styleUrls: ['./print-dialog.component.scss']
 })
 export class PrintTableDialogComponent implements OnInit {
-  @ViewChild('printContentRef', {static: true}) printContentRef: ElementRef;
+  @ViewChild('printContentRef', {static: true}) printContentRef !: ElementRef;
 
   constructor( public dialogRef: MatDialogRef<PrintTableDialogComponent>, @Inject(MAT_DIALOG_DATA) public printTable: PrintConfig) {}
 

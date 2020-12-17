@@ -31,7 +31,7 @@ export class OrderTableComponent implements OnInit {
   ];
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource(ELEMENT_DATA);
-  @ViewChild(MatSort, {static: false}) sort: MatSort;
+  @ViewChild(MatSort, {static: false}) sort !: MatSort;
 
   previousIndex: number;
 
