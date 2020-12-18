@@ -39,7 +39,7 @@ export const tableAnimation = trigger('tableAnimation', [
 export const expandAnimation = trigger('detailExpand', [
   state('collapsed', style({height: '0px', minHeight: '0'})),
   state('expanded', style({height: '*'})),
-  transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+  transition('expanded <=> collapsed', animate('100ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
 ]);
 @Component({
   // tslint:disable-next-line: component-selector
@@ -291,7 +291,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     });
   }
 
-  public expandRow(rowIndex: number, mode: boolean = true) {
+  public expandRow(rowIndex: number, mode: boolean = true) {    
     if (this.expandedElement === this.dataSource.allData[rowIndex]) {
       this.expandedElement.option.expand = mode;    
       this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
@@ -309,7 +309,7 @@ export class DynamicMatTableComponent<T extends TableRow>
           }
           this.expandedElement.option.expand = true;
           this.refreshGrid();
-        }, 300);
+        }, 10);
       }
     }    
   }
