@@ -1,17 +1,21 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { DynamicMatTableComponent, IDynamicCell, TableField, IEvent } from 'dynamic-mat-table';
 
 @Component({
   selector: 'app-dynamic-cell',
   templateUrl: './dynamic-cell.component.html'
 })
-export class DynamicCellComponent implements OnInit, IDynamicCell {
+export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
   @Input() onRowEvent: EventEmitter<IEvent>;  
   @Input() row: any;
   @Input() column: TableField<any>;
   @Input() parent: DynamicMatTableComponent<any>;
 
   ngOnInit(): void {}
+
+  ngOnDestroy(): void {
+    console.log('ss');    
+  }
 
   expandRow_onClick() {
     // this.row.option.expand = !this.row.option.expand;

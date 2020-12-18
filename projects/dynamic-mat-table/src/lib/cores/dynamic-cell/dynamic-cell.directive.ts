@@ -1,4 +1,4 @@
-import { Compiler, ComponentFactoryResolver, ComponentRef, Directive, EventEmitter, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { Compiler, ComponentFactoryResolver, ComponentRef, Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { DynamicMatTableComponent } from '../../dynamic-mat-table/dynamic-mat-table.component';
 import { TableField } from '../../models/table-field.model';
 import { IEvent } from '../../models/table-row.model';
@@ -7,7 +7,7 @@ import { IDynamicCell } from './IDynamicCell';
 @Directive({
   selector: '[dynamicCell]'
 })
-export class DynamicCellDirective implements OnInit, OnChanges {
+export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   @Input() component: any;
   @Input() column: TableField<any>;
   @Input() row: any;
@@ -19,7 +19,7 @@ export class DynamicCellDirective implements OnInit, OnChanges {
     private cfr: ComponentFactoryResolver,
     private vc: ViewContainerRef,
     private parent: DynamicMatTableComponent<any>
-    ) {}  
+    ) {}    
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.componentRef === null || this.componentRef === undefined) {
@@ -39,10 +39,15 @@ export class DynamicCellDirective implements OnInit, OnChanges {
 
   ngOnInit() {}
 
+  ngOnDestroy(): void {
+    console.log('destroy');    
+    this.componentRef.destroy();
+  }
+
   initComponent() {
     try{
       const componentFactory = this.cfr.resolveComponentFactory<IDynamicCell>(this.component);
-      this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);
+      this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);      
       this.updateInput();
     } catch (e) {
       console.log(e);
