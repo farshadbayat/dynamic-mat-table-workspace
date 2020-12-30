@@ -5,6 +5,7 @@ export interface TableSetting {
   direction?: Direction;
   columnSetting?: AbstractField[];
   visibaleActionMenu?: VisibleActionMenu;
+  visibleTableMenu?: boolean;
 }
 
 export interface VisibleActionMenu {

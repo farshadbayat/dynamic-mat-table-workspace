@@ -27,10 +27,13 @@ export interface AbstractField {
   filter?: 'client-side' | 'server-side' | 'none';
   sort?: 'client-side' | 'server-side' | 'none';
   cellClass?: string;
-  style?: string;
+  cellStyle?: any;
   icon?: string;
   iconColor?: string;  
   dynamicCellComponent?: any;
+  draggable?: boolean;
+  filterable?: boolean;
+  sortable?: boolean;
   data?: any; // for store share data show in cell
 }
 

@@ -26,11 +26,12 @@ export class AppComponent {
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
 
   fields: TableField<any>[] = []; /* REQUIRED */
-  setting: TableSetting;
-  pending = false;
+  setting: TableSetting= {};
+  pending = false; 
   showNoData = true;
   stickyHeader = true;
   showProgress = true;
+  visibleMenu = true;
   conditinalClass = false;
   paginationMode: string = 'server';
   direction: 'rtl' | 'ltr' = 'ltr';
@@ -52,7 +53,11 @@ export class AppComponent {
 
   constructor() {
     this.fields = [
-      { name: 'row', type: 'number' },
+      {
+         name: 'row',
+         type: 'number',
+         cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'}
+     },
       { name: 'name', header: 'Element Name', sticky: 'start' },
       { name: 'weight' },
       { name: 'color' },
@@ -62,6 +67,9 @@ export class AppComponent {
         icon: 'chrome_reader_mode',
         iconColor: 'blue',
         dynamicCellComponent: DynamicCellComponent,
+        filterable: false,
+        draggable: false,
+        sortable: false,
       }
     ];
 
@@ -90,7 +98,7 @@ export class AppComponent {
   }
 
   table_onChangeSetting(setting) {
-    console.log(setting);
+    // console.log(setting);
   }
 
   tableonRowActionChange(e) {
@@ -98,14 +106,14 @@ export class AppComponent {
   }
 
   columnSticky_onClick(columnSticky, type) {
-    console.log(this.fields);
+    // console.log(this.fields);
 
     if (this.fields[columnSticky].sticky === type) {
       this.fields[columnSticky].sticky = 'none';
     } else {
       this.fields[columnSticky].sticky = type;
     }
-    console.log(this.fields);
+    // console.log(this.fields);
   }
 
   tableSelection_onClick() {
@@ -119,7 +127,7 @@ export class AppComponent {
   }
 
   table_onRowSelectionChange(e) {
-    console.log(e);
+    // console.log(e);
   }
 
   addNewColumn_onClick() {
@@ -159,9 +167,10 @@ export class AppComponent {
   }
   
   row_onClick(e: IEvent) {
+    console.log(e.event);
     if (e.event === 'RowSelectionChange') {
-      console.log('Row Selection Change',e.sender);      
-    } else {
+      // console.log('Row Selection Change',e.sender);      
+    } else if(e.event.type === 'click' &&  e.sender.row) {
       // change style
       if(!e.sender.row.option){
         e.sender.row.option = {};
@@ -171,7 +180,21 @@ export class AppComponent {
         e.sender.row.option[e.sender.column.name] = {};
       }
       e.sender.row.option[e.sender.column.name].style = {'background-color': '#ff4081', 'color':'white'};
+    } else if(e.event.type === 'dblclick' &&  e.sender.row) {
+      // change style
+      if(!e.sender.row.option){
+        e.sender.row.option = {};
+      }
+      // if option not defined
+      e.sender.row.option.style = {'background-color': '#ff4081', 'color':'white'};
     }
+  }
+
+  visible_onChange(e) {
+    const setting = Object.assign({}, this.setting);
+    setting.visibleTableMenu = e.checked;
+    this.setting= setting;
+    console.log(e.checked);
   }
 }
 

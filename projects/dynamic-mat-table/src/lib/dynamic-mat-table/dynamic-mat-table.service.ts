@@ -93,7 +93,7 @@ export class TableService {
   }
 
   public saveColumnInfo(columnInfo: TableField<any>[], saveName: string = this.tableName): void {
-    console.log(saveName);
+    // console.log(saveName);
     if (saveName) {
       if (!localStorage) {
         return;

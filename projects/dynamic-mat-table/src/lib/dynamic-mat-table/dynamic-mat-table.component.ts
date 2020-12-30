@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChildren,
-         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
 import { RowActionMenu, TableRow } from '../models/table-row.model';
@@ -16,6 +16,7 @@ import { MenuActionChange } from './extensions/table-menu/table-menu.component';
 import { CdkDragDrop, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isNullorUndefined } from '../cores/type';
 import 'hammerjs';
+import { TableSetting } from '../models/table-setting.model';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -50,9 +51,21 @@ export const expandAnimation = trigger('detailExpand', [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DynamicMatTableComponent<T extends TableRow>
-  extends TableCoreDirective<T>
-  implements OnInit, AfterViewInit {
+export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit {
+  @Input()
+  get setting() {
+    return this.tableSetting;
+  }
+  set setting(value: TableSetting) {    
+    if ( !isNullorUndefined(value) ) {
+      this.tableSetting.columnSetting = value.columnSetting === undefined ? this.tableSetting.columnSetting : value.columnSetting;
+      this.tableSetting.visibleTableMenu = value.visibleTableMenu === undefined ? this.tableSetting.visibleTableMenu : value.visibleTableMenu;
+      this.tableSetting.direction = value.direction ? this.tableSetting.direction : value.direction;
+      this.tableSetting.visibaleActionMenu = value.visibaleActionMenu ? this.tableSetting.visibaleActionMenu : value.visibaleActionMenu;      
+      this.setDisplayedColumns();
+    }
+  }
+  
   @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
   @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
   @ViewChildren(HeaderFilterComponent) headerFilterList !: QueryList<HeaderFilterComponent>;
@@ -116,20 +129,30 @@ export class DynamicMatTableComponent<T extends TableRow>
     }
   }
 
-  cellClass(option, cellName) {
-    if (option && cellName) {
-      return option[cellName] ? option[cellName].class : null;
+  cellClass(option, column) {
+    let clas = null;
+    if (option && column.name) {
+      clas = option[column.name] ? option[column.name].style : null;
+    }
+    
+    if ( clas === null) {
+      return column.cellClass;
     } else {
-      return null;
+      return {...clas, ...column.cellClass};
     }
   }
 
-  cellStyle(option, cellName) {
-    if (option && cellName) {
-      return option[cellName] ? option[cellName].style : null;
+  cellStyle(option, column) {
+    let style = null;
+    if (option && column.name) {
+      style = option[column.name] ? option[column.name].style : null;
+    }
+    
+    if ( style === null) {
+      return column.cellStyle;
     } else {
-      return null;
-    }    
+      return {...style, ...column.cellStyle};
+    }
   }
 
   cellIcon(option, cellName) {
@@ -212,7 +235,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
-    console.log(this.resizeColumn.resizeHandler, this.resizeColumn.startX);
+    // console.log(this.resizeColumn.resizeHandler, this.resizeColumn.startX);
     if (this.resizeColumn.resizeHandler === 'right') {
       this.resizeColumn.startWidth = event.target.parentElement.clientWidth;
       this.resizeColumn.currentResizeIndex = index;
@@ -293,6 +316,9 @@ export class DynamicMatTableComponent<T extends TableRow>
   }
 
   public expandRow(rowIndex: number, mode: boolean = true) {    
+    if( rowIndex === null || rowIndex === undefined) {
+      throw 'Row index is not defined.';      
+    }
     if (this.expandedElement === this.dataSource.allData[rowIndex]) {
       this.expandedElement.option.expand = mode;    
       this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
@@ -320,6 +346,10 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.onRowSelectionChange(e, row);
     }
     this.onRowEvent.emit({ event: e, sender: {row: row, column: column} });
+  }
+
+  onRowDblClick(e, row) {    
+    this.onRowEvent.emit({ event: e, sender: {row: row} });
   }
 
   /************************************ Drag & Drop Column *******************************************/

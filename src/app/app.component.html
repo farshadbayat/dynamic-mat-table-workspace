@@ -73,6 +73,7 @@
 <section class="section">
   <mat-checkbox [(ngModel)]="showNoData">Show NoData</mat-checkbox>
   <mat-checkbox [(ngModel)]="showProgress">Show Progress</mat-checkbox>
+  <mat-checkbox [(ngModel)]="visibleMenu" (change)="visible_onChange($event)">Show Table Menu</mat-checkbox>
 </section>
 
 <div *ngFor="let item of eventLog">

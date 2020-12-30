@@ -47,6 +47,6 @@
 </ng-template>
 </mat-menu>
 
-<span class="trigger" [matMenuTriggerFor]="filterMenu">
+<span class="trigger" [matMenuTriggerFor]="filterMenu" *ngIf="field.filterable !== false">
   <mat-icon>filter_list</mat-icon>
 </span>

@@ -142,7 +142,6 @@ import { FilterLabels, LanguagePack, MenuLabels, TableLabels } from 'dynamic-mat
 export class PersionLanguage implements LanguagePack {
 
   constructor() {
-    console.log('international');
   }
 
   menuLabels: MenuLabels = {
@@ -176,7 +175,7 @@ export class PersionLanguage implements LanguagePack {
     firstPageLabel: 'اولین صفحه:',
     lastPageLabel: 'آخرین صفحه:',
     getRangeLabel : (page: number, pageSize: number, length: number) => {
-      console.log(page, pageSize, length);
+      // console.log(page, pageSize, length);
       if (length === 0 || pageSize === 0) { return `0 از ${length}`; }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;

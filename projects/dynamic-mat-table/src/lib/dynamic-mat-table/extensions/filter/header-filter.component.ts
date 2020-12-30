@@ -55,7 +55,11 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   @HostBinding('class.show-trigger')
   get showTrigger(): boolean {
-    return this.menu.menuOpen || this.hasValue;
+    if(this.menu === undefined) { 
+      return false;
+    } else {
+      return this.menu.menuOpen || this.hasValue;
+    }
   }
 
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
@@ -93,7 +97,9 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.menu.menuOpened.subscribe(() => this.focusToLastInput());
+    if (this.menu) {
+      this.menu.menuOpened.subscribe(() => this.focusToLastInput());
+    }
   }
 
   focusToLastInput() {

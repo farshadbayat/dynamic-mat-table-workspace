@@ -7,7 +7,7 @@ import {
 } from 'dynamic-mat-table';
 export class PersianLanguage implements LanguagePack {
   constructor() {
-    console.log('international');
+    // console.log('international');
   }
 
   menuLabels: MenuLabels = {
@@ -42,7 +42,7 @@ export class PersianLanguage implements LanguagePack {
     firstPageLabel: 'اولین صفحه:',
     lastPageLabel: 'آخرین صفحه:',
     getRangeLabel: (page: number, pageSize: number, length: number) => {
-      console.log(page, pageSize, length);
+      // console.log(page, pageSize, length);
       if (length === 0 || pageSize === 0) {
         return `0 از ${length}`;
       }

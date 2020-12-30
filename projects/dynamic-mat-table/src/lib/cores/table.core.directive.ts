@@ -51,15 +51,7 @@ export class TableCoreDirective<T extends TableRow> {
     this.tableSetting.direction = value;
   }
 
-  @Input()
-  get setting() {
-    return this.tableSetting;
-  }
-  set setting(value: TableSetting) {
-    if ( !isNullorUndefined(value) ) {
-      this.tableSetting = value;
-    }
-  }
+  
 
   @Input()
   get pagingMode() {
@@ -93,7 +85,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set rowSelection(value: SelectionModel<T>) {
     this.tableSelection = value;
-    console.log(this.tableSelection);
+    // console.log(this.tableSelection);
     
   }
 
@@ -185,7 +177,7 @@ export class TableCoreDirective<T extends TableRow> {
       f.width =  getObjectProp('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
     });
     this.tableColumns = fields;
-    console.log('pp');
+    // console.log('pp');
     if (isNullorUndefined(this.tableSetting.columnSetting) ) {
       this.tableSetting.columnSetting = clone(fields);
     }
@@ -245,7 +237,7 @@ export class TableCoreDirective<T extends TableRow> {
   private tablePagination: TablePagination = { };
   public tablePagingMode: 'none' | 'client' | 'server'  = 'none';
   public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
-  public tableSetting: TableSetting = {};
+  tableSetting: TableSetting;
 
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table !: MatTable<any>;
@@ -285,6 +277,9 @@ export class TableCoreDirective<T extends TableRow> {
       this.dataSource.clearData();
       this.expandedElement = null;
     }
+    if(this.tableSelection) {
+      this.tableSelection.clear();
+    }
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
 
@@ -306,7 +301,9 @@ export class TableCoreDirective<T extends TableRow> {
       if (this.selection === 'multi' || this.selection === 'single') {
         this.displayedColumns = ['table-select', ...this.displayedColumns];
       }
-      this.displayedColumns.push('table-menu');
+      if (this.tableSetting.visibleTableMenu !== false) {
+        this.displayedColumns.push('table-menu');
+      }
     }
     this.updatePagination();
   }

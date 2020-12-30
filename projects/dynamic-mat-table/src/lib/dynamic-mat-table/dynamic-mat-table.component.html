@@ -11,8 +11,8 @@
     matSort 
     class="table"
     multiTemplateDataRows
-    [cdkDropListGroupDisabled]="true"
-    cdkDropListGroup    
+    [cdkDropListGroupDisabled]="false"
+    cdkDropListGroup
     [@tableAnimation]
     [trackBy]="trackBy"
     [dataSource]="dataSource">
@@ -33,8 +33,7 @@
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
           [checked]="rowSelection.isSelected(row)"
-          [aria-label]="checkboxLabel(row)"
-        >
+          [aria-label]="checkboxLabel(row)">
         </mat-checkbox>
       </mat-cell>
     </ng-container> 
@@ -45,20 +44,19 @@
       <mat-header-cell *matHeaderCellDef
         cdkDropListOrientation="horizontal"
         (cdkDragStarted)="dragStarted($event, i)"
-        (cdkDropListDropped)="dropListDropped($event, i)"
+        (cdkDropListDropped)="dropListDropped($event, i)"        
         cdkDropList
         cdkDrag 
-        cdkDropListLockAxis="x"      
-        cdkDragBoundary="mat-header-row"        
+        cdkDropListLockAxis="x"        
         [cdkDragData]="{name: column.name, columIndex: i}"
         [style.maxWidth.px]="column.width"
         [style.minWidth.px]="column.width"        
-        [class.active-resize]="resizeColumn.currentResizeIndex===i">
+        [class.active-resize]="resizeColumn.currentResizeIndex===i"> <!--  cdkDragBoundary="mat-header-row"    -->
         <div class="left-resizer-handler" (mousedown)="onResizeColumn($event, i, 'left')"></div>
         <header-filter [field]="column" (filterChanged)="filter_onChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
           <mat-icon class="column-icon" [ngStyle]="{ 'color': column?.iconColor }">{{column?.icon}}</mat-icon>          
-          <mat-icon class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
-          <div mat-sort-header class="header-caption">{{ column.header }}</div>
+          <mat-icon *ngIf="column?.draggable !== false" class="drag-indicator" >drag_indicator</mat-icon> <!-- cdkDragHandle -->
+          <div mat-sort-header [disabled]="column.sortable === false" class="header-caption">{{ column.header }}</div>
         </header-filter>
         <div
           class="right-resizer-handler"
@@ -70,9 +68,10 @@
                   [style.maxWidth.px]="column.width"
                   [style.minWidth.px]="column.width"
                   [class]="row[column.cellClass]"
-                  (click)="onCellClick($event, row, column)"
-                  [ngClass]="cellClass(row?.option, column?.name)"
-                  [ngStyle]="cellStyle(row?.option, column?.name)">          
+                  (click)="onCellClick($event, row, column)"                  
+                  [ngClass]="cellClass(row?.option, column)"
+                  [ngStyle]="cellStyle(row?.option, column)"
+                  [ngStyle]="column?.style">
           <mat-icon>{{cellIcon(row?.option, column?.name)}}</mat-icon>
           {{row[column.name]}}
         </mat-cell>
@@ -107,7 +106,7 @@
     </ng-container>
 
     <!-- Table Menu[ Sort, Visible, Export] -->
-    <ng-container matColumnDef="table-menu" [stickyEnd]="true">
+    <ng-container matColumnDef="table-menu" [stickyEnd]="true" *ngIf="setting?.visibleTableMenu !== false">
       <mat-header-cell *matHeaderCellDef class="table-menu">
         <table-menu
           [tableSetting]="tableSetting"
@@ -124,6 +123,7 @@
     <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></mat-header-row>
     <mat-row
       *matRowDef="let row; columns: displayedColumns;"
+      (dblclick)="onRowDblClick($event, row)"
       [style.height.px]="rowHeight"
       class="table-row"
       [ngClass]="row?.option?.class"

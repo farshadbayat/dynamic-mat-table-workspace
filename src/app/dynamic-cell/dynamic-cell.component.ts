@@ -14,7 +14,7 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    console.log('ss');    
+    // console.log('ss');    
   }
 
   expandRow_onClick() {
