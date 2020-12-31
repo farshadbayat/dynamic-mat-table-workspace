@@ -89,13 +89,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   ) {
     super(tableService); 
 
-    this.resizeColumn.widthUpdate.pipe( delay(200)).subscribe((data) => {
-      console.log(data.w);
-      
-      // this.columns[data.i].cellStyle.flexBasis = data.w;
+    this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
       this.tableSetting.columnSetting[data.i].width = data.w;
-      // this.refreshTableSetting();
       this.refreshGrid();
     });
   }
@@ -104,9 +100,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     this.viewport.renderedRangeStream.subscribe( t => {
       // in expanding row scrolling make not good apperance therefor close it.
       if (this.expandedElement && this.expandedElement.option && this.expandedElement.option.expand) {
-        console.log('clear', t); 
-        this.expandedElement.option.expand = false;
-        this.expandedElement = null;
+        // console.log('clear', t); 
+        // this.expandedElement.option.expand = false;
+        // this.expandedElement = null;
       }
     })
   }
@@ -329,15 +325,20 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       }
       this.expandedElement = null;      
       if (mode === true) {    
-        this.viewport.scrollToIndex(rowIndex, 'smooth');      
-        setTimeout( () => {
-          this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
-          if (this.expandedElement.option === undefined || this.expandedElement.option === null) {
-            this.expandedElement.option = { expand: false};
-          }
-          this.expandedElement.option.expand = true;
-          this.refreshGrid();
-        }, 300);
+        // this.viewport.scrollToIndex(rowIndex, 'smooth');      
+        // setTimeout( () => {
+        //   this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
+        //   if (this.expandedElement.option === undefined || this.expandedElement.option === null) {
+        //     this.expandedElement.option = { expand: false};
+        //   }
+        //   this.expandedElement.option.expand = true;
+        //   this.refreshGrid();
+        // }, 300);
+        this.expandedElement = this.expandedElement === this.dataSource.allData[rowIndex] ? null : this.dataSource.allData[rowIndex];    
+        if (this.expandedElement.option === undefined || this.expandedElement.option === null) {
+          this.expandedElement.option = { expand: false};
+        }
+        this.expandedElement.option.expand = true;
       }
     }    
   }
@@ -361,8 +362,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     // this.dragDropData.dragColumnIndex = event.source.;
   }
 
-  dropListDropped(event: CdkDragDrop<string[]>) {
-    debugger
+  dropListDropped(event: CdkDragDrop<string[]>) {    
     if (event) {
       this.dragDropData.dropColumnIndex = event.currentIndex;
       this.moveColumn(event.previousIndex, event.currentIndex);

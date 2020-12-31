@@ -67,9 +67,9 @@ export class AppComponent {
         icon: 'chrome_reader_mode',
         iconColor: 'blue',
         dynamicCellComponent: DynamicCellComponent,
-        filterable: false,
-        draggable: false,
-        sortable: false,
+        // filterable: false,
+        // draggable: false,
+        // sortable: false,
       }
     ];
 

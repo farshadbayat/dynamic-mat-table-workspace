@@ -47,6 +47,8 @@
       [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
       <mat-header-cell *matHeaderCellDef                
         cdkDrag 
+        [cdkDragDisabled]="column?.draggable === false"
+        cdkDragBoundary="mat-header-row"
         cdkDropListLockAxis="x"        
         [cdkDragData]="{name: column.name, columIndex: i}"        
         [style.maxWidth.px]="column.width"
@@ -55,7 +57,7 @@
         <div class="left-resizer-handler" (mousedown)="onResizeColumn($event, i, 'left')"></div>
         <header-filter [field]="column" (filterChanged)="filter_onChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
           <mat-icon class="column-icon" [ngStyle]="{ 'color': column?.iconColor }">{{column?.icon}}</mat-icon>          
-          <mat-icon *ngIf="column?.draggable !== false" class="drag-indicator" cdkDragHandle >drag_indicator</mat-icon> <!-- cdkDragHandle -->
+          <mat-icon *ngIf="column?.draggable !== false" class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon> <!-- cdkDragHandle -->
           <div mat-sort-header [disabled]="column.sortable === false" class="header-caption">{{ column.header }}</div>
         </header-filter>
         <div
@@ -77,7 +79,13 @@
       </ng-container>
 
       <ng-container *ngIf="column.dynamicCellComponent">
-        <mat-cell *matCellDef="let row;">          
+        <mat-cell *matCellDef="let row;"
+                  [style.maxWidth.px]="column.width"
+                  [style.minWidth.px]="column.width"
+                  [class]="row[column.cellClass]"
+                  (click)="onCellClick($event, row, column)"                  
+                  [ngClass]="cellClass(row?.option, column)"
+                  [ngStyle]="cellStyle(row?.option, column)">          
           <ng-container dynamicCell [component]="column.dynamicCellComponent" [column]="column" [row]="row" [onRowEvent]="onRowEvent">
           </ng-container> 
         </mat-cell>

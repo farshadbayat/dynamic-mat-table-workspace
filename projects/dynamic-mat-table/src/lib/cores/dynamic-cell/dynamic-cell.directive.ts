@@ -49,7 +49,7 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
       this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);      
       this.updateInput();
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     }
   }
 
