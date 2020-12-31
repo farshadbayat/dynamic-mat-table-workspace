@@ -269,7 +269,7 @@ export class TableCoreDirective<T extends TableRow> {
     });
   }
 
-  clear() {
+  public clear() {
     if (this.dataSource && this.dataSource !== null) {
       if (this.viewport) {
         this.viewport.scrollTo({ top: 0, behavior: 'auto' });

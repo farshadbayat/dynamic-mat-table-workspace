@@ -16,8 +16,9 @@ import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import {MatSliderModule} from '@angular/material/slider';
 import { OrderTableComponent } from './order-table/order-table.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatIconModule, MatTableModule } from '@angular/material';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */

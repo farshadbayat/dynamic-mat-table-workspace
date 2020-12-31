@@ -13,10 +13,11 @@ import { trigger, transition, style, animate, query, stagger, state } from '@ang
 import { ResizeColumn } from '../models/resize-column.mode';
 import { TableIntl } from '../international/table-Intl';
 import { MenuActionChange } from './extensions/table-menu/table-menu.component';
-import { CdkDragDrop, CdkDragStart, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isNullorUndefined } from '../cores/type';
 import 'hammerjs';
 import { TableSetting } from '../models/table-setting.model';
+import { delay } from 'rxjs/operators';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -86,12 +87,16 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     private cd: ChangeDetectorRef,
     // private fixedSizeTableVirtualScrollStrategy: FixedSizeTableVirtualScrollStrategy
   ) {
-    super(tableService);
+    super(tableService); 
 
-    this.resizeColumn.widthUpdate.subscribe((data) => {
+    this.resizeColumn.widthUpdate.pipe( delay(200)).subscribe((data) => {
+      console.log(data.w);
+      
+      // this.columns[data.i].cellStyle.flexBasis = data.w;
       this.columns[data.i].width = data.w;
       this.tableSetting.columnSetting[data.i].width = data.w;
-      this.refreshTableSetting();
+      // this.refreshTableSetting();
+      this.refreshGrid();
     });
   }
 
@@ -156,7 +161,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   cellIcon(option, cellName) {
-    //debugger;
     if (option && cellName) {
       return option[cellName] ? option[cellName].icon : null;
     } else {
@@ -268,10 +272,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
             const dx = this.resizeColumn.startX - event.pageX;
             width = this.resizeColumn.startWidth - rtl * dx;
           }
-          if (
-            this.resizeColumn.currentResizeIndex === index &&
-            width > this.minWidth
-          ) {
+          if ( this.resizeColumn.currentResizeIndex === index && width > this.minWidth ) {
             this.resizeColumn.widthUpdate.next({
               i: index - (this.resizeColumn.resizeHandler === 'left' ? 1 : 0),
               w: width,
@@ -354,14 +355,17 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   /************************************ Drag & Drop Column *******************************************/
 
-  dragStarted(event: CdkDragStart, index: number) {
-    this.dragDropData.dragColumnIndex = index;
+  dragStarted(event: CdkDragStart) {
+    console.log(event);    
+    // debugger
+    // this.dragDropData.dragColumnIndex = event.source.;
   }
 
-  dropListDropped(event: CdkDropList, index: number) {
+  dropListDropped(event: CdkDragDrop<string[]>) {
+    debugger
     if (event) {
-      this.dragDropData.dropColumnIndex = index;
-      this.moveColumn(this.dragDropData.dragColumnIndex, this.dragDropData.dropColumnIndex);
+      this.dragDropData.dropColumnIndex = event.currentIndex;
+      this.moveColumn(event.previousIndex, event.currentIndex);
     }
   }
 

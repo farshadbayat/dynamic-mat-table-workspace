@@ -128,7 +128,7 @@ export class AppComponent {
 
   table_onRowSelectionChange(e) {
     // console.log(e);
-  }
+  } 
 
   addNewColumn_onClick() {
     this.fields.push({
@@ -146,7 +146,7 @@ export class AppComponent {
     });
     const cloned = this.fields.map((x) => Object.assign({}, x));
     this.fields = cloned;
-  }
+  } 
 
   paginationMode_onClick() {
     this.paginationMode == 'client'

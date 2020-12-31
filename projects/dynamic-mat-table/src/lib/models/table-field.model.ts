@@ -5,7 +5,7 @@ export declare type AtClassFunc = (row: any, col: any) => string;
 export declare type AtSortFunc<R extends TableRow> = (data: R[], col: any) => string;
 export declare type AtFilterFunc<R extends TableRow> = (data: R[], col: any) => string;
 export interface TableField<R extends TableRow> extends AbstractField {
-    renderer?: AtRenderFunc<R>;
+    // renderer?: AtRenderFunc<R>;
     classNames?: string;
     rowClass?: string | AtClassFunc;
     customSortFunction?: AtSortFunc<R>;
@@ -16,7 +16,6 @@ export interface AbstractField {
   index?: number;
   name: string;
   type?: 'text' | 'number' | 'date' | 'category';
-  option?: any;
   width?: number;
   header?: string;
   print?: boolean;
@@ -34,6 +33,9 @@ export interface AbstractField {
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
-  data?: any; // for store share data show in cell
+  data?: any; // for store share data show in cell of column
+  categoryData?: any[];
+  toString?: (column: TableField<any>, row: TableRow) => string;
+  customSort?: (column: TableField<any>, row: any) => string;
 }
 
