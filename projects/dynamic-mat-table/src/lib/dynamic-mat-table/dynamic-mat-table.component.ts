@@ -358,10 +358,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   dragStarted(event: CdkDragStart) {
     console.log(event);    
-    // debugger
+    // debugger  
     // this.dragDropData.dragColumnIndex = event.source.;
   }
-
+ 
   dropListDropped(event: CdkDragDrop<string[]>) {    
     if (event) {
       this.dragDropData.dropColumnIndex = event.currentIndex;

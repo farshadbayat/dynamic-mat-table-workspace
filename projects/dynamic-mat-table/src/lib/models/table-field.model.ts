@@ -33,7 +33,7 @@ export interface AbstractField {
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
-  data?: any; // for store share data show in cell of column
+  option?: any; // for store share data show in cell of column
   categoryData?: any[];
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
