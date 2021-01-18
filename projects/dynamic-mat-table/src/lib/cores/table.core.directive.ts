@@ -9,13 +9,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination } from '../models/table-pagination.model';
 import { PrintConfig } from '../models/print-config.model';
-import { TableSetting, Direction } from '../models/table-setting.model';
+import { TableSetting, Direction, ScreenMode } from '../models/table-setting.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
-
+const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; z-index: 1000;';
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[core]'
@@ -42,6 +42,11 @@ export class TableCoreDirective<T extends TableRow> {
     }
     this.updatePagination();
   }
+  @HostBinding('class')
+  get fullscreenClass(): string {    
+    return this.tableSetting.screenMode === 'fullscreen' ? 'full-screen' : null;
+  }
+  
 
   @HostBinding('style.direction')
   get direction(): Direction {
@@ -51,6 +56,11 @@ export class TableCoreDirective<T extends TableRow> {
     this.tableSetting.direction = value;
   }
 
+  // FullScreen Mode //    
+  @HostBinding('style')
+  get fullscreen(): string {
+    return this.tableSetting.screenMode === 'fullscreen' ? FULLSCREEN_STYLE: null;
+  }
   
 
   @Input()
@@ -83,7 +93,10 @@ export class TableCoreDirective<T extends TableRow> {
   get rowSelection() {
     return this.tableSelection;
   }
-  set rowSelection(value: SelectionModel<T>) {
+  set rowSelection(value: SelectionModel<T>) { 
+    if (this.rowSelectionMode !== 'none') {
+      this.selection = (value.isMultipleSelection() === true ? 'multi': 'single');
+    }
     this.tableSelection = value;
     // console.log(this.tableSelection);
     
@@ -134,10 +147,11 @@ export class TableCoreDirective<T extends TableRow> {
   public expandColumn = [];
   private expandComponent_: any;
   @Input()
-  get expandComponent(): any {
+  get expandComponent(): any {    
     return this.expandComponent_;
   }
   set expandComponent(value: any) {
+    console.log(this.expandColumn);
     this.expandComponent_ = value;
     if (this.expandComponent_ !== null && this.expandComponent_ !== undefined) {
       this.expandColumn = ['expandedDetail'];
@@ -211,7 +225,9 @@ export class TableCoreDirective<T extends TableRow> {
   @Output() onRowEvent: EventEmitter<IEvent> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
-  //@Output() rowSelectionChange: EventEmitter<SelectionModel<T>> = new EventEmitter();
+  
+
+  //**this event is deperact and move to onRowEvent */
   @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
   
   /*************************************** Expand Row *********************************/
@@ -241,7 +257,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table !: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;  
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;    
   /**************************************** Methods **********************************************/
 
   refreshTableSetting() {

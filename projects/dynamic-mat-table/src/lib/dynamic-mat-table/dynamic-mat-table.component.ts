@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChildren,
          QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
-import { RowActionMenu, TableRow } from '../models/table-row.model';
+import { IEvent, RowActionMenu, TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { TablePagination } from '../models/table-pagination.model';
@@ -18,6 +18,7 @@ import { isNullorUndefined } from '../cores/type';
 import 'hammerjs';
 import { TableSetting } from '../models/table-setting.model';
 import { delay } from 'rxjs/operators';
+import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -50,7 +51,7 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit {
   @Input()
@@ -74,7 +75,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   printing = true;
   printTemplate: TemplateRef<any> = null;
   resizeColumn: ResizeColumn = new ResizeColumn();
-    
   // mouse resize
   resizableMousemove: () => void;
   resizableMouseup: () => void;
@@ -85,7 +85,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     public languagePack: TableIntl,
     public tableService: TableService,
     private cd: ChangeDetectorRef,
-    // private fixedSizeTableVirtualScrollStrategy: FixedSizeTableVirtualScrollStrategy
   ) {
     super(tableService); 
 
@@ -96,7 +95,11 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
-  ngOnInit() {
+  ngOnInit() {    
+    const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
+    scrollStrategy.offsetChange.subscribe(offset => {      
+      console.log(offset);
+    })
     this.viewport.renderedRangeStream.subscribe( t => {
       // in expanding row scrolling make not good apperance therefor close it.
       if (this.expandedElement && this.expandedElement.option && this.expandedElement.option.expand) {
@@ -116,10 +119,18 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
+  public get inverseOfTranslation(): string {
+    if (!this.viewport || !this.viewport["_renderedContentOffset"]) {
+      return "-0px";
+    }
+    let offset = this.viewport["_renderedContentOffset"];
+    return `-${offset}px`;
+  }
+
   public refreshGrid() {    
     this.cd.markForCheck();
     this.refreshTableSetting();
-  }
+  } 
 
   // TO DO
   ellipsis(cellRef) {
@@ -209,10 +220,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   }
 
-  rowActionChange(e: RowActionMenu, row) {
-    window.requestAnimationFrame(() => {
-      // actionItem: e, rowItem: row
-      this.rowActionMenuChange.emit({actionItem: e, rowItem: row });
+  rowActionChange(menu: RowActionMenu, row: any) {
+    window.requestAnimationFrame(() => {            
+      this.onRowEvent.emit({ event: 'RowActionMenu', sender: {row: row, column: menu} });
+      this.rowActionMenuChange.emit({actionItem: menu, rowItem: row });
     });
   }
 

@@ -4,10 +4,18 @@
   #menuTrigger="matMenuTrigger"
   [matMenuTriggerFor]="menu"
   [dir]="reverseDirection">
-  <mat-icon>more_vert</mat-icon>
+  <mat-icon class="main-menu">more_vert</mat-icon>
 </button>
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
+  <button
+    *ngIf="tableSetting.screenMode !== 'none'"
+    mat-menu-item
+    (click)="screenMode_OnClick()"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon style="margin-top: -3px">{{ tableSetting.screenMode === 'fullscreen' ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
+    <span>{{ languagePack.menuLabels.fullScreen }}</span>
+  </button>
   <button
     mat-menu-item
     color="primary"
@@ -80,12 +88,13 @@
           (change)="toggleSelectedColumn(column.index)">
           {{ column.header }}
         </mat-checkbox> 
-        <button
+        <mat-icon class="column-setting-button" (click)="setting_onClick(i)" #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
+        <!-- <button
           mat-icon-button
           class="column-setting-button"
           (click)="setting_onClick(i)">
-          <mat-icon #menuTrigger="matMenuTrigger" [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
-        </button>
+          <mat-icon (click)="setting_onClick(i)" #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
+        </button> -->
 
         <div class="va-mat-table-drag-preview" *cdkDragPreview>
           <mat-icon>drag_indicator</mat-icon>

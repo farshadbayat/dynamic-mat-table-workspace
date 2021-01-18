@@ -71,6 +71,8 @@
   overflow: hidden;
   font-size: 14px;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .filter-panel:nth-child(2) {

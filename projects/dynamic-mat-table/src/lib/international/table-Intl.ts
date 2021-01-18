@@ -10,6 +10,8 @@ import { Subject } from 'rxjs';
 export class TableIntl implements LanguagePack {
   menuLabels: MenuLabels = {
     saveData: 'Save Data',
+    fullScreen: 'Full Screen',
+    exitFullScreen: 'Exit Full Screen',
     columnSetting: 'Column Setting',
     saveTableSetting: 'Save Table Setting',
     clearFilter: 'Clear Filter',

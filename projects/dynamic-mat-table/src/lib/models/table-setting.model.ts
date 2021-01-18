@@ -1,7 +1,9 @@
 import { AbstractField } from './table-field.model';
 
 export type Direction = 'rtl' | 'ltr';
+export type ScreenMode = 'fullscreen' | 'normal' | 'none';
 export interface TableSetting {
+  screenMode?: ScreenMode;
   direction?: Direction;
   columnSetting?: AbstractField[];
   visibaleActionMenu?: VisibleActionMenu;

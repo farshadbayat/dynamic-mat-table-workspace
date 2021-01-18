@@ -10,6 +10,11 @@
   }
 }
 
+.main-menu {  
+  width: 38px !important;
+  line-height: 24px !important;
+}
+
 .va-mat-button-no-input {
   border: none;
   background-color: transparent;
@@ -26,46 +31,52 @@
   background-color: green !important;
 }
 
-.dragable-row {
-  display: inline-flex;
+.dragable-row {  
   mat-checkbox {
     width: 100%;
-    display: inline-flex;
+    line-height: 28px;    
   }
 }
 
 .va-mat-table-dragable-container .dragable-row {
   background-color: white;
+  display: flex;
   width: 100%;
-  line-height: 26px;
+  height: 30px;
   font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.va-mat-table-dragable-container .dragable-row .column-setting-button {
-  //float: right;
-  margin: 0 5px;
-  cursor: pointer;
-  width: 26px;
-  height: 26px;
-  mat-icon{
-    cursor: pointer;
-    font-size: 22px;
-  }
+.column-setting-button {
+  cursor: pointer !important;
+  font-size: 24px;
+  margin-right: 5px;
 }
 
-.column-setting-button:dir(ltr) {
-  margin: 15px;
-}
-.va-mat-table-dragable-container .dragable-row mat-icon {
-  margin-top: -2px;
-}
-.va-mat-table-dragable-container .dragable-row mat-icon,
-.va-mat-table-dragable-container .dragable-row mat-checkbox {
-  vertical-align: top;
-}
+// .va-mat-table-dragable-container .dragable-row .column-setting-button {
+//   //float: right;
+//   margin: 0 5px;
+//   cursor: pointer;
+//   width: 26px;
+//   height: 26px;
+//   mat-icon{
+//     cursor: pointer;
+//     font-size: 22px;
+//   }
+// }
+
+// .column-setting-button:dir(ltr) {
+//   margin: 15px;
+// }
+// .va-mat-table-dragable-container .dragable-row mat-icon {
+//   margin-top: -2px;
+// }
+// .va-mat-table-dragable-container .dragable-row mat-icon,
+// .va-mat-table-dragable-container .dragable-row mat-checkbox {
+//   vertical-align: top;
+// }
 .va-mat-table-dragable-container .dragable-row mat-icon {
   line-height: 30px;
   opacity: 0.15;
@@ -112,15 +123,17 @@
 
 .done-setting {
   width: 50% !important;
-  display: inline-block;
-  text-align: center;
-  padding-left: 24px;
-  height: 34px;
+  display: inline-flex;
+  text-align: center;  
+  height: 38px;
   mat-icon{
-    height: 38px;
+    line-height: 38px !important;
     opacity: 0.6;
     transition: opacity 0.5s;
     color: #616161;
+    width: 100%;
+    text-align: center;
+    margin: 0;
   }
   mat-icon:hover{
     opacity: 1;
@@ -136,8 +149,8 @@
     font-size: 12px;
     margin-top: -2px;
     mat-radio-button{
-      padding: 5px 0px 5px 10px !important;
-      // overflow: hidden !important;
+      padding: 5px;
+      width: 50%;
     }
 
     mat-radio-button:last-child {
@@ -177,3 +190,13 @@
   margin-right: 5px !important;
 }
 
+
+.mat-menu-item {
+  display: inline-flex;
+  span {
+    width: 100%;
+  }
+  mat-icon {
+    line-height: 48px;
+  }
+}

@@ -15,6 +15,8 @@
   min-height: 200px;
   position: relative;
   overflow: auto;
+  background-color: white;  
+  transition: 0.5s;
 }
 
 mat-cell:first-of-type:not(.table-select) {
@@ -30,6 +32,16 @@ mat-footer-row, mat-row{
   min-height: auto !important;
 }
 
+tr.mat-row, tr.mat-header-row, tr.mat-footer-row{
+  display: flex;
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-bottom-color: #d2d2d2;
+  border-style: solid;
+  align-items: center;
+  box-sizing: border-box;
+}
+
 mat-cell, mat-footer-cell, mat-header-cell {
   // hyphens: auto;
   align-self: stretch;
@@ -41,7 +53,7 @@ mat-cell, mat-footer-cell, mat-header-cell {
 
 // mat-cell, mat-footer-cell, mat-header-cell {
 //   min-width: 100px;
-// }
+// } 
 
 @include table-base;
 @include progress;
@@ -52,6 +64,7 @@ cdk-virtual-scroll-viewport {
   min-height: 100px;
   height: inherit;
   overflow: auto;
+  transition: 0.5s;
 }
 
 // RTL Suport and Drag & Drop icon Padding
@@ -209,7 +222,7 @@ mat-header-cell:hover {
 
 .detail-row {
   height: 0px;
-  display: contents;
+  display: inline !important;
   width: 100%;
 }
 
@@ -235,4 +248,19 @@ mat-header-cell:hover {
   display: block;
   border-width: 0;
   padding: 0px !important;
+}
+
+// ::ng-deep .cdk-virtual-scroll-content-wrapper {
+//   transform: translateY(0px) !important;
+// }
+
+
+.full-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100vh;
+  z-index: 1000;
 }

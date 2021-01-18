@@ -24,6 +24,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
   public viewport: CdkVirtualScrollViewport;
 
   public renderedRangeStream = new BehaviorSubject<ListRange>({start: 0, end: 0});
+  public offsetChange = new BehaviorSubject(0);
 
   public scrolledIndexChange = this.indexChange.pipe(distinctUntilChanged());
 
@@ -111,15 +112,16 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     const buffer = Math.ceil(amount * this.bufferMultiplier);
 
     const skip = Math.round(offset / this.rowHeight);
-    const index = Math.max(0, skip);
-    console.log('current index:', index);
+    const index = Math.max(0, skip);    
     
     const start = Math.max(0, index - buffer);
     const end = Math.min(this.dataLength, index + amount + buffer);    
     const renderedOffset = start * this.rowHeight;
+    console.log('current index:', index,buffer, start , end);
     this.viewport.setRenderedContentOffset(renderedOffset);
-    this.viewport.setRenderedRange({start, end});
+    this.viewport.setRenderedRange({start, end});    
     this.indexChange.next(index);
     this.stickyChange.next(renderedOffset);
+    this.offsetChange.next(offset)
   }
 }

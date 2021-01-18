@@ -21,7 +21,7 @@ export interface RowActionMenu {
 export type TableSelectionMode = 'single' | 'multi' | 'none';
 
 export interface IEvent {
-  event: any | 'MasterSelectionChange' | 'RowSelectionChange';
+  event: any | 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu';
   sender: any;
 }
 

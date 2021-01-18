@@ -30,9 +30,9 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
 }
 
 @mixin progress {
-  .mat-header-row.progress {
+  tr.mat-header-row.progress {
     border: none;
-    min-height: 0;
+    height: 0px;
 
     .mat-header-cell {
       border: 0;

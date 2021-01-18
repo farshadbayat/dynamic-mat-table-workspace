@@ -13,9 +13,7 @@ import { clone, deepClone, isNullorUndefined } from '../../../cores/type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableMenuComponent {
-  @Output() menuActionChange: EventEmitter<MenuActionChange> = new EventEmitter<
-    MenuActionChange
-  >();
+  @Output() menuActionChange: EventEmitter<MenuActionChange> = new EventEmitter<MenuActionChange>();
   @Input()
   get tableSetting(): TableSetting {
     return this.currentTableSetting;
@@ -32,6 +30,14 @@ export class TableMenuComponent {
   currentTableSetting: TableSetting;
 
   constructor(public languagePack: TableIntl, private tableService: TableService) {
+  }
+
+  screenMode_OnClick() {
+    this.currentTableSetting.screenMode = this.currentTableSetting.screenMode === 'fullscreen' ? 'normal' : 'fullscreen';
+    this.menuActionChange.emit({
+      type: 'TableSetting',
+      data: this.currentTableSetting,
+    });
   }
 
   /***** Column Setting ******/
@@ -104,6 +110,6 @@ export class TableMenuComponent {
 }
 
 export interface MenuActionChange {
-  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print' | 'ScreenMode';
   data?: any;
 }

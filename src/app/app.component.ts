@@ -1,3 +1,4 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, ViewChild } from '@angular/core';
 import {
   TableRow,
@@ -50,6 +51,8 @@ export class AppComponent {
     title: 'Print All Test Data',
     showParameters: true,
   };
+
+  selection: SelectionModel<TestElement> = null;
 
   constructor() {
     this.fields = [
@@ -124,6 +127,14 @@ export class AppComponent {
     } else {
       this.tableSelection = 'multi';
     }
+  }
+
+  selectToggle_onClick() {
+    const selection: SelectionModel<TestElement> = new SelectionModel(true);    
+    for(let i=0 ; i< 10 ; i++) {
+      selection.select(this.dataSource.allData[i]);
+    }    
+    this.selection = selection;
   }
 
   table_onRowSelectionChange(e) {

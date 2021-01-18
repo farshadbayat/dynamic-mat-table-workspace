@@ -103,7 +103,7 @@
     </ng-container>
 
     <!-- Expanded Content Column - The detail row is made up of Dynamic Cell -->
-    <ng-container *ngIf="expandComponent" matColumnDef="expandedDetail">
+    <ng-container *ngIf="expandColumn.length > 0" matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length" class="expanded-detail-cell">
         <div class="expanded-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'">
           <ng-container dynamicCell [component]="expandComponent" [row]="row" [onRowEvent]="onRowEvent">
@@ -126,9 +126,9 @@
     </ng-container>
 
     <!-- Row Table[Header, Data, Footer] -->
-    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky"></mat-header-row>
-    <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></mat-header-row>
-    <mat-row
+    <tr mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></tr>
+    <tr mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></tr>
+    <tr mat-row
       *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
       [style.height.px]="rowHeight"
@@ -137,8 +137,10 @@
       [ngStyle]="row?.option?.style"
       [class.expanded-row]="expandedElement === row"
       [class.row-selection]="rowSelection ? rowSelection.isSelected(row) : false">
-    </mat-row>
-    <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
+    </tr>
+    <ng-container *ngIf="expandColumn.length > 0">      
+      <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
+    </ng-container>
   </mat-table>
 </cdk-virtual-scroll-viewport>
 

@@ -18,14 +18,15 @@
     [showNoData]="showNoData"
     [printConfig]="printConfig"
     [selection]="tableSelection"
+    [rowSelection]="selection"
     [showProgress]="showProgress"
-    [rowActionMenu]="rowActionMenu"
+    [rowActionMenu]="rowActionMenu"    
     (onRowEvent)="row_onClick($event)"
     [class.conditional-class]="conditinalClass"
     (settingChange)="table_onChangeSetting($event)"
     (rowSelectionChange)="table_onRowSelectionChange($event)">
   </dynamic-mat-table>
-</mat-card>
+</mat-card> 
 
 <section class="section">
   <button mat-raised-button color="primary" (click)="fetchData_onClick()">
@@ -45,6 +46,9 @@
   </button>
   <button mat-raised-button color="primary" (click)="tableSelection_onClick()">
     Table Selection ({{ tableSelection }})
+  </button>
+  <button mat-raised-button color="primary" (click)="selectToggle_onClick()">
+    Select 10 Row
   </button>
   <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass">
     Conditional Class ({{ conditinalClass }})
@@ -66,7 +70,7 @@
   </button>
   <button mat-raised-button color="primary" (click)="expandToggle_onClick()">
     Expand Toggle Row {{ expandIndex }}
-  </button>
+  </button>  
   <mat-slider min="40" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 
