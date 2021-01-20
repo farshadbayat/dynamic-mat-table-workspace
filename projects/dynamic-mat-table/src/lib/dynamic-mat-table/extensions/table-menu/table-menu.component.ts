@@ -29,7 +29,7 @@ export class TableMenuComponent {
   originalTableSetting: TableSetting;
   currentTableSetting: TableSetting;
 
-  constructor(public languagePack: TableIntl, private tableService: TableService) {
+  constructor(public languagePack: TableIntl, public tableService: TableService) {
   }
 
   screenMode_OnClick() {

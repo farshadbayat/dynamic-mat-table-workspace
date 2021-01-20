@@ -135,6 +135,8 @@ export class AppComponent {
       selection.select(this.dataSource.allData[i]);
     }    
     this.selection = selection;
+    console.log(this.selection);
+    
   }
 
   table_onRowSelectionChange(e) {
