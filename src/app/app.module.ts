@@ -19,6 +19,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+import {MatBadgeModule} from '@angular/material/badge';
+
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
@@ -45,7 +47,8 @@ export function languageIntl() {
     MatSliderModule,
     DragDropModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatBadgeModule
   ],
   entryComponents:[
     DynamicCellComponent,

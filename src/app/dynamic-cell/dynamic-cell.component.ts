@@ -6,10 +6,12 @@ import { DynamicMatTableComponent, IDynamicCell, TableField, IEvent } from 'dyna
   templateUrl: './dynamic-cell.component.html'
 })
 export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
+
   @Input() onRowEvent: EventEmitter<IEvent>;  
   @Input() row: any;
   @Input() column: TableField<any>;
   @Input() parent: DynamicMatTableComponent<any>;
+  
 
   ngOnInit(): void {}
 
@@ -30,6 +32,17 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
 
   raiseEvent_onClick() {
     this.onRowEvent.emit({event: { name: 'test', data: 'any thing from row ' + this.row.row}, sender:  this })
+  }
+
+  moveDown_onClick() {    
+    const id = this.row.id;
+    this.parent.moveRow(id, id+1 );
+    this.onRowEvent.emit({ sender: this.row, event: 'moveDown' });
+  }
+ 
+  moveUp_onClick() {    
+    const id = this.row.id;
+    this.parent.moveRow(id, id-1 );
   }
 
 }

@@ -8,6 +8,8 @@ export interface TableSetting {
   columnSetting?: AbstractField[];
   visibaleActionMenu?: VisibleActionMenu;
   visibleTableMenu?: boolean;
+  alternativeRowStyle?: any;
+  normalRowStyle?: any;
 }
 
 export interface VisibleActionMenu {

@@ -43,7 +43,7 @@ export const expandAnimation = trigger('detailExpand', [
   state('collapsed', style({height: '0px', minHeight: '0'})),
   state('expanded', style({height: '*'})),
   transition('expanded <=> collapsed', animate('100ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-]);
+]); 
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -60,13 +60,19 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
   set setting(value: TableSetting) {    
     if ( !isNullorUndefined(value) ) {
-      this.tableSetting.columnSetting = value.columnSetting === undefined ? this.tableSetting.columnSetting : value.columnSetting;
-      this.tableSetting.visibleTableMenu = value.visibleTableMenu === undefined ? this.tableSetting.visibleTableMenu : value.visibleTableMenu;
-      this.tableSetting.direction = value.direction ? this.tableSetting.direction : value.direction;
-      this.tableSetting.visibaleActionMenu = value.visibaleActionMenu ? this.tableSetting.visibaleActionMenu : value.visibaleActionMenu;      
+      value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
+      value.alternativeRowStyle = value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
+      value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
+      value.direction = value.direction || this.tableSetting.direction;
+      value.normalRowStyle = value.normalRowStyle || this.tableSetting.normalRowStyle;
+      value.screenMode = value.screenMode || this.tableSetting.screenMode;
+      value.visibaleActionMenu = value.visibaleActionMenu || this.tableSetting.visibaleActionMenu;
+      value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
+      this.tableSetting = value;
       this.setDisplayedColumns();
     }
-  }
+  } 
+
   
   @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
   @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
@@ -84,9 +90,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     private renderer: Renderer2,
     public languagePack: TableIntl,
     public tableService: TableService,
-    private cd: ChangeDetectorRef,
+    public cd: ChangeDetectorRef,
   ) {
-    super(tableService); 
+    super(tableService, cd); 
 
     this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
@@ -125,12 +131,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
     let offset = this.viewport["_renderedContentOffset"];
     return `-${offset}px`;
-  }
-
-  public refreshGrid() {    
-    this.cd.markForCheck();
-    this.refreshTableSetting();
-  } 
+  }  
 
   // TO DO
   ellipsis(cellRef) {

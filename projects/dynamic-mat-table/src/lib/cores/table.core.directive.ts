@@ -1,6 +1,6 @@
 import { IEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
-import { ViewChild, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { ViewChild, Input, Output, EventEmitter, HostBinding, ChangeDetectorRef } from '@angular/core';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -139,7 +139,10 @@ export class TableCoreDirective<T extends TableRow> {
   set dataSource(value: TableVirtualScrollDataSource<T>) {
     this.clear();
     if (value && value != null) {
-      this.tvsDataSource.data = value.data;
+      this.tvsDataSource.data = value.data.map( (item, index) => {
+        item.id = index ;
+        return item;
+      });
       // this.cdr.detectChanges();
     }
   }
@@ -180,6 +183,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set columns(fields: TableField<T>[]) {
     (fields || []).forEach((f, i) => {
+
+      // key name error //
+      if (f.name.toLowerCase() === 'id') {
+        throw 'Field name is reserved.["id"]';
+      }
+
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
@@ -233,7 +242,7 @@ export class TableCoreDirective<T extends TableRow> {
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;
 
-  constructor(public tableService: TableService) {
+  constructor(public tableService: TableService, public cd: ChangeDetectorRef) {
     this.showProgress = true;
     this.tableSetting = {
       direction: 'ltr',
@@ -326,6 +335,20 @@ export class TableCoreDirective<T extends TableRow> {
 
 
   /************************************ Drag & Drop Column *******************************************/ 
+  public refreshGrid() {    
+    this.cd.markForCheck();
+    this.refreshTableSetting();
+  } 
+
+  public moveRow(from: number, to: number) {
+    if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
+        this.dataSource.allData[from].id = to;
+        this.dataSource.allData[to].id = from;
+        console.log('move',from, to);        
+        moveItemInArray(this.dataSource.allData, from, to);
+        this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
+    }
+  }
 
   moveColumn(from: number, to: number) {
     window.requestAnimationFrame(() => {

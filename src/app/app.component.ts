@@ -25,9 +25,11 @@ export class AppComponent {
   eventLog = [];
   title = 'dynamic-mat-table';
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
-
+  altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
-  setting: TableSetting= {};
+  setting: TableSetting= {
+    alternativeRowStyle: {'background-color': '#d2d2d2'}
+  }; 
   pending = false; 
   showNoData = true;
   stickyHeader = true;
@@ -61,15 +63,23 @@ export class AppComponent {
          type: 'number',
          cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'}
      },
+     { 
+       name: 'order',
+       header: 'Row Order',
+       sticky: 'start',
+       option: 1,
+       dynamicCellComponent: DynamicCellComponent
+       },
       { name: 'name', header: 'Element Name', sticky: 'start' },
       { name: 'weight' },
       { name: 'color' },
-      { name: 'brand' },
+      { name: 'brand' },      
       {
         name: 'setting',
         icon: 'chrome_reader_mode',
         iconColor: 'blue',
         dynamicCellComponent: DynamicCellComponent,
+        option: 2
         // filterable: false,
         // draggable: false,
         // sortable: false,
