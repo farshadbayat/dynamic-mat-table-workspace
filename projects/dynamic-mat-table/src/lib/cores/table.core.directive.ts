@@ -1,6 +1,6 @@
 import { IEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
-import { ViewChild, Input, Output, EventEmitter, HostBinding, ChangeDetectorRef } from '@angular/core';
+import { ViewChild, Input, Output, EventEmitter, HostBinding, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { TableField } from '../models/table-field.model';
 import { titleCase } from '../utilies/text.utils';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
+import { BehaviorSubject } from 'rxjs';
 const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; z-index: 1000;';
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -154,7 +155,7 @@ export class TableCoreDirective<T extends TableRow> {
     return this.expandComponent_;
   }
   set expandComponent(value: any) {
-    console.log(this.expandColumn);
+    // console.log(this.expandColumn);
     this.expandComponent_ = value;
     if (this.expandComponent_ !== null && this.expandComponent_ !== undefined) {
       this.expandColumn = ['expandedDetail'];
@@ -230,6 +231,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() headerEnable = true;
   @Input() footerEnable = false;
   @Input() showNoData: boolean;
+  @Output() signal: BehaviorSubject<any>;
   // tslint:disable-next-line: no-output-on-prefix
   @Output() onRowEvent: EventEmitter<IEvent> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
@@ -243,6 +245,7 @@ export class TableCoreDirective<T extends TableRow> {
   expandedElement: TableRow | null;
 
   constructor(public tableService: TableService, public cd: ChangeDetectorRef) {
+    this.signal = new BehaviorSubject(null);
     this.showProgress = true;
     this.tableSetting = {
       direction: 'ltr',
@@ -333,6 +336,15 @@ export class TableCoreDirective<T extends TableRow> {
     this.updatePagination();
   }
 
+  requestFullscreen(element: ElementRef) {
+    if (element.nativeElement.requestFullscreen) {
+      element.nativeElement.requestFullscreen();
+    } else if (element.nativeElement.webkitRequestFullscreen) { /* Safari */
+      element.nativeElement.webkitRequestFullscreen();
+    } else if (element.nativeElement.msRequestFullscreen) { /* IE11 */
+      element.nativeElement.msRequestFullscreen();
+    }
+  }
 
   /************************************ Drag & Drop Column *******************************************/ 
   public refreshGrid() {    
@@ -344,7 +356,7 @@ export class TableCoreDirective<T extends TableRow> {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
         this.dataSource.allData[from].id = to;
         this.dataSource.allData[to].id = from;
-        console.log('move',from, to);        
+        // console.log('move',from, to);        
         moveItemInArray(this.dataSource.allData, from, to);
         this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
     }
@@ -407,5 +419,6 @@ export class TableCoreDirective<T extends TableRow> {
     }
     return `${this.rowSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
+
 }
 

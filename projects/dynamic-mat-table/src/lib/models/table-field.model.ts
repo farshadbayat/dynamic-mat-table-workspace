@@ -9,7 +9,7 @@ export interface TableField<R extends TableRow> extends AbstractField {
     classNames?: string;
     rowClass?: string | AtClassFunc;
     customSortFunction?: AtSortFunc<R>;
-    customFilterFunction?: AtSortFunc<R>;
+    customFilterFunction?: AtSortFunc<R>;    
 }
 
 export interface AbstractField {
@@ -33,6 +33,8 @@ export interface AbstractField {
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
+  clickable?: boolean;
+  rowSelectionable?: boolean;
   option?: any; // for store share data show in cell of column
   categoryData?: any[];
   toString?: (column: TableField<any>, row: TableRow) => string;

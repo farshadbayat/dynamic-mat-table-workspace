@@ -1,4 +1,5 @@
 import { Compiler, ComponentFactoryResolver, ComponentRef, Directive, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { DynamicMatTableComponent } from '../../dynamic-mat-table/dynamic-mat-table.component';
 import { TableField } from '../../models/table-field.model';
 import { IEvent } from '../../models/table-row.model';
@@ -11,7 +12,7 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   @Input() component: any;
   @Input() column: TableField<any>;
   @Input() row: any;
-  @Input() onRowEvent: EventEmitter<IEvent>;
+  @Input() onRowEvent: EventEmitter<IEvent>;  
   componentRef: ComponentRef<IDynamicCell> = null;
 
   constructor(
@@ -49,22 +50,23 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
       this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);      
       this.updateInput();
     } catch (e) {
-      console.log(e);
-    }
+      // console.log(e);
+    } 
   }
 
   updateInput() {
+    // debugger 
+    if (this.parent) {
+      (this.componentRef.instance as IDynamicCell).parent = this.parent;
+    }    
     if (this.column) {
       this.componentRef.instance.column = this.column;
     }   
     if (this.row) {
-      (this.componentRef.instance as any).row = this.row;
+      (this.componentRef.instance as IDynamicCell).row = this.row;
     }
     if (this.onRowEvent) {
-      (this.componentRef.instance as any).onRowEvent = this.onRowEvent;
-    }
-    if (this.parent) {
-      (this.componentRef.instance as any).parent = this.parent;
-    }
+      (this.componentRef.instance as IDynamicCell).onRowEvent = this.onRowEvent;
+    }    
   }
 }

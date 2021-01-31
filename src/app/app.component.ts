@@ -15,7 +15,7 @@ import {
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(1000);
+const DATA = getData(500);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -68,7 +68,9 @@ export class AppComponent {
        header: 'Row Order',
        sticky: 'start',
        option: 1,
-       dynamicCellComponent: DynamicCellComponent
+       dynamicCellComponent: DynamicCellComponent,
+       clickable: false,
+       rowSelectionable: false,
        },
       { name: 'name', header: 'Element Name', sticky: 'start' },
       { name: 'weight' },
@@ -79,7 +81,9 @@ export class AppComponent {
         icon: 'chrome_reader_mode',
         iconColor: 'blue',
         dynamicCellComponent: DynamicCellComponent,
-        option: 2
+        option: 2,
+        clickable: false,
+        rowSelectionable: false,
         // filterable: false,
         // draggable: false,
         // sortable: false,
@@ -145,7 +149,7 @@ export class AppComponent {
       selection.select(this.dataSource.allData[i]);
     }    
     this.selection = selection;
-    console.log(this.selection);
+    // console.log(this.selection);
     
   }
 
@@ -190,7 +194,9 @@ export class AppComponent {
   }
   
   row_onClick(e: IEvent) {
-    console.log(e.event);
+    // console.log(this.table.dataSource.allData);
+    
+    // console.log(e.event);
     if (e.event === 'RowSelectionChange') {
       // console.log('Row Selection Change',e.sender);      
     } else if(e.event.type === 'click' &&  e.sender.row) {
@@ -217,7 +223,7 @@ export class AppComponent {
     const setting = Object.assign({}, this.setting);
     setting.visibleTableMenu = e.checked;
     this.setting= setting;
-    console.log(e.checked);
+    // console.log(e.checked);
   }
 }
 

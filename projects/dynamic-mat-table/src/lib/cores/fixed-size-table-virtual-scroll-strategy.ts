@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { CdkVirtualScrollViewport, VirtualScrollStrategy } from '@angular/cdk/scrolling';
 import { ListRange } from '@angular/cdk/collections';
+import { Subscription } from 'rxjs';
 
 export interface TSVStrategyConfigs {
   rowHeight: number;
@@ -12,7 +13,8 @@ export interface TSVStrategyConfigs {
 }
 
 @Injectable()
-export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrategy {
+export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrategy, OnDestroy {  
+  private eventsSubscription: Subscription;
   private length = 0;
   private rowHeight!: number;
   private headerHeight!: number;
@@ -37,9 +39,14 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     this.onDataLengthChanged();
   }
 
+  ngOnDestroy(): void {
+    console.log('Method not implemented.');
+    // this.eventsSubscription.unsubscribe();
+  }
+
   public attach(viewport: CdkVirtualScrollViewport): void {
     this.viewport = viewport;
-    this.viewport.renderedRangeStream.subscribe(this.renderedRangeStream);
+    this.eventsSubscription = this.viewport.renderedRangeStream.subscribe(this.renderedRangeStream);
     this.onDataLengthChanged();
   }
 
@@ -112,12 +119,12 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     const buffer = Math.ceil(amount * this.bufferMultiplier);
 
     const skip = Math.round(offset / this.rowHeight);
-    const index = Math.max(0, skip);    
+    const index = Math.max(0, skip);
     
     const start = Math.max(0, index - buffer);
     const end = Math.min(this.dataLength, index + amount + buffer);    
     const renderedOffset = start * this.rowHeight;    
-    console.log(renderedOffset, start , end);
+    // console.log(renderedOffset, start , end);
     this.viewport.setRenderedContentOffset(renderedOffset);
     this.viewport.setRenderedRange({start, end});    
     this.indexChange.next(index);

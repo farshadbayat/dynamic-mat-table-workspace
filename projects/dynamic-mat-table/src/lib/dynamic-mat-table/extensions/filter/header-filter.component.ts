@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Output, ViewChild,
-         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
+         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren, OnDestroy } from '@angular/core';
 import { TableField } from './../../../models/table-field.model';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TextFilter } from './compare/text-filter';
@@ -10,6 +10,7 @@ import { TableIntl } from '../../../international/table-Intl';
 import { MatInput } from '@angular/material/input';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { isNullorUndefined } from '../../../cores/type';
+import { Subscription } from 'rxjs';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -28,7 +29,7 @@ const listAnimation = trigger('listAnimation', [
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimation]
 })
-export class HeaderFilterComponent implements OnInit, AfterViewInit {
+export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() field?: TableField<any>;
   @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
@@ -36,6 +37,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   @ViewChild(MatMenuTrigger, { static: true }) menu !: MatMenuTrigger;
 
   private filterList: AbstractFilter[] = [];
+  private eventsSubscription: Subscription;
   @Input()
   get filters(): AbstractFilter[] {
     if ( isNullorUndefined(this.filterList) === true || this.filterList.length === 0) {
@@ -63,6 +65,13 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
+  }
+
+  ngOnDestroy(): void {
+    console.log('Method not implemented.');
+    if (this.eventsSubscription) {
+      this.eventsSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
@@ -98,7 +107,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.menu) {
-      this.menu.menuOpened.subscribe(() => this.focusToLastInput());
+      this.eventsSubscription = this.menu.menuOpened.subscribe(() => this.focusToLastInput());
     }
   }
 
