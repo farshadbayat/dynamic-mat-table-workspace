@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChildren,
          QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnDestroy} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
-import { IEvent, RowActionMenu, TableRow } from '../models/table-row.model';
+import { IRowEvent, RowActionMenu, TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { TablePagination } from '../models/table-pagination.model';
@@ -103,8 +103,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.refreshGrid();
     });
   }
-  ngOnDestroy(): void {
-    console.log('Method not implemented.');
+  ngOnDestroy(): void {    
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
@@ -202,7 +201,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       if (e.data === 'CSV') {
         this.tableService.exportToCsv(
           this.dataSource.filteredData,
-          this.rowSelection
+          this.rowSelectionModel
         );
       } else if (e.data === 'JSON') {
         this.tableService.exportToJson(this.dataSource.filteredData);
@@ -253,6 +252,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     this.dataSource.refreshFilterPredicate(); // pagination Bugfixed
     this.paginationChange.emit(e);
   } 
+
+  reload_onClick(){
+    this.onTableEvent.emit({ sender: null, event: 'ReloadData'});
+  }
 
   /////////////////////////////////////////////////////////////////
 
@@ -370,7 +373,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   onCellClick(e, row, column: TableField<T>) {    
-    if (this.selection && this.selection !== 'none' && column.rowSelectionable !== false) {
+    if (this.rowSelectionMode && this.rowSelectionMode !== 'none' && column.rowSelectionable !== false) {
       this.onRowSelectionChange(e, row);
     }
     if (column.clickable !== false) {

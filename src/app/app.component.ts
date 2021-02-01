@@ -10,7 +10,8 @@ import {
   TableSelectionMode,
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
-  IEvent
+  IRowEvent,
+  ITableEvent
 } from 'dynamic-mat-table';
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
@@ -30,6 +31,7 @@ export class AppComponent {
   setting: TableSetting= {
     alternativeRowStyle: {'background-color': '#d2d2d2'}
   }; 
+  showReloadData = true;
   pending = false; 
   showNoData = true;
   stickyHeader = true;
@@ -39,7 +41,8 @@ export class AppComponent {
   paginationMode: string = 'server';
   direction: 'rtl' | 'ltr' = 'ltr';
   rowActionMenu: RowActionMenu[] = [];
-  tableSelection: TableSelectionMode = 'none';
+  rowSelectionMode: TableSelectionMode = 'none';
+  selectionModel: SelectionModel<TestElement> = null;
   dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
   rowHeight = 48;
   expandComponent = DynamicExpandCellComponent;
@@ -54,7 +57,7 @@ export class AppComponent {
     showParameters: true,
   };
 
-  selection: SelectionModel<TestElement> = null;
+  
 
   constructor() {
     this.fields = [
@@ -111,7 +114,8 @@ export class AppComponent {
   }
 
   fetchData_onClick() {
-    this.dataSource = new TableVirtualScrollDataSource(DATA);
+    const d = DATA.map( item =>{return {...item, option:{ expandCallback: null}}});
+    this.dataSource = new TableVirtualScrollDataSource(d);
   }
 
   table_onChangeSetting(setting) {
@@ -134,12 +138,12 @@ export class AppComponent {
   }
 
   tableSelection_onClick() {
-    if (this.tableSelection === 'multi') {
-      this.tableSelection = 'single';
-    } else if (this.tableSelection === 'single') {
-      this.tableSelection = 'none';
+    if (this.rowSelectionMode === 'multi') {
+      this.rowSelectionMode = 'single';
+    } else if (this.rowSelectionMode === 'single') {
+      this.rowSelectionMode = 'none';
     } else {
-      this.tableSelection = 'multi';
+      this.rowSelectionMode = 'multi';
     }
   }
 
@@ -148,7 +152,7 @@ export class AppComponent {
     for(let i=0 ; i< 10 ; i++) {
       selection.select(this.dataSource.allData[i]);
     }    
-    this.selection = selection;
+    this.selectionModel = selection;
     // console.log(this.selection);
     
   }
@@ -192,8 +196,14 @@ export class AppComponent {
     this.table.expandRow( this.expandIndex);
     this.expandIndex++;
   }
+
+  tableEvent_onClick(e: ITableEvent) {
+    if (e.event === 'ReloadData') {
+      this.fetchData_onClick();
+    }
+  }
   
-  row_onClick(e: IEvent) {
+  rowEvent_onClick(e: IRowEvent) {
     // console.log(this.table.dataSource.allData);
     
     // console.log(e.event);

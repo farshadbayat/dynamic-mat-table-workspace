@@ -26,10 +26,10 @@
       <mat-header-cell *matHeaderCellDef class="table-select">
         <mat-checkbox
           (change)="$event ? masterToggle() : null"
-          [checked]="rowSelection.hasValue() && isAllSelected()"
-          [indeterminate]="rowSelection.hasValue() && !isAllSelected()"
+          [checked]="rowSelectionModel.hasValue() && isAllSelected()"
+          [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
           [aria-label]="checkboxLabel()"
-          *ngIf="selection === 'multi'"
+          *ngIf="rowSelectionMode === 'multi'"
         >
         </mat-checkbox>
       </mat-header-cell>
@@ -37,7 +37,7 @@
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
-          [checked]="rowSelection.isSelected(row)"
+          [checked]="rowSelectionModel.isSelected(row)"
           [aria-label]="checkboxLabel(row)">
         </mat-checkbox>
       </mat-cell>
@@ -138,7 +138,7 @@
       [ngStyle]="row?.option?.style"
       [ngStyle]="row.id % 2 === 0 ? setting?.alternativeRowStyle : null"
       [class.expanded-row]="expandedElement === row"
-      [class.row-selection]="rowSelection ? rowSelection.isSelected(row) : false">
+      [class.row-selection]="rowSelectionModel ? rowSelectionModel.isSelected(row) : false">
     </tr>
     <ng-container *ngIf="expandColumn.length > 0">      
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
@@ -146,12 +146,8 @@
   </mat-table>
 </cdk-virtual-scroll-viewport>
 
-
-
-
-
 <mat-paginator
-  *ngIf="pagingMode"
+  *ngIf="pagingMode !== 'none'"
   class="table-paginator"
   [length]="pagination?.length"
   [pageSize]="pagination?.pageSize"
@@ -161,5 +157,8 @@
 </mat-paginator>
 
 <div class="no-records" *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)">
-  <mat-icon>web</mat-icon> {{ languagePack?.tableLabels.NoData }}
+  <!-- <mat-icon>web</mat-icon>  -->
+  {{ languagePack?.tableLabels.NoData }}  
+  <br>
+  <button *ngIf="showReload" mat-icon-button color="primary" (click)="reload_onClick()"><mat-icon>autorenew</mat-icon></button>
 </div>

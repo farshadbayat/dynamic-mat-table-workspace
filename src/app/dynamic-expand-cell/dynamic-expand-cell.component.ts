@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { DynamicMatTableComponent, IDynamicCell, IEvent, TableField } from 'dynamic-mat-table';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { DynamicMatTableComponent, IDynamicCell, IRowEvent, TableField } from 'dynamic-mat-table';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -7,15 +7,26 @@ import { BehaviorSubject } from 'rxjs';
   templateUrl: './dynamic-expand-cell.component.html',
   styleUrls: ['./dynamic-expand-cell.component.scss']
 })
-export class DynamicExpandCellComponent implements OnInit, IDynamicCell {
+export class DynamicExpandCellComponent implements OnInit, IDynamicCell, AfterViewInit {
   @Input() row: any;
   @Input() column: TableField<any>;
   @Input() parent: DynamicMatTableComponent<any>;
-  @Input() onRowEvent?: EventEmitter<IEvent>;  
+  @Input() onRowEvent?: EventEmitter<IRowEvent>;  
 
   constructor() { }
   
-  ngOnInit() {
+  ngAfterViewInit(): void {
+    
   }
+  
+  ngOnInit() {    
+    if( this.row) {             
+      this.row.option.expandCallback = (data) =>{
+        console.log('expand ', data);        
+      };
+    }
+  }
+
+
 
 }

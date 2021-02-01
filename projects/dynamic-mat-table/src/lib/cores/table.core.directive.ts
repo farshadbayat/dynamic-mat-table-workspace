@@ -1,4 +1,4 @@
-import { IEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode } from '../models/table-row.model';
+import { IRowEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode, ITableEvent } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { TableField } from '../models/table-field.model';
@@ -91,25 +91,23 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input()
-  get rowSelection() {
-    return this.tableSelection;
+  get rowSelectionModel() {
+    return this._rowSelectionModel;
   }
-  set rowSelection(value: SelectionModel<T>) { 
-    if (this.rowSelectionMode !== 'none') {
-      this.selection = (value.isMultipleSelection() === true ? 'multi': 'single');
+  set rowSelectionModel(value: SelectionModel<T>) { 
+    if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
+      this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
     }
-    this.tableSelection = value;
-    // console.log(this.tableSelection);
-    
+    this._rowSelectionModel = value;
   }
 
   @Input()
-  get selection() {
-    return this.rowSelectionMode;
+  get rowSelectionMode() {
+    return this._rowSelectionMode;
   }
-  set selection(selection: TableSelectionMode) {
-    this.rowSelectionMode = selection || 'none';
-    this.tableSelection = this.rowSelectionMode === 'none' ? null : new SelectionModel<T>(this.rowSelectionMode === 'multi', []);
+  set rowSelectionMode(selection: TableSelectionMode) {
+    this._rowSelectionMode = selection || 'none';
+    this._rowSelectionModel = this._rowSelectionMode === 'none' ? null : new SelectionModel<T>(this._rowSelectionMode === 'multi', []);
     this.setDisplayedColumns();    
     //this.rowSelectionChange.emit(this.tableSelection);
   }
@@ -231,9 +229,10 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() headerEnable = true;
   @Input() footerEnable = false;
   @Input() showNoData: boolean;
-  @Output() signal: BehaviorSubject<any>;
+  @Input() showReload: boolean;  
   // tslint:disable-next-line: no-output-on-prefix
-  @Output() onRowEvent: EventEmitter<IEvent> = new EventEmitter();
+  @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
+  @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
   
@@ -244,8 +243,7 @@ export class TableCoreDirective<T extends TableRow> {
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;
 
-  constructor(public tableService: TableService, public cd: ChangeDetectorRef) {
-    this.signal = new BehaviorSubject(null);
+  constructor(public tableService: TableService, public cd: ChangeDetectorRef) {    
     this.showProgress = true;
     this.tableSetting = {
       direction: 'ltr',
@@ -260,8 +258,8 @@ export class TableCoreDirective<T extends TableRow> {
   public tableColumns: TableField<T>[];
   public tvsDataSource: TableVirtualScrollDataSource<T>;
 
-  private rowSelectionMode: TableSelectionMode;
-  private tableSelection = new SelectionModel<T>(true, []);
+  private _rowSelectionMode: TableSelectionMode;
+  private _rowSelectionModel = new SelectionModel<T>(true, []);
   private tablePagination: TablePagination = { };
   public tablePagingMode: 'none' | 'client' | 'server'  = 'none';
   public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
@@ -305,8 +303,8 @@ export class TableCoreDirective<T extends TableRow> {
       this.dataSource.clearData();
       this.expandedElement = null;
     }
-    if(this.tableSelection) {
-      this.tableSelection.clear();
+    if(this._rowSelectionModel) {
+      this._rowSelectionModel.clear();
     }
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
@@ -326,7 +324,7 @@ export class TableCoreDirective<T extends TableRow> {
         // this.displayedColumns[index] = colunm.name;
       });
 
-      if (this.selection === 'multi' || this.selection === 'single') {
+      if (this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') {
         this.displayedColumns = ['table-select', ...this.displayedColumns];
       }
       if (this.tableSetting.visibleTableMenu !== false) {
@@ -392,7 +390,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
-    const numSelected = this.tableSelection.selected.length;
+    const numSelected = this._rowSelectionModel.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
@@ -400,15 +398,15 @@ export class TableCoreDirective<T extends TableRow> {
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
-      this.rowSelection.clear() :
-      this.dataSource.data.forEach(row => this.rowSelection.select(row));    
-    this.onRowEvent.emit({ event: 'MasterSelectionChange', sender:  this.tableSelection});
+      this._rowSelectionModel.clear() :
+      this.dataSource.data.forEach(row => this._rowSelectionModel.select(row));    
+    this.onRowEvent.emit({ event: 'MasterSelectionChange', sender:  this._rowSelectionModel});
   }
 
   onRowSelectionChange(e: any, row: T) {
     if (e) {
-      this.rowSelection.toggle(row);
-      this.onRowEvent.emit({ event: 'RowSelectionChange', sender:  this.tableSelection});
+      this._rowSelectionModel.toggle(row);
+      this.onRowEvent.emit({ event: 'RowSelectionChange', sender:  this._rowSelectionModel});
     }
   }
 
@@ -417,7 +415,7 @@ export class TableCoreDirective<T extends TableRow> {
     if (!row) {
       return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
     }
-    return `${this.rowSelection.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+    return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
   }
 
 }

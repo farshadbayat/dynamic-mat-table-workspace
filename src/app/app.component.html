@@ -4,7 +4,8 @@
   <!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
 
   <!-- [alternativeRowStyle]="altRowStyle" -->
-  <dynamic-mat-table    
+  <dynamic-mat-table
+    [showReload] = "showReloadData"
     [dir]="direction"
     [expandComponent]="expandComponent"
     [rowHeight]="rowHeight"
@@ -18,11 +19,12 @@
     [pagination]="pagination"
     [showNoData]="showNoData"
     [printConfig]="printConfig"
-    [selection]="tableSelection"
-    [rowSelection]="selection"
+    [rowSelectionMode]="rowSelectionMode"
+    [rowSelectionModel]="selectionModel"
     [showProgress]="showProgress"
     [rowActionMenu]="rowActionMenu"    
-    (onRowEvent)="row_onClick($event)"
+    (onTableEvent)="tableEvent_onClick($event)"
+    (onRowEvent)="rowEvent_onClick($event)"
     [class.conditional-class]="conditinalClass"
     (settingChange)="table_onChangeSetting($event)"
     (rowSelectionChange)="table_onRowSelectionChange($event)">

@@ -62,11 +62,9 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
     line-height: 42px;
     position: absolute;
     z-index: 1;
-    pointer-events: none;
-    mat-icon {
-      font-size: 35px;
-      margin: 15px;
-      line-height: 22px;
+    pointer-events: none;   
+    button {
+      pointer-events: initial;
     }
   } 
 }

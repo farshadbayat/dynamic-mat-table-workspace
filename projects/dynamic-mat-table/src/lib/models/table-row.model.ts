@@ -17,12 +17,16 @@ export interface RowActionMenu {
   visible?: boolean;
 }
 
-
 export type TableSelectionMode = 'single' | 'multi' | 'none';
 
-export interface IEvent {
-  event: any | 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu';
+export interface IRowEvent {
+  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | any;
   sender: any;
+}
+
+export interface ITableEvent {
+  event: 'ReloadData' | any;
+  sender: any | undefined;
 }
 
 export interface IRowActionMenuEvent<T> {

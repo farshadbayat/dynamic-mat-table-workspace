@@ -2,12 +2,12 @@ import { EventEmitter } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DynamicMatTableComponent } from '../../dynamic-mat-table/dynamic-mat-table.component';
 import { TableField } from '../../models/table-field.model';
-import { IEvent } from '../../models/table-row.model';
+import { IRowEvent, TableRow } from '../../models/table-row.model';
 export interface IDynamicCell {
-  row: any;
+  row: TableRow ;
   column: TableField<any>;
   parent: DynamicMatTableComponent<any>;
-  onRowEvent?: EventEmitter<IEvent>;
+  onRowEvent?: EventEmitter<IRowEvent>;
   //onSignal?: BehaviorSubject<any>;  
-  signal?: (sender: IDynamicCell, e: any) => void;
+  // signal?: (sender: IDynamicCell, e: any) => void;
 }

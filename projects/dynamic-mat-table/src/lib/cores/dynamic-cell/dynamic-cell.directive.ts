@@ -2,7 +2,7 @@ import { Compiler, ComponentFactoryResolver, ComponentRef, Directive, EventEmitt
 import { BehaviorSubject } from 'rxjs';
 import { DynamicMatTableComponent } from '../../dynamic-mat-table/dynamic-mat-table.component';
 import { TableField } from '../../models/table-field.model';
-import { IEvent } from '../../models/table-row.model';
+import { IRowEvent } from '../../models/table-row.model';
 import { IDynamicCell } from './IDynamicCell';
 
 @Directive({
@@ -12,7 +12,7 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   @Input() component: any;
   @Input() column: TableField<any>;
   @Input() row: any;
-  @Input() onRowEvent: EventEmitter<IEvent>;  
+  @Input() onRowEvent: EventEmitter<IRowEvent>;  
   componentRef: ComponentRef<IDynamicCell> = null;
 
   constructor(

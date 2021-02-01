@@ -67,8 +67,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
   }
 
-  ngOnDestroy(): void {
-    console.log('Method not implemented.');
+  ngOnDestroy(): void {    
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }

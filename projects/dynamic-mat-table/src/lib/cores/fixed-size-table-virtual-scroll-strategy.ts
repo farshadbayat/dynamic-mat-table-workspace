@@ -39,9 +39,8 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     this.onDataLengthChanged();
   }
 
-  ngOnDestroy(): void {
-    console.log('Method not implemented.');
-    // this.eventsSubscription.unsubscribe();
+  ngOnDestroy(): void {    
+    this.eventsSubscription.unsubscribe();
   }
 
   public attach(viewport: CdkVirtualScrollViewport): void {

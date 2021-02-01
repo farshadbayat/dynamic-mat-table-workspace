@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
-import { DynamicMatTableComponent, IDynamicCell, TableField, IEvent } from 'dynamic-mat-table';
+import { DynamicMatTableComponent, IDynamicCell, TableField, IRowEvent } from 'dynamic-mat-table';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
 
-  @Input() onRowEvent: EventEmitter<IEvent>;  
+  @Input() onRowEvent: EventEmitter<IRowEvent>;  
   @Input() row: any;
   @Input() column: TableField<any>;
   @Input() parent: DynamicMatTableComponent<any>;
@@ -34,7 +34,9 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
       this.row.option.expand = false;
     }
     this.parent.expandRow(this.row.row - 1, !this.row.option.expand);    
-    this.onSignal.next(this.row.option.expand);
+    if (this.row.option.expandCallback !== undefined) {
+      this.row.option.expandCallback(this.row);
+    }
   }
 
   raiseEvent_onClick() {
