@@ -372,10 +372,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }    
   }
 
-  onCellClick(e, row, column: TableField<T>) {    
+  onRowSelection(e, row, column: TableField<T>) {
     if (this.rowSelectionMode && this.rowSelectionMode !== 'none' && column.rowSelectionable !== false) {
       this.onRowSelectionChange(e, row);
     }
+  }
+
+  onCellClick(e, row, column: TableField<T>) {    
+    this.onRowSelection(e, row, column);
     if (column.clickable !== false) {
       this.onRowEvent.emit({ event: e, sender: {row: row, column: column} });
     }
@@ -383,6 +387,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   onRowDblClick(e, row) {    
     this.onRowEvent.emit({ event: e, sender: {row: row} });
+  }
+
+  onRowClick(e, row) {
+    this.onRowEvent.emit({ event: e, sender: {row: row} });    
   }
 
   /************************************ Drag & Drop Column *******************************************/

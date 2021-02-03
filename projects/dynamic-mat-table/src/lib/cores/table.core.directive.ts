@@ -7,7 +7,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
-import { TablePagination } from '../models/table-pagination.model';
+import { TablePagination, TablePaginationMode } from '../models/table-pagination.model';
 import { PrintConfig } from '../models/print-config.model';
 import { TableSetting, Direction, ScreenMode } from '../models/table-setting.model';
 import { MatSort } from '@angular/material/sort';
@@ -15,7 +15,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
-import { BehaviorSubject } from 'rxjs';
+import { TableScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
+
 const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; z-index: 1000;';
 @Directive({
   // tslint:disable-next-line:directive-selector
@@ -35,7 +36,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
-    if (!isNullorUndefined(value) && this.tablePagingMode === 'client') {
+    if (!isNullorUndefined(value) && this.tablePagingMode === 'client-side') {
       if (this.tvsDataSource === undefined || this.tvsDataSource === null) {
         this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
       }
@@ -43,12 +44,14 @@ export class TableCoreDirective<T extends TableRow> {
     }
     this.updatePagination();
   }
+
+  @Input()
   @HostBinding('class')
   get fullscreenClass(): string {    
     return this.tableSetting.screenMode === 'fullscreen' ? 'full-screen' : null;
-  }
-  
+  }  
 
+  @Input()
   @HostBinding('style.direction')
   get direction(): Direction {
     return this.tableSetting.direction;
@@ -61,30 +64,38 @@ export class TableCoreDirective<T extends TableRow> {
   @HostBinding('style')
   get fullscreen(): string {
     return this.tableSetting.screenMode === 'fullscreen' ? FULLSCREEN_STYLE: null;
+  }  
+
+  @Input()
+  get ScrollStrategyType() {
+    return this.tableSetting.scrollStrategy;
   }
-  
+  set ScrollStrategyType(value: TableScrollStrategy) {        
+    this.viewport['_scrollStrategy'].scrollStrategyMode = value;
+    this.tableSetting.scrollStrategy = value;
+  }
 
   @Input()
   get pagingMode() {
     return this.tablePagingMode;
   }
-  set pagingMode(value: 'none' | 'client' | 'server') {
+  set pagingMode(value: TablePaginationMode) {
     this.tablePagingMode = value;
     this.updatePagination();
   }
 
   @Input()
   get pagination() {
-    return this.tablePagination;
+    return this._tablePagination;
   }
   set pagination(value: TablePagination) {
     if (value && value !== null) {
-      this.tablePagination = value;
-      if ( isNullorUndefined(this.tablePagination.pageSizeOptions)) {
-        this.tablePagination.pageSizeOptions = [5, 10, 25, 100];
+      this._tablePagination = value;
+      if ( isNullorUndefined(this._tablePagination.pageSizeOptions)) {
+        this._tablePagination.pageSizeOptions = [5, 10, 25, 100];
       }
-      if ( isNullorUndefined(this.tablePagination.pageSizeOptions)) {
-        this.tablePagination.pageSize = this.tablePagination.pageSizeOptions[0];
+      if ( isNullorUndefined(this._tablePagination.pageSizeOptions)) {
+        this._tablePagination.pageSize = this._tablePagination.pageSizeOptions[0];
       }
       this.updatePagination();
     }
@@ -147,15 +158,15 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   public expandColumn = [];
-  private expandComponent_: any;
+  private _expandComponent: any;
   @Input()
   get expandComponent(): any {    
-    return this.expandComponent_;
+    return this._expandComponent;
   }
   set expandComponent(value: any) {
     // console.log(this.expandColumn);
-    this.expandComponent_ = value;
-    if (this.expandComponent_ !== null && this.expandComponent_ !== undefined) {
+    this._expandComponent = value;
+    if (this._expandComponent !== null && this._expandComponent !== undefined) {
       this.expandColumn = ['expandedDetail'];
     } else {
       this.expandColumn = [];
@@ -174,7 +185,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   @Input() defaultWidth: number = null;
 
-  @Input() minWidth = 100;
+  @Input() minWidth = 120;
 
   @Input()
   get columns() {
@@ -260,8 +271,8 @@ export class TableCoreDirective<T extends TableRow> {
 
   private _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
-  private tablePagination: TablePagination = { };
-  public tablePagingMode: 'none' | 'client' | 'server'  = 'none';
+  private _tablePagination: TablePagination = { };
+  public tablePagingMode: TablePaginationMode  = 'none';
   public viewportClass: 'viewport' | 'viewport-with-pagination' = 'viewport-with-pagination';
   tableSetting: TableSetting;
 
@@ -276,12 +287,12 @@ export class TableCoreDirective<T extends TableRow> {
 
   updatePagination() {
     window.requestAnimationFrame(() => {
-      if (this.tablePagingMode === 'client' || this.tablePagingMode === 'server') {
+      if (this.tablePagingMode === 'client-side' || this.tablePagingMode === 'server-side') {
         this.viewportClass = 'viewport-with-pagination';
         if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
           let dataLen = this.tvsDataSource.paginator.length;
-          if (!isNullorUndefined(this.tablePagination.length) && this.tablePagination.length > dataLen) {
-            dataLen = this.tablePagination.length;
+          if (!isNullorUndefined(this._tablePagination.length) && this._tablePagination.length > dataLen) {
+            dataLen = this._tablePagination.length;
           }
           this.tvsDataSource.paginator.length = dataLen;
         }

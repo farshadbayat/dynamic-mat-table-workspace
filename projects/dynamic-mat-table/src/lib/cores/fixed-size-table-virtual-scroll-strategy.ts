@@ -12,6 +12,8 @@ export interface TSVStrategyConfigs {
   bufferMultiplier: number;
 }
 
+export declare type TableScrollStrategy = 'fixed-size' | 'none' | null;
+
 @Injectable()
 export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrategy, OnDestroy {  
   private eventsSubscription: Subscription;
@@ -22,6 +24,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
   private bufferMultiplier!: number;
   private indexChange = new Subject<number>();
   public stickyChange = new Subject<number>();
+  public scrollStrategyMode: TableScrollStrategy = 'fixed-size';
 
   public viewport: CdkVirtualScrollViewport;
 
@@ -111,6 +114,12 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     if (!this.viewport || !this.rowHeight) {
       return;
     }
+    let start = 0;
+    let end = this.dataLength;   
+
+    if ( this.scrollStrategyMode === 'none' && this.viewport.getRenderedRange().start  === start && this.viewport.getRenderedRange().end  === end ) {
+      return;
+    } 
 
     const scrollOffset = this.viewport.measureScrollOffset();
     const amount = Math.ceil(this.getViewportSize() / this.rowHeight);
@@ -118,12 +127,14 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     const buffer = Math.ceil(amount * this.bufferMultiplier);
 
     const skip = Math.round(offset / this.rowHeight);
-    const index = Math.max(0, skip);
-    
-    const start = Math.max(0, index - buffer);
-    const end = Math.min(this.dataLength, index + amount + buffer);    
+    const index = Math.max(0, skip);    
+     
+    if (this.scrollStrategyMode === 'fixed-size') {
+      start = Math.max(0, index - buffer);
+      end = Math.min(this.dataLength, index + amount + buffer);
+    }
     const renderedOffset = start * this.rowHeight;    
-    // console.log(renderedOffset, start , end);
+    
     this.viewport.setRenderedContentOffset(renderedOffset);
     this.viewport.setRenderedRange({start, end});    
     this.indexChange.next(index);

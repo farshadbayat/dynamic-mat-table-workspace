@@ -18,7 +18,7 @@ export * from './lib/cores/table-data-source';
 Model Class
 */
 export * from './lib/models/language-pack.model';
-export * from './lib/international/table-Intl';
+// export * from './lib/international/table-Intl';
 export * from './lib/models/table-row.model';
 export * from './lib/models/table-field.model';
 export * from './lib/models/print-config.model';

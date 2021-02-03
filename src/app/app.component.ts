@@ -13,6 +13,7 @@ import {
   IRowEvent,
   ITableEvent
 } from 'dynamic-mat-table';
+import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
@@ -31,6 +32,7 @@ export class AppComponent {
   setting: TableSetting= {
     alternativeRowStyle: {'background-color': '#d2d2d2'}
   }; 
+  scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
   pending = false; 
   showNoData = true;
@@ -153,8 +155,10 @@ export class AppComponent {
       selection.select(this.dataSource.allData[i]);
     }    
     this.selectionModel = selection;
-    // console.log(this.selection);
-    
+  }
+
+  tableVST_onClick() {
+    this.scrollStrategyType
   }
 
   table_onRowSelectionChange(e) {
@@ -219,7 +223,7 @@ export class AppComponent {
         e.sender.row.option = {};
       }
       // if option not defined
-      if (!e.sender.row.option[e.sender.column.name]) {        
+      if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {        
         e.sender.row.option[e.sender.column.name] = {};
       }
       e.sender.row.option[e.sender.column.name].style = {'background-color': '#ff4081', 'color':'white'};

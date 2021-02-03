@@ -132,6 +132,7 @@
     <tr mat-row
       *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
+      (click)="onRowClick($event, row)"
       [style.height.px]="rowHeight"
       class="table-row"
       [ngClass]="row?.option?.class"

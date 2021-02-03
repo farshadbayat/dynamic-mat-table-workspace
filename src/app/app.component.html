@@ -5,6 +5,7 @@
 
   <!-- [alternativeRowStyle]="altRowStyle" -->
   <dynamic-mat-table
+    [ScrollStrategyType]="scrollStrategyType"
     [showReload] = "showReloadData"
     [dir]="direction"
     [expandComponent]="expandComponent"
@@ -49,6 +50,9 @@
   </button>
   <button mat-raised-button color="primary" (click)="tableSelection_onClick()">
     Table Selection ({{ rowSelectionMode }})
+  </button>
+  <button mat-raised-button color="primary" (click)="tableVST_onClick()">
+    Scrolling Type ({{ scrollStrategyType }})
   </button>
   <button mat-raised-button color="primary" (click)="selectToggle_onClick()">
     Select 10 Row
