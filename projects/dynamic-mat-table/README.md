@@ -3,6 +3,9 @@
 Dynamic tables built with angular material.
 
 ## Online Demo
+Latest Version:
+https://stackblitz.com/edit/angular-ivy-s4ne42
+version (1.2.14):
 https://stackblitz.com/edit/angular-ivy-nuglh9
 ## Getting Started
 
@@ -25,32 +28,56 @@ imports: [
 
 Column types are defined as follow:
 
+
 ```javascript
-export interface AbstractField {
+{
   index?: number;
-  name: string; // The key of the data
-  type?: 'text' | 'number' | 'date' | 'category'; // Type of data in the field
-  width?: number; // width of column
-  header?: string; // The title of the column
-  print?: boolean; // disply in printing view by defualt is true
+  name: string;// The key of the data
+  type?: 'text' | 'number' | 'date' | 'category';// Type of data in the field
+  width?: number;// width of column
+  header?: string;// The title of the column
+  print?: boolean;// disply in printing view by defualt is true
   isKey?: boolean;
   inlineEdit?: boolean;
-  display?: 'visible' | 'hiden' | 'prevent-hidden'; // Hide and visible this column
-  sticky?: 'start' | 'end' | 'none'; // sticky this column to start or end
+  display?: 'visible' | 'hiden' | 'prevent-hidden';// Hide and visible this column
+  sticky?: 'start' | 'end' | 'none';// sticky this column to start or end
   filter?: 'client-side' | 'server-side' | 'none';
   sort?: 'client-side' | 'server-side' | 'none';
-  cellClass?: string; // Apply a class to a cell, class name must be in the data
+  cellClass?: string;// Apply a class to a cell, class name must be in the global stylesheet
+  cellStyle?: any;// Apply a style to a cell, style must be object ex: [...].cellStyle = {'color' : 'red'}
+  icon?: string;
+  iconColor?: string;
+  dynamicCellComponent?: any;
+  draggable?: boolean;
+  filterable?: boolean;
+  sortable?: boolean;
+  clickable?: boolean;
+  rowSelectionable?: boolean;
+  option?: any;
+  categoryData?: any[];
+  toString?: (column: TableField<any>, row: TableRow) => string;
+  customSort?: (column: TableField<any>, row: any) => string;
 }
 ```
 
 Data row is extend from TableRow:
+-can apply class or style to row with option field.
+-can share data to all cell in the row.
+-can defined expand state.
 
 ```javascript
 export interface TableRow {
-  id?: number;
-  isOpen?: boolean;
-  rowClass?: string;
-  actionMenu?: { [key: string]: ActionMenu; };
+    id?: number;
+    rowActionMenu?: {
+        [key: string]: RowActionMenu;
+    };
+    option?: RowOption;
+}
+
+export interface RowOption extends Dictionary<any> {
+    style?: any;
+    class?: any;
+    expand?: boolean;
 }
 ```
 
@@ -65,6 +92,12 @@ this.dataSource = new TableVirtualScrollDataSource(data);
 
 In the HTML add the selector:
 
+Minmal:
+```html
+  <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> 
+```
+
+Full:
 ```html
 <dynamic-mat-table tableName="demo_table"
                       [columns]="fields"

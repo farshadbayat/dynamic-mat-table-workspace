@@ -38,7 +38,7 @@ export class AppComponent {
   showProgress = true;
   visibleMenu = true;
   conditinalClass = false;
-  paginationMode: string = 'server';
+  paginationMode: string = 'none';
   direction: 'rtl' | 'ltr' = 'ltr';
   rowActionMenu: RowActionMenu[] = [];
   rowSelectionMode: TableSelectionMode = 'none';
@@ -180,9 +180,13 @@ export class AppComponent {
   } 
 
   paginationMode_onClick() {
-    this.paginationMode == 'client'
-      ? (this.paginationMode = 'server')
-      : (this.paginationMode = 'client');
+    if (this.paginationMode === 'client') {
+      this.paginationMode = 'server';
+    } else if (this.paginationMode === 'server') {
+      this.paginationMode = 'none';
+    } else if (this.paginationMode === 'none') {
+      this.paginationMode = 'client';
+    }
   }
 
   direction_onClick() {

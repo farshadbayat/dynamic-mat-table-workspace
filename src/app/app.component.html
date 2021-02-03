@@ -13,9 +13,9 @@
     [pending]="pending"
     [setting]="setting"
     tableName="demo_table"
-    [pagingMode]="paginationMode"
     [sticky]="stickyHeader"
     [dataSource]="dataSource"
+    [pagingMode]="paginationMode"
     [pagination]="pagination"
     [showNoData]="showNoData"
     [printConfig]="printConfig"
@@ -48,7 +48,7 @@
     {{ fields[3]?.name + ":" + fields[3]?.sticky }}
   </button>
   <button mat-raised-button color="primary" (click)="tableSelection_onClick()">
-    Table Selection ({{ tableSelection }})
+    Table Selection ({{ rowSelectionMode }})
   </button>
   <button mat-raised-button color="primary" (click)="selectToggle_onClick()">
     Select 10 Row
