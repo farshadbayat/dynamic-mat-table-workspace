@@ -153,7 +153,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   rowStyle(row) {
     let style: any =  row.option.style || {};
     if (this.setting.alternativeRowStyle && row.id % 2 === 0) {
-      style = { ...style, ...this.setting.alternativeRowStyle};
+      // style is high priority
+      style = { ...this.setting.alternativeRowStyle ,...style};
     }
     return style;
   }

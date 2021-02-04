@@ -209,10 +209,13 @@ export class TableCoreDirective<T extends TableRow> {
       f.sticky = getObjectProp('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
       f.width =  getObjectProp('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
     });
-    this.tableColumns = fields;
-    // console.log('pp');
+    this.tableColumns = fields;        
+  }
+
+  public updateColumn() {    
     if (isNullorUndefined(this.tableSetting.columnSetting) ) {
-      this.tableSetting.columnSetting = clone(fields);
+      this.tableSetting.columnSetting = clone(this.tableColumns);
+      this.refreshTableSetting();
     }
     this.setDisplayedColumns();
   }
