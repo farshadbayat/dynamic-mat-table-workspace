@@ -44,8 +44,10 @@ tr.mat-row, tr.mat-header-row, tr.mat-footer-row{
 }
 
 mat-cell, mat-footer-cell, mat-header-cell {
-  // hyphens: auto;
   align-self: stretch;
+  color: inherit;
+  background-color: inherit;
+  // hyphens: auto;
 //   overflow: hidden;
 //   width: 200px;
 //   text-overflow: ellipsis;
