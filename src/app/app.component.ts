@@ -117,6 +117,7 @@ export class AppComponent {
 
   fetchData_onClick() {
     const d = DATA.map( item =>{return {...item, option:{ expandCallback: null}}});
+    d[1].option.style = { 'background-color' : 'red' };
     this.dataSource = new TableVirtualScrollDataSource(d);
   }
 

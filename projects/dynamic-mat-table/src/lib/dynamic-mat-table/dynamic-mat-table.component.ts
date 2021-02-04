@@ -150,6 +150,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   }
 
+  rowStyle(row) {
+    let style: any =  row.option.style || {};
+    if (this.setting.alternativeRowStyle && row.id % 2 === 0) {
+      style = { ...style, ...this.setting.alternativeRowStyle};
+    }
+    return style;
+  }
+
   cellClass(option, column) {
     let clas = null;
     if (option && column.name) {

@@ -136,8 +136,7 @@
       [style.height.px]="rowHeight"
       class="table-row"
       [ngClass]="row?.option?.class"
-      [ngStyle]="row?.option?.style"
-      [ngStyle]="row.id % 2 === 0 ? setting?.alternativeRowStyle : null"
+      [ngStyle]="rowStyle(row)"      
       [class.expanded-row]="expandedElement === row"
       [class.row-selection]="rowSelectionModel ? rowSelectionModel.isSelected(row) : false">
     </tr>
