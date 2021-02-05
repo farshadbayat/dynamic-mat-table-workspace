@@ -209,7 +209,8 @@ export class TableCoreDirective<T extends TableRow> {
       f.sticky = getObjectProp('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
       f.width =  getObjectProp('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
     });
-    this.tableColumns = fields;        
+    this.tableColumns = fields;   
+    this.updateColumn();     
   }
 
   public updateColumn() {    
