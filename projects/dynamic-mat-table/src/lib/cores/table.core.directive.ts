@@ -45,11 +45,11 @@ export class TableCoreDirective<T extends TableRow> {
     this.updatePagination();
   }
 
-  @Input()
-  @HostBinding('class')
-  get fullscreenClass(): string {    
-    return this.tableSetting.screenMode === 'fullscreen' ? 'full-screen' : null;
-  }  
+  // @Input()
+  // @HostBinding('class')
+  // get fullscreenClass(): string {    
+  //   return this.tableSetting.screenMode === 'fullscreen' ? 'full-screen' : null;
+  // }  
 
   @Input()
   @HostBinding('style.direction')
