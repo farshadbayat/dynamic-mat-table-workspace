@@ -34,7 +34,8 @@
 .dragable-row {  
   mat-checkbox {
     width: 100%;
-    line-height: 28px;    
+    line-height: 28px;  
+    display: inline-flex;  
   }
 }
 
@@ -197,6 +198,6 @@
     width: 100%;
   }
   mat-icon {
-    line-height: 48px;
+    line-height: 48px !important;
   }
 }

@@ -13,7 +13,7 @@
     mat-menu-item
     (click)="screenMode_OnClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
-    <mat-icon style="margin-top: -3px">{{ tableSetting.screenMode === 'fullscreen' ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
+    <mat-icon>{{ tableSetting.screenMode === 'fullscreen' ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
     <span>{{ languagePack.menuLabels.fullScreen }}</span>
   </button>
   <button
@@ -43,7 +43,7 @@
     mat-menu-item
     (click)="clearFilter_OnClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
-    <mat-icon style="margin-top: -3px">clear</mat-icon>
+    <mat-icon>clear</mat-icon>
     <span>{{ languagePack.menuLabels.clearFilter }}</span>
   </button>
 </mat-menu>

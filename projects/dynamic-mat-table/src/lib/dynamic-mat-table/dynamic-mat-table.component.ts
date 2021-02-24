@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChildren,
-         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnDestroy} from '@angular/core';
+         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnDestroy, ContentChildren} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
 import { IRowEvent, RowActionMenu, TableRow } from '../models/table-row.model';
@@ -20,6 +20,7 @@ import { TableSetting } from '../models/table-setting.model';
 import { delay } from 'rxjs/operators';
 import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
 import { Subscription } from 'rxjs';
+import { MatHeaderRowDef } from '@angular/material/table';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -78,7 +79,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   
   @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
   @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
-  @ViewChildren(HeaderFilterComponent) headerFilterList !: QueryList<HeaderFilterComponent>;
+  @ContentChildren(HeaderFilterComponent) headerFilterList !: QueryList<HeaderFilterComponent>;  
   private dragDropData = {dragColumnIndex: -1, dropColumnIndex: -1};
   private eventsSubscription: Subscription;
   printing = true;
@@ -99,7 +100,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
     this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
-      this.tableSetting.columnSetting[data.i].width = data.w;
+      if (this.tableSetting.columnSetting[data.i]) {
+        this.tableSetting.columnSetting[data.i].width = data.w;
+      }
       this.refreshGrid();
     });
   }

@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Output, ViewChild,
-         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren, OnDestroy } from '@angular/core';
+         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren, OnDestroy, ContentChildren } from '@angular/core';
 import { TableField } from './../../../models/table-field.model';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TextFilter } from './compare/text-filter';
@@ -33,7 +33,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() field?: TableField<any>;
   @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
-  @ViewChildren('filterInput') filterInputList !: QueryList<MatInput>;
+  @ContentChildren('filterInput') filterInputList !: QueryList<MatInput>;
   @ViewChild(MatMenuTrigger, { static: true }) menu !: MatMenuTrigger;
 
   private filterList: AbstractFilter[] = [];

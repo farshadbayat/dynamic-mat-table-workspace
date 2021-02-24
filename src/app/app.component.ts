@@ -116,7 +116,7 @@ export class AppComponent {
   }
 
   fetchData_onClick() {
-    const d = DATA.map( item =>{return {...item, option:{ expandCallback: null}}});
+    const d = DATA.map( item =>{return {...item, option:{ expandCallback: null, style: null}}});
     d[1].option.style = { 'background-color' : 'red' };
     this.dataSource = new TableVirtualScrollDataSource(d);
   }
@@ -192,6 +192,7 @@ export class AppComponent {
     } else if (this.paginationMode === 'none') {
       this.paginationMode = 'client';
     }
+    //this.fetchData_onClick();
   }
 
   direction_onClick() {
