@@ -7,6 +7,7 @@ import { MatTable } from '@angular/material/table';
 import { FixedSizeTableVirtualScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
 import { CdkHeaderRowDef } from '@angular/cdk/table';
 import { Subject } from 'rxjs';
+import { isNullorUndefined } from './type';
 
 export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemSizeDirective) {
   return tableDir.scrollStrategy;
@@ -103,31 +104,31 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
   }
 
   connectDataSource(dataSource: any) {
-    this.dataSourceChanges.next();
-    if (dataSource instanceof TableVirtualScrollDataSource) {
-      dataSource
-        .dataToRender$
-        .pipe(
-          distinctUntilChanged(),
-          takeUntil(this.dataSourceChanges),
-          takeWhile(this.isAlive()),
-          tap(data => this.scrollStrategy.dataLength = data.length),
-          switchMap(data =>
-            this.scrollStrategy
-              .renderedRangeStream
-              .pipe(
-                map(({ start, end }) => this.getPage(data, start, end))
-              )
+      this.dataSourceChanges.next();
+      if (dataSource instanceof TableVirtualScrollDataSource) {
+        dataSource
+          .dataToRender$
+          .pipe(
+            distinctUntilChanged(),
+            takeUntil(this.dataSourceChanges),
+            takeWhile(this.isAlive()),
+            tap(data => this.scrollStrategy.dataLength = data.length),
+            switchMap(data =>
+              this.scrollStrategy
+                .renderedRangeStream
+                .pipe(
+                  map(({ start, end }) => this.getPage(data, start, end))
+                )
+            )
           )
-        )
-        .subscribe(data => {
-          this.zone.run(() => {
-            dataSource.dataOfRange$.next(data);
+          .subscribe(data => {
+            this.zone.run(() => {
+              dataSource.dataOfRange$.next(data);
+            });
           });
-        });
-    } else {
-      throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
-    }
+      } else {
+        throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
+      }    
   }
 
   ngOnChanges() {

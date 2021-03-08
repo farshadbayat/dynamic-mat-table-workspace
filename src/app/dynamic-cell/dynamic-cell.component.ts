@@ -33,8 +33,8 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
     } else if (!this.row.option.expand) {
       this.row.option.expand = false;
     }
-    this.parent.expandRow(this.row.row - 1, !this.row.option.expand);    
-    if (this.row.option.expandCallback !== undefined) {
+    this.parent.expandRow(this.row.id , !this.row.option.expand);    
+    if (this.row.option.expandCallback !== undefined && this.row.option.expandCallback !== null) {
       this.row.option.expandCallback(this.row);
     }
   }

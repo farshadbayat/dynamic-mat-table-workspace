@@ -83,7 +83,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     } else {
       this.filterPredicate = (data: T, filter: string) => true;
     }
-    this.filter = conditionsString;
+    this.filter = conditionsString;        
   }
 
   ngOnInit(): void {

@@ -52,7 +52,7 @@ export const expandAnimation = trigger('detailExpand', [
   selector: 'dynamic-mat-table',
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
-  animations: [tableAnimation, expandAnimation],
+  animations: [tableAnimation, expandAnimation], 
   //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
@@ -73,6 +73,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
       this.tableSetting = value;
       this.setDisplayedColumns();
+      this.cdr.detectChanges();
     }
   } 
 
@@ -94,9 +95,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     private renderer: Renderer2,
     public languagePack: TableIntl,
     public tableService: TableService,
-    public cd: ChangeDetectorRef,
+    public cdr: ChangeDetectorRef,
   ) {
-    super(tableService, cd); 
+    super(tableService, cdr); 
 
     this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
@@ -128,9 +129,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort.sortChange.subscribe((resp) => {
-      this.pagination.pageIndex = 0;
-    });
+    // this.dataSource.sort.sortChange.subscribe((resp) => {
+    //   this.pagination.pageIndex = 0;
+    // });
     this.dataSource.dataOfRange$.subscribe((data) => {
       // console.log('dataOfRange');
     });
@@ -393,7 +394,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   onCellClick(e, row, column: TableField<T>) {    
     this.onRowSelection(e, row, column);
     if (column.clickable !== false) {
-      this.onRowEvent.emit({ event: e, sender: {row: row, column: column} });
+      this.onRowEvent.emit({ event: 'CellClick', sender: {row: row, column: column} });
     }
   }
 
@@ -402,7 +403,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   onRowClick(e, row) {
-    this.onRowEvent.emit({ event: e, sender: {row: row} });    
+    this.onRowEvent.emit({ event: 'RowClick', sender: {row: row} });    
   }
 
   /************************************ Drag & Drop Column *******************************************/

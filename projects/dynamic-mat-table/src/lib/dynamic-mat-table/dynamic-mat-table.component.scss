@@ -251,7 +251,12 @@ mat-header-cell:hover {
   display: block;
   border-width: 0;
   padding: 0px !important;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
 }
+
+
 
 // ::ng-deep .cdk-virtual-scroll-content-wrapper {
 //   transform: translateY(0px) !important;

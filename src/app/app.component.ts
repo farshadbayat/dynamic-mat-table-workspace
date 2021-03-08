@@ -17,7 +17,7 @@ import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fi
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(500);
+const DATA = getData(10);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -118,7 +118,7 @@ export class AppComponent {
   fetchData_onClick() {
     const d = DATA.map( item =>{return {...item, option:{ expandCallback: null, style: null}}});
     d[1].option.style = { 'background-color' : 'red' };
-    this.dataSource = new TableVirtualScrollDataSource(d);
+    this.dataSource.data = d;
   }
 
   table_onChangeSetting(setting) {
@@ -219,13 +219,17 @@ export class AppComponent {
     // console.log(e.event);
     if (e.event === 'RowSelectionChange') {
       // console.log('Row Selection Change',e.sender);      
-    } else if(e.event.type === 'click' &&  e.sender.row) {
+    } else if(e.event === 'RowClick' &&  e.sender.row) {
       // change style
       if(!e.sender.row.option){
         e.sender.row.option = {};
       }
       // if option not defined
       if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {        
+        e.sender.row.option[e.sender.column.name] = {};
+      }      
+    } else if(e.event === 'CellClick' && e.sender.column) {
+      if (e.sender.row.option[e.sender.column.name] === undefined) {
         e.sender.row.option[e.sender.column.name] = {};
       }
       e.sender.row.option[e.sender.column.name].style = {'background-color': '#ff4081', 'color':'white'};
@@ -245,6 +249,19 @@ export class AppComponent {
     this.setting= setting;
     // console.log(e.checked);
   }
+
+  addNew_onClick() {
+    console.log(this.dataSource.allData);        
+    this.dataSource.allData.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
+    // this.dataSource.refreshFilterPredicate();
+    //this.dataSource =  new TableVirtualScrollDataSource(this.dataSource.allData);
+    //this.table.refreshTableSetting();
+  }
+
+  changeCell_onClick() {
+    this.dataSource.allData[0].name = new Date().toString();
+  }
+
 }
 
 export interface TestElement extends TableRow {

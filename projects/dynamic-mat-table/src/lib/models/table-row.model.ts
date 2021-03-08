@@ -20,7 +20,7 @@ export interface RowActionMenu {
 export type TableSelectionMode = 'single' | 'multi' | 'none';
 
 export interface IRowEvent {
-  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | any;
+  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | any;
   sender: any;
 }
 

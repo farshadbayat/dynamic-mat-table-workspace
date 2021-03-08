@@ -78,6 +78,12 @@
   <button mat-raised-button color="primary" (click)="expandToggle_onClick()">
     Expand Toggle Row {{ expandIndex }}
   </button>  
+  <button mat-raised-button color="primary" (click)="addNew_onClick()">
+    Add New
+  </button>  
+  <button mat-raised-button color="primary" (click)="changeCell_onClick()">
+    Change Cell
+  </button>  
   <mat-slider min="40" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 

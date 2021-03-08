@@ -9,7 +9,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { TableService } from '../dynamic-mat-table/dynamic-mat-table.service';
 import { TablePagination, TablePaginationMode } from '../models/table-pagination.model';
 import { PrintConfig } from '../models/print-config.model';
-import { TableSetting, Direction, ScreenMode } from '../models/table-setting.model';
+import { TableSetting, Direction } from '../models/table-setting.model';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable } from '@angular/material/table';
@@ -27,9 +27,11 @@ export class TableCoreDirective<T extends TableRow> {
   @ViewChild(MatSort, { static: true }) // sort: MatSort;
   set sort(value: MatSort) {
     if (value && value !== null) {
-      if (this.tvsDataSource === undefined || this.tvsDataSource === null) {
-        this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
+      if (isNullorUndefined(this.tvsDataSource)) {
+        return;
+         // this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
       }
+      debugger
       this.tvsDataSource.sort = value;
     }
   }
@@ -37,8 +39,9 @@ export class TableCoreDirective<T extends TableRow> {
   @ViewChild(MatPaginator, { static: false })
   set paginator(value: MatPaginator) {
     if (!isNullorUndefined(value) && this.tablePagingMode === 'client-side') {
-      if (this.tvsDataSource === undefined || this.tvsDataSource === null) {
-        this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
+      if (isNullorUndefined(this.tvsDataSource)) {
+        return;
+        //this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
       }
       (this.tvsDataSource as any)._paginator = value;
     }
@@ -140,21 +143,39 @@ export class TableCoreDirective<T extends TableRow> {
     if (value === true) {
       this.progressColumn.push('progress');
     }
-  }
+  } 
+
+  private totalRecord = 0;
 
   @Input()
-  get dataSource() {
+  get dataSource() {    
+    if(isNullorUndefined(this.tvsDataSource)) {
+      return null;
+    }
+    console.log(this.totalRecord, this.tvsDataSource?.allData.length);    
+    if (this.totalRecord !== this.tvsDataSource.allData.length) {
+      this.addSystemField(this.tvsDataSource.allData);      
+      //this.cdr.markForCheck(); 
+      //this.cdr.detectChanges();   
+      this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);     
+    }
     return this.tvsDataSource;
   }
   set dataSource(value: TableVirtualScrollDataSource<T>) {
-    this.clear();
-    if (value && value != null) {
-      this.tvsDataSource.data = value.data.map( (item, index) => {
-        item.id = index ;
-        return item;
-      });
-      // this.cdr.detectChanges();
+    this.clear();    
+    if (!isNullorUndefined(value)) {
+      this.addSystemField(value.data);
+      this.tvsDataSource = value;      
     }
+  }
+
+  private addSystemField(data: T[]) {
+    data = data.map( (item, index) => {
+      item.id = index ;
+      item.option = item.option || {};
+      return item;
+    });
+    this.totalRecord = this.tvsDataSource.allData.length;
   }
 
   public expandColumn = [];
@@ -258,7 +279,7 @@ export class TableCoreDirective<T extends TableRow> {
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;
 
-  constructor(public tableService: TableService, public cd: ChangeDetectorRef) {    
+  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {    
     this.showProgress = true;
     this.tableSetting = {
       direction: 'ltr',
@@ -271,7 +292,7 @@ export class TableCoreDirective<T extends TableRow> {
   displayedColumns: string[] = [];
   // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
-  public tvsDataSource: TableVirtualScrollDataSource<T>;
+  public tvsDataSource: TableVirtualScrollDataSource<T> = new TableVirtualScrollDataSource<T>([]);;
 
   private _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
@@ -289,8 +310,11 @@ export class TableCoreDirective<T extends TableRow> {
     this.tableSetting = clone(this.tableSetting);
   }
 
-  updatePagination() {
+  updatePagination() {    
     window.requestAnimationFrame(() => {
+      if (isNullorUndefined(this.tvsDataSource)){
+        return;
+      }      
       if (this.tablePagingMode === 'client-side' || this.tablePagingMode === 'server-side') {
         this.viewportClass = 'viewport-with-pagination';
         if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
@@ -299,7 +323,7 @@ export class TableCoreDirective<T extends TableRow> {
             dataLen = this._tablePagination.length;
           }
           this.tvsDataSource.paginator.length = dataLen;
-        }
+        } 
       } else {
         this.viewportClass = 'viewport';
         if ((this.tvsDataSource as any)._paginator !== undefined) {
@@ -311,16 +335,17 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   public clear() {
-    if (this.dataSource && this.dataSource !== null) {
+    if (!isNullorUndefined(this.tvsDataSource)) {
       if (this.viewport) {
         this.viewport.scrollTo({ top: 0, behavior: 'auto' });
       }
-      this.dataSource.clearData();
+      this.tvsDataSource.clearData();
       this.expandedElement = null;
     }
     if(this._rowSelectionModel) {
       this._rowSelectionModel.clear();
     }
+    this.cdr.detectChanges();
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
 
@@ -338,7 +363,6 @@ export class TableCoreDirective<T extends TableRow> {
         }
         // this.displayedColumns[index] = colunm.name;
       });
-
       if (this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') {
         this.displayedColumns = ['table-select', ...this.displayedColumns];
       }
@@ -347,6 +371,7 @@ export class TableCoreDirective<T extends TableRow> {
       }
     }
     this.updatePagination();
+    // this.cdr.detectChanges();
   }
 
   requestFullscreen(element: ElementRef) {
@@ -361,9 +386,16 @@ export class TableCoreDirective<T extends TableRow> {
 
   /************************************ Drag & Drop Column *******************************************/ 
   public refreshGrid() {    
-    this.cd.markForCheck();
+    this.cdr.markForCheck();
     this.refreshTableSetting();
+    this.cdr.detectChanges();
   } 
+
+  // public refreshData() {
+  //   if (this.dataSource && this.dataSource.allData) {
+  //     this.dataSource = new TableVirtualScrollDataSource<T>(this.dataSource.allData);
+  //   }
+  // }
 
   public moveRow(from: number, to: number) {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
