@@ -55,7 +55,6 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   }
 
   updateInput() {
-    // debugger 
     if (this.parent) {
       (this.componentRef.instance as IDynamicCell).parent = this.parent;
     }    

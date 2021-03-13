@@ -160,14 +160,14 @@
       </mat-radio-group>
     </ng-container>
 
-    <ng-container
+    <ng-container 
       *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingFilter)">
       <div class="column-setting-header">
         <mat-icon color="primary">print</mat-icon>{{ languagePack.menuLabels.printMode }}
       </div>
       <mat-radio-group class="radio" [(ngModel)]="currentTableSetting.columnSetting[currentColumn].print">
-        <mat-radio-button value=true (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printYesMode }}</mat-radio-button>
-        <mat-radio-button value=false (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printNoMode }}</mat-radio-button>
+        <mat-radio-button [value]="true" (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printYesMode }}</mat-radio-button>
+        <mat-radio-button [value]="false" (click)="$event.stopPropagation()">{{ languagePack.menuLabels.printNoMode }}</mat-radio-button>
       </mat-radio-group>
     </ng-container>
 

@@ -17,7 +17,7 @@ import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fi
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(10);
+const DATA = getData(200000);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -41,7 +41,7 @@ export class AppComponent {
   visibleMenu = true;
   conditinalClass = false;
   paginationMode: string = 'none';
-  direction: 'rtl' | 'ltr' = 'ltr';
+  direction: 'rtl' | 'ltr' = 'rtl';
   rowActionMenu: RowActionMenu[] = [];
   rowSelectionMode: TableSelectionMode = 'none';
   selectionModel: SelectionModel<TestElement> = null;
@@ -113,6 +113,7 @@ export class AppComponent {
         visible: true,
       }
     );
+    this.fetchData_onClick();
   }
 
   fetchData_onClick() {

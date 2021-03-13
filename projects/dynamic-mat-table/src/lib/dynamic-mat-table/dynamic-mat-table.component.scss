@@ -33,7 +33,7 @@ mat-footer-row, mat-row{
   min-height: auto !important;
 }
 
-tr.mat-row, tr.mat-header-row, tr.mat-footer-row{
+mat-row, mat-header-row, mat-footer-row{
   display: flex;
   border-width: 0;
   border-bottom-width: 1px;

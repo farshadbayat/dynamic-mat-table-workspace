@@ -124,12 +124,11 @@
       <mat-cell *matCellDef="let row" class="table-menu">
         <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowActionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
-    </ng-container>
-
+    </ng-container> 
     <!-- Row Table[Header, Data, Footer] -->
-    <tr mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></tr>
-    <tr mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky"></tr>
-    <tr mat-row
+    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></mat-header-row>
+    <mat-header-row  class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top]="inverseOfTranslation+10" ></mat-header-row>
+    <mat-row 
       *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
       (click)="onRowClick($event, row)"
@@ -139,7 +138,7 @@
       [ngStyle]="rowStyle(row)"      
       [class.expanded-row]="expandedElement === row"
       [class.row-selection]="rowSelectionModel ? rowSelectionModel.isSelected(row) : false">
-    </tr>
+    </mat-row>
     <ng-container *ngIf="expandColumn.length > 0">      
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
     </ng-container>

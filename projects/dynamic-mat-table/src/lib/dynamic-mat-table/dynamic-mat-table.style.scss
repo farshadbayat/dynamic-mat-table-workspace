@@ -30,20 +30,17 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
 }
 
 @mixin progress {
-  tr.mat-header-row.progress {
+  mat-header-row.progress {
     border: none;
-    height: 0px;
+    min-height: 0px;
 
     .mat-header-cell {
       border: 0;
       padding: 0;
     }
 
-    mat-progress-bar {
-      bottom: 0;
-      position: absolute;
+    mat-progress-bar {      
       transition: height 0.3s, opacity 0.25s linear;
-
       &:not(.show) {
         height: 0;
         opacity: 0;

@@ -24,29 +24,19 @@ const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0;
 })
 export class TableCoreDirective<T extends TableRow> {
 
-  @ViewChild(MatSort, { static: true }) // sort: MatSort;
-  set sort(value: MatSort) {
-    if (value && value !== null) {
-      if (isNullorUndefined(this.tvsDataSource)) {
-        return;
-         // this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
-      }
-      debugger
-      this.tvsDataSource.sort = value;
-    }
-  }
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  @ViewChild(MatPaginator, { static: false })
-  set paginator(value: MatPaginator) {
-    if (!isNullorUndefined(value) && this.tablePagingMode === 'client-side') {
-      if (isNullorUndefined(this.tvsDataSource)) {
-        return;
-        //this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
-      }
-      (this.tvsDataSource as any)._paginator = value;
-    }
-    this.updatePagination();
-  }
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  // set paginator(value: MatPaginator) {
+  //   if (!isNullorUndefined(value) && this.tablePagingMode === 'client-side') {
+  //     if (isNullorUndefined(this.tvsDataSource)) {
+  //       return;
+  //       //this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
+  //     }
+  //     (this.tvsDataSource as any)._paginator = value;
+  //   }
+  //   this.updatePagination();
+  // }
 
   // @Input()
   // @HostBinding('class')
@@ -151,22 +141,21 @@ export class TableCoreDirective<T extends TableRow> {
   get dataSource() {    
     if(isNullorUndefined(this.tvsDataSource)) {
       return null;
-    }
-    console.log(this.totalRecord, this.tvsDataSource?.allData.length);    
+    }    
     if (this.totalRecord !== this.tvsDataSource.allData.length) {
-      this.addSystemField(this.tvsDataSource.allData);      
-      //this.cdr.markForCheck(); 
-      //this.cdr.detectChanges();   
+      this.addSystemField(this.tvsDataSource.allData);           
       this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);     
     }
     return this.tvsDataSource;
   }
   set dataSource(value: TableVirtualScrollDataSource<T>) {
     this.clear();    
-    if (!isNullorUndefined(value)) {
-      this.addSystemField(value.data);
-      this.tvsDataSource = value;      
-    }
+      if (!isNullorUndefined(value)) {
+        value.sort = this.sort;
+        (value as any)._paginator = value;
+        this.addSystemField(value.data);
+        this.tvsDataSource = value;      
+      }
   }
 
   private addSystemField(data: T[]) {
@@ -218,12 +207,12 @@ export class TableCoreDirective<T extends TableRow> {
       // key name error //
       if (f.name.toLowerCase() === 'id') {
         throw 'Field name is reserved.["id"]';
-      }
-
+      }      
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
-      f.header = f.header ? f.header : titleCase(f.name);
+      f.print = f.print || true;
+      f.header = f.header || titleCase(f.name);
       f.display = getObjectProp('display', 'visible' , settingField, f ); // f.display ? f.display : 'visible';
       f.filter = getObjectProp('filter', 'client-side' , settingField, f ); // f.filter ? f.filter : 'client-side';
       f.sort = getObjectProp('sort', 'client-side' , settingField, f ); // f.sort ? f.sort : 'client-side';
@@ -311,27 +300,28 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   updatePagination() {    
-    window.requestAnimationFrame(() => {
-      if (isNullorUndefined(this.tvsDataSource)){
-        return;
-      }      
-      if (this.tablePagingMode === 'client-side' || this.tablePagingMode === 'server-side') {
-        this.viewportClass = 'viewport-with-pagination';
-        if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
-          let dataLen = this.tvsDataSource.paginator.length;
-          if (!isNullorUndefined(this._tablePagination.length) && this._tablePagination.length > dataLen) {
-            dataLen = this._tablePagination.length;
-          }
-          this.tvsDataSource.paginator.length = dataLen;
-        } 
-      } else {
-        this.viewportClass = 'viewport';
-        if ((this.tvsDataSource as any)._paginator !== undefined) {
-          delete (this.tvsDataSource as any)._paginator;
+    if (isNullorUndefined(this.tvsDataSource)){
+      return;
+    }      
+    if (this.tablePagingMode === 'client-side' || this.tablePagingMode === 'server-side') {
+      this.viewportClass = 'viewport-with-pagination';
+      if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
+        let dataLen = this.tvsDataSource.paginator.length;
+        if (!isNullorUndefined(this._tablePagination.length) && this._tablePagination.length > dataLen) {
+          dataLen = this._tablePagination.length;
         }
+        this.tvsDataSource.paginator.length = dataLen;
+      } 
+    } else {
+      this.viewportClass = 'viewport';
+      if ((this.tvsDataSource as any)._paginator !== undefined) {
+        delete (this.tvsDataSource as any)._paginator;
       }
-      this.tvsDataSource.refreshFilterPredicate();
-    });
+    }
+    this.tvsDataSource.refreshFilterPredicate();
+    // window.requestAnimationFrame(() => {      
+      
+    // });
   }
 
   public clear() {
