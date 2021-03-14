@@ -41,7 +41,9 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   ngOnInit() {}
 
   ngOnDestroy(): void {
-    this.componentRef.destroy();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+    }
   }
 
   initComponent() {

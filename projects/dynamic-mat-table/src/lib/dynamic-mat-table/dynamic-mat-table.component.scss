@@ -33,7 +33,7 @@ mat-footer-row, mat-row{
   min-height: auto !important;
 }
 
-mat-row, mat-header-row, mat-footer-row{
+mat-row, tr.mat-header-row, mat-footer-row{
   display: flex;
   border-width: 0;
   border-bottom-width: 1px;
@@ -57,6 +57,7 @@ mat-cell, mat-footer-cell, mat-header-cell {
 // mat-cell, mat-footer-cell, mat-header-cell {
 //   min-width: 100px;
 // } 
+
 
 @include table-base;
 @include progress;

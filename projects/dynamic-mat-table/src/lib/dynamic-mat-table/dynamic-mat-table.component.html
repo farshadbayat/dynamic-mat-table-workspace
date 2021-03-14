@@ -23,7 +23,7 @@
     [dataSource]="dataSource">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="table-select">
-      <mat-header-cell *matHeaderCellDef class="table-select">
+      <mat-header-cell *matHeaderCellDef class="table-select" style="z-index: 2;">
         <mat-checkbox
           (change)="$event ? masterToggle() : null"
           [checked]="rowSelectionModel.hasValue() && isAllSelected()"
@@ -124,10 +124,10 @@
       <mat-cell *matCellDef="let row" class="table-menu">
         <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowActionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
-    </ng-container> 
+    </ng-container>
     <!-- Row Table[Header, Data, Footer] -->
-    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></mat-header-row>
-    <mat-header-row  class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top]="inverseOfTranslation+10" ></mat-header-row>
+    <tr mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></tr>
+    <tr mat-header-row  class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top]="inverseOfTranslation+10" ></tr>
     <mat-row 
       *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
