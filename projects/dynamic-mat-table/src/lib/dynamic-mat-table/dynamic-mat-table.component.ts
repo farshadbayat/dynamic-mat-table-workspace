@@ -53,7 +53,6 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation], 
-  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tbl') tbl; 

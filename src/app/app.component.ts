@@ -62,7 +62,6 @@ export class AppComponent implements OnInit {
   
 
   constructor() {   
-
     this.rowActionMenu.push(
       {
         name: 'Edit',
