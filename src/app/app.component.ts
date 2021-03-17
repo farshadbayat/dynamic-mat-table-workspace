@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   TableRow,
   TableField,
@@ -17,13 +17,13 @@ import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fi
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(200000);
+const DATA = getData(1000);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   eventLog = [];
   title = 'dynamic-mat-table';
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
@@ -43,7 +43,7 @@ export class AppComponent {
   paginationMode: string = 'none';
   direction: 'rtl' | 'ltr' = 'rtl';
   rowActionMenu: RowActionMenu[] = [];
-  rowSelectionMode: TableSelectionMode = 'none';
+  rowSelectionMode: TableSelectionMode = 'multi';
   selectionModel: SelectionModel<TestElement> = null;
   dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
   rowHeight = 48;
@@ -61,11 +61,37 @@ export class AppComponent {
 
   
 
-  constructor() {
+  constructor() {   
+
+    this.rowActionMenu.push(
+      {
+        name: 'Edit',
+        text: 'ویرایش',
+        color: 'primary',
+        icon: 'edit',
+        disabled: false,
+        visible: true,
+      },
+      {
+        name: 'Delete',
+        text: 'حذف',
+        color: 'warn',
+        icon: 'delete',
+        disabled: false,
+        visible: true,
+      }
+    );
+    //this.fetchData_onClick();    
+  }
+  ngOnInit(): void {
+    this.initField();
+  }
+
+  initField() {
     this.fields = [
       {
          name: 'row',
-         type: 'number',
+        // type: 'number',
          cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'}
      },
      { 
@@ -94,29 +120,9 @@ export class AppComponent {
         // sortable: false,
       }
     ];
-
-    this.rowActionMenu.push(
-      {
-        name: 'Edit',
-        text: 'ویرایش',
-        color: 'primary',
-        icon: 'edit',
-        disabled: false,
-        visible: true,
-      },
-      {
-        name: 'Delete',
-        text: 'حذف',
-        color: 'warn',
-        icon: 'delete',
-        disabled: false,
-        visible: true,
-      }
-    );
-    this.fetchData_onClick();
   }
 
-  fetchData_onClick() {
+  fetchData_onClick() {    
     const d = DATA.map( item =>{return {...item, option:{ expandCallback: null, style: null}}});
     d[1].option.style = { 'background-color' : 'red' };
     this.dataSource.data = d;

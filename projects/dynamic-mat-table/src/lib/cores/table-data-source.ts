@@ -121,7 +121,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     // Last Paging
     const paginatedData = combineLatest([orderedData, pageChange]).pipe(map(([data]) => this.pagingData(data)));
 
-    this._renderChangesSubscription.unsubscribe();
+    this._renderChangesSubscription?.unsubscribe();
     this._renderChangesSubscription = new Subscription();
     this._renderChangesSubscription.add(paginatedData.subscribe(data => this.dataToRender$.next(data)));
     this._renderChangesSubscription.add(this.dataOfRange$.subscribe(data => renderData.next(data)));
@@ -131,6 +131,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     if (!this.streamsReady) {
       this.dataToRender$ = new ReplaySubject<T[]>(1);
       this.dataOfRange$ = new ReplaySubject<T[]>(1);
+      this.streamsReady = true;
     }
   }
 }

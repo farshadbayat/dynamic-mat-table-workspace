@@ -53,14 +53,14 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation], 
-  //changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tbl') tbl; 
   @Input()
   get setting() {
     return this.tableSetting;
-  }
+  } 
   set setting(value: TableSetting) {    
     if ( !isNullorUndefined(value) ) {
       value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
@@ -137,13 +137,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
-  public get inverseOfTranslation(): string {
+  public get inverseOfTranslation(): number {
     if (!this.viewport || !this.viewport["_renderedContentOffset"]) {
-      return "-0px";
+      return -0;
     }
     let offset = this.viewport["_renderedContentOffset"];
-    return `-${offset}px`;
-  }  
+    return -offset;
+  }   
 
   // TO DO
   ellipsis(cellRef) {
@@ -273,6 +273,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
+    console.log(index,type);
+    
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     // console.log(this.resizeColumn.resizeHandler, this.resizeColumn.startX);

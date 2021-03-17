@@ -22,8 +22,8 @@
     [trackBy]="trackBy"
     [dataSource]="dataSource">
     <!-- Checkbox Column -->
-    <ng-container matColumnDef="table-select">
-      <mat-header-cell *matHeaderCellDef class="table-select" style="z-index: 2;">
+    <ng-container matColumnDef="row-checkbox">
+      <mat-header-cell *matHeaderCellDef class="row-checkbox" style="z-index: 2;">
         <mat-checkbox
           (change)="$event ? masterToggle() : null"
           [checked]="rowSelectionModel.hasValue() && isAllSelected()"
@@ -33,7 +33,7 @@
         >
         </mat-checkbox>
       </mat-header-cell>
-      <mat-cell *matCellDef="let row" class="table-select">
+      <mat-cell *matCellDef="let row" class="row-checkbox">
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
@@ -54,11 +54,11 @@
         [cdkDragData]="{name: column.name, columIndex: i}"        
         [style.maxWidth.px]="column.width"
         [style.minWidth.px]="column.width"        
-        [class.active-resize]="resizeColumn.currentResizeIndex===i"> <!--  cdkDragBoundary="mat-header-row"    -->
+        [class.active-resize]="resizeColumn.currentResizeIndex===i" cdkDragBoundary="mat-header-row">
         <div class="left-resizer-handler" (mousedown)="onResizeColumn($event, i, 'left')"></div>
         <header-filter [field]="column" (filterChanged)="filter_onChanged(column, $event)" [filters]="dataSource.getFilter(column.name)">
           <mat-icon class="column-icon" [ngStyle]="{ 'color': column?.iconColor }">{{column?.icon}}</mat-icon>          
-          <mat-icon *ngIf="column?.draggable != false" class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon> <!-- cdkDragHandle -->
+          <mat-icon *ngIf="column?.draggable != false" class="drag-indicator" cdkDragHandle>drag_indicator</mat-icon>
           <div mat-sort-header [disabled]="column.sortable === false" class="header-caption">{{ column.header }}</div>
         </header-filter>
         <div
@@ -94,7 +94,7 @@
       
     </ng-container> 
 
-    <ng-container matColumnDef="progress">
+    <ng-container matColumnDef="progress" > 
       <mat-header-cell
         *matHeaderCellDef
         [attr.colspan]="displayedColumns.length">
@@ -125,9 +125,7 @@
         <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowActionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
     </ng-container>
-    <!-- Row Table[Header, Data, Footer] -->
-    <tr mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top]="inverseOfTranslation"></tr>
-    <tr mat-header-row  class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top]="inverseOfTranslation+10" ></tr>
+    <!-- Row Table[Header, Data, Footer] -->    
     <mat-row 
       *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
@@ -142,9 +140,11 @@
     <ng-container *ngIf="expandColumn.length > 0">      
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
     </ng-container>
+    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
+    <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top.px]="inverseOfTranslation + headerHeight - 5" ></mat-header-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>
-
+ 
 <mat-paginator
   *ngIf="pagingMode !== 'none'"
   class="table-paginator"
@@ -154,7 +154,7 @@
   (page)="pagination_onChange($event)"
   [pageSizeOptions]="pagination?.pageSizeOptions">
 </mat-paginator>
-
+ 
 <div class="no-records" *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)">
   <!-- <mat-icon>web</mat-icon>  -->
   {{ languagePack?.tableLabels.NoData }}  

@@ -9,9 +9,9 @@
   transition-property: opacity, transform;
 }
 
-mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-type {
-  padding-right: 0 !important;
-}
+// mat-cell:not(.row-checkbox):first-of-type, mat-footer-cell:not(.row-checkbox):first-of-type, mat-header-cell:not(.row-checkbox):first-of-type {
+//   padding-right: 0 !important;
+// }
 
 @mixin table-base {
   .mat-table {
@@ -29,11 +29,13 @@ mat-cell:first-of-type, mat-footer-cell:first-of-type, mat-header-cell:first-of-
   }
 }
 
-@mixin progress {
-  tr.mat-header-row.progress {
+@mixin progress {    
+  .mat-header-row.progress {
     border: none;
     max-height: 4px;
-
+    min-height: 4px;
+    height: 0;
+    margin-top: -4px;
     .mat-header-cell {
       border: 0;
       padding: 0;

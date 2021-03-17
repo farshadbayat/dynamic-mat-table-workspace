@@ -1,3 +1,4 @@
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { DynamicMatTableComponent, IDynamicCell, TableField, IRowEvent } from 'dynamic-mat-table';
 import { BehaviorSubject } from 'rxjs';
@@ -50,8 +51,14 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
   }
  
   moveUp_onClick() {    
-    const id = this.row.id;
-    this.parent.moveRow(id, id-1 );
+    // const id = this.row.id;
+    // this.parent.moveRow(id, id-1 );
+    // // debugger
+    // console.log(this.parent.viewport);  
+    const viewport: CdkVirtualScrollViewport= this.parent.viewport;    
+    viewport.setTotalContentSize((Number(viewport._totalContentHeight.replace('px',''))+283) as number); //_totalContentSize
+
+    //viewport.scrollToIndex(0, 'smooth')
   }
 
 }

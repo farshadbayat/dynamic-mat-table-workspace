@@ -47,7 +47,7 @@ export class TableCoreDirective<T extends TableRow> {
   @Input()
   @HostBinding('style.direction')
   get direction(): Direction {
-    return this.tableSetting.direction;
+    return this.tableSetting?.direction;
   }
   set direction(value: Direction) {
     this.tableSetting.direction = value;
@@ -92,17 +92,19 @@ export class TableCoreDirective<T extends TableRow> {
       }
       this.updatePagination();
     }
-  }
+  } 
 
   @Input()
   get rowSelectionModel() {
     return this._rowSelectionModel;
   }
   set rowSelectionModel(value: SelectionModel<T>) { 
-    if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
-      this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
+    if (!isNullorUndefined(value)) {
+      if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
+        this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
+      }
+      this._rowSelectionModel = value;
     }
-    this._rowSelectionModel = value;
   }
 
   @Input()
@@ -137,28 +139,30 @@ export class TableCoreDirective<T extends TableRow> {
 
   private totalRecord = 0;
 
-  @Input()
+  @Input() 
   get dataSource() {    
-    if(isNullorUndefined(this.tvsDataSource)) {
+    if(isNullorUndefined(this.tvsDataSource)) {      
       return null;
     }    
     if (this.totalRecord !== this.tvsDataSource.allData.length) {
-      this.addSystemField(this.tvsDataSource.allData);           
+      this.addUpdateSystemField(this.tvsDataSource.allData);           
       this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);     
     }
     return this.tvsDataSource;
-  }
-  set dataSource(value: TableVirtualScrollDataSource<T>) {
+  } 
+  set dataSource(value: TableVirtualScrollDataSource<T>) {       
     this.clear();    
-      if (!isNullorUndefined(value)) {
-        value.sort = this.sort;
-        (value as any)._paginator = value;
-        this.addSystemField(value.data);
-        this.tvsDataSource = value;      
-      }
+    console.log(typeof value);
+    
+    if (!isNullorUndefined(value)) {      
+      this.addUpdateSystemField(value.data);
+      this.tvsDataSource = value;
+      this.tvsDataSource.sort = this.sort;
+      (this.tvsDataSource as any)._paginator = value;      
+    }
   }
 
-  private addSystemField(data: T[]) {
+  private async addUpdateSystemField(data: T[]) {
     data = data.map( (item, index) => {
       item.id = index ;
       item.option = item.option || {};
@@ -354,7 +358,18 @@ export class TableCoreDirective<T extends TableRow> {
         // this.displayedColumns[index] = colunm.name;
       });
       if (this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') {
-        this.displayedColumns = ['table-select', ...this.displayedColumns];
+        //bugfixed becuse of double header show
+        setTimeout(() => {
+          this.displayedColumns = ['row-checkbox', ...this.displayedColumns];
+        }, 500);
+        console.log(this.displayedColumns);        
+        
+        console.log(this.displayedColumns);
+        // requestAnimationFrame( () => {
+        //   console.log(this.displayedColumns);        
+        //   this.displayedColumns = ['row-checkbox', ...this.displayedColumns];
+        //   console.log(this.displayedColumns);        
+        // });
       }
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
@@ -375,17 +390,26 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /************************************ Drag & Drop Column *******************************************/ 
-  public refreshGrid() {    
-    this.cdr.markForCheck();
-    this.refreshTableSetting();
-    this.cdr.detectChanges();
-  } 
+  // public refreshGrid() {    
+  //   window.requestAnimationFrame( () =>{
+  //     this.table.renderRows();
+  //   this.cdr.markForCheck();
+  //   this.refreshTableSetting();
+  //   this.cdr.detectChanges();      
+  //   });
+  //   this.table.renderRows();
+  //   this.cdr.markForCheck();
+  //   this.refreshTableSetting();
+  //   this.cdr.detectChanges();
+  // }  
 
-  // public refreshData() {
-  //   if (this.dataSource && this.dataSource.allData) {
-  //     this.dataSource = new TableVirtualScrollDataSource<T>(this.dataSource.allData);
-  //   }
-  // }
+  public refreshGrid() {
+    this.table.renderRows();
+    this.cdr.markForCheck();
+    // if (this.dataSource && this.dataSource.allData) {
+    //   this.dataSource = new TableVirtualScrollDataSource<T>(this.dataSource.allData);
+    // }
+  }
 
   public moveRow(from: number, to: number) {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      

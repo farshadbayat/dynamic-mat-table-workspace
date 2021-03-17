@@ -1,10 +1,10 @@
 import { AbstractFilter, FilterOperation } from './abstract-filter';
 import { TableIntl } from '../../../../international/table-Intl';
 
-const contains = 'a.includes(b)';
-const equals = 'a === b';
-const startsWith = 'a.startsWith(b)';
-const endsWith = 'a.endsWith(b)';
+const contains = 'a.toString().includes(b)';
+const equals = 'a.toString() === b.toString()';
+const startsWith = 'a.toString().startsWith(b)';
+const endsWith = 'a.toString().endsWith(b.toString())';
 const empty = '!a';
 const notEmpty = '!!a';
 const operations = [contains, equals, startsWith, endsWith, empty, notEmpty];
@@ -60,7 +60,7 @@ export class TextFilter extends AbstractFilter<string> {
     const a = '_a$';
     const b = '_b$';
     const predicate = this.selectedValue.predicate.replace('a', a).replace('b', b);
-    const statement = predicate.replace(a, `${a}['${dynamicVariable}']?.toLowerCase()`);
+    const statement = predicate.replace(a, `${a}['${dynamicVariable}']?.toString()?.toLowerCase()`);
     // one static parameters equals  notEquals greaterThan lessThan //
     if (this._selectedIndex === 0 ||
       this._selectedIndex === 1 ||

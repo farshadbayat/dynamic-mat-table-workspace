@@ -53,11 +53,11 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
   }
 
   public detach(): void {
-    // no-op
+    this.indexChange.complete();
+    this.stickyChange.complete();
     this.renderedRangeStream.complete();
-    this.viewport = null;
   }
-
+ 
   public onContentScrolled(): void {
     this.updateContent();
   }
@@ -77,11 +77,14 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     // no-op
   }
 
-  public scrollToIndex(index: number, behavior: ScrollBehavior): void {
-    // no-op    
-    if (this.viewport) {
-      this.viewport.scrollToOffset( this.rowHeight * index , behavior);
-    }    
+  public scrollToIndex(index: number, behavior: ScrollBehavior): void {    
+    // if (this.viewport) {
+    //   this.viewport.scrollToOffset( this.rowHeight * index , behavior);
+    // }    
+    if (!this.viewport || !this.rowHeight) {
+      return;
+    }
+    this.viewport.scrollToOffset((index - 1 ) * this.rowHeight + this.headerHeight);
   }
 
   public setConfig(configs: TSVStrategyConfigs) {
@@ -103,7 +106,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
 
   // bug fixed some time viewport is zero height (i dont know why!)
   public getViewportSize() {
-    if (this.viewport.getViewportSize() === 0) {
+    if (this.viewport.getViewportSize() === 0) {      
       return this.viewport.elementRef.nativeElement.clientHeight + 52;
     } else {
       return this.viewport.getViewportSize();

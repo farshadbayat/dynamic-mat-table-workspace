@@ -1,5 +1,5 @@
 .viewport {
-  height: calc( 100% - 10px);
+  height: calc( 100% - 0px);
 }
 
 .viewport-with-pagination {
@@ -20,7 +20,7 @@
   border: 2px rgb(0, 150, 136);
 }
 
-mat-cell:first-of-type:not(.table-select) {
+mat-cell:first-of-type:not(.row-checkbox) {
   padding-left: 0 !important;
 }
 
@@ -64,21 +64,17 @@ mat-cell, mat-footer-cell, mat-header-cell {
 @include no-records;
 @include dmf-class;
 
+
 cdk-virtual-scroll-viewport {
   min-height: 100px;
   height: inherit;
   overflow: auto;
-  transition: 0.5s;
+  //transition: 0.5s;
 }
 
-// RTL Suport and Drag & Drop icon Padding
-// mat-cell, mat-footer-cell {
-//   padding-left: 24px;
+// mat-header-cell:not(.row-checkbox) {
+//   padding-left: 0 !important;
 // }
-
-mat-header-cell {
-  padding-left: 0 !important;
-}
 
 // Header Text
 .header-caption{
@@ -88,12 +84,14 @@ mat-header-cell {
 
 .header{
   user-select: none;
+  background-color: white;
 }
 
 // Table Column Select
-.table-select{
-  max-width: 42px;
-  padding-left: 24px !important;
+.row-checkbox{
+  max-width: 34px;
+  //padding-right: 10px !important;
+  //padding-left: 24px !important;
 }
 
 // table action menu
@@ -188,6 +186,7 @@ mat-header-cell:hover {
 
 .cdk-drag-preview {
   color: black;
+  min-height: 55px;// fixed drag and height max-mized ;) used with min-height
   border: solid 1px #d4d4d4;
   background-color: rgba(245, 245, 245);
   box-sizing: border-box;
@@ -252,7 +251,7 @@ mat-header-cell:hover {
   display: block;
   border-width: 0;
   padding: 0px !important;
-  position: fixed;
+  // position: fixed;
   width: 100%;
   z-index: 2;
 }
