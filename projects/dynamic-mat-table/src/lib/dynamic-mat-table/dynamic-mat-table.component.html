@@ -144,7 +144,6 @@
     <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top.px]="inverseOfTranslation + headerHeight - 5" ></mat-header-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>
- 
 <mat-paginator
   *ngIf="pagingMode !== 'none'"
   class="table-paginator"
@@ -160,4 +159,4 @@
   {{ languagePack?.tableLabels.NoData }}  
   <br>
   <button *ngIf="showReload" mat-icon-button color="primary" (click)="reload_onClick()"><mat-icon>autorenew</mat-icon></button>
-</div>
+</div> 

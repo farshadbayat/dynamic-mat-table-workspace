@@ -66,13 +66,11 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.alternativeRowStyle = value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
       value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
       value.direction = value.direction || this.tableSetting.direction;
-      value.normalRowStyle = value.normalRowStyle || this.tableSetting.normalRowStyle;
-      value.screenMode = value.screenMode || this.tableSetting.screenMode;
+      value.normalRowStyle = value.normalRowStyle || this.tableSetting.normalRowStyle;      
       value.visibaleActionMenu = value.visibaleActionMenu || this.tableSetting.visibaleActionMenu;
       value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
       this.tableSetting = value;
       this.setDisplayedColumns();
-      this.cdr.detectChanges();
     }
   } 
 
@@ -204,11 +202,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   menuActionChange(e: MenuActionChange) {
-    if (e.type === 'TableSetting') {
-      if (e.data.screenMode === 'fullscreen') {
-        this.requestFullscreen(this.tbl.elementRef);
-      }
-      this.saveSetting(e.data, false);
+    if (e.type === 'TableSetting') {      
+       this.saveSetting(e.data, false);
+    } else if(e.type === 'FullScreenMode') {
+      this.requestFullscreen(this.tbl.elementRef);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
         this.tableService.exportToCsv(

@@ -11,8 +11,7 @@ export class PersianLanguage implements LanguagePack {
   }
 
   menuLabels: MenuLabels = {
-    fullScreen: 'تمام صفحه',
-    exitFullScreen: 'خروج از تمام صفحه',
+    fullScreen: 'تمام صفحه',    
     saveData: 'ذخیره داده ها ',
     columnSetting: 'تنظیمات ستون ها ',
     saveTableSetting: 'ذخیره  تنظیمات جدول',

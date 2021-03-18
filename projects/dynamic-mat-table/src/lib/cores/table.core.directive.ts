@@ -16,8 +16,6 @@ import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
 import { TableScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
-
-const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; height: 100vh; z-index: 1000;';
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[core]'
@@ -25,24 +23,7 @@ const FULLSCREEN_STYLE = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0;
 export class TableCoreDirective<T extends TableRow> {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  // set paginator(value: MatPaginator) {
-  //   if (!isNullorUndefined(value) && this.tablePagingMode === 'client-side') {
-  //     if (isNullorUndefined(this.tvsDataSource)) {
-  //       return;
-  //       //this.tvsDataSource = new TableVirtualScrollDataSource<T>([]);
-  //     }
-  //     (this.tvsDataSource as any)._paginator = value;
-  //   }
-  //   this.updatePagination();
-  // }
-
-  // @Input()
-  // @HostBinding('class')
-  // get fullscreenClass(): string {    
-  //   return this.tableSetting.screenMode === 'fullscreen' ? 'full-screen' : null;
-  // }  
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator; 
 
   @Input()
   @HostBinding('style.direction')
@@ -52,12 +33,6 @@ export class TableCoreDirective<T extends TableRow> {
   set direction(value: Direction) {
     this.tableSetting.direction = value;
   }
-
-  // FullScreen Mode //    
-  @HostBinding('style')
-  get fullscreen(): string {
-    return this.tableSetting.screenMode === 'fullscreen' ? FULLSCREEN_STYLE: null;
-  }  
 
   @Input()
   get ScrollStrategyType() {
@@ -75,7 +50,7 @@ export class TableCoreDirective<T extends TableRow> {
   set pagingMode(value: TablePaginationMode) {
     this.tablePagingMode = value;
     this.updatePagination();
-  }
+  } 
 
   @Input()
   get pagination() {
@@ -227,8 +202,8 @@ export class TableCoreDirective<T extends TableRow> {
     this.updateColumn();     
   }
 
-  public updateColumn() {    
-    if (isNullorUndefined(this.tableSetting.columnSetting) ) {
+  public updateColumn() {
+    if (isNullorUndefined(this.tableSetting.columnSetting)) {
       this.tableSetting.columnSetting = clone(this.tableColumns);
       this.refreshTableSetting();
     }
@@ -345,41 +320,32 @@ export class TableCoreDirective<T extends TableRow> {
 
   trackBy = (_: number, item: any) => {
     return item.Id;
-  }
-
-  setDisplayedColumns() {
+  } 
+ 
+  setDisplayedColumns() {    
     if (this.columns) {
       this.displayedColumns = [];
       this.columns.forEach((colunm, index) => {
         colunm.index = index;
         if (colunm.display === undefined || colunm.display === 'visible' || colunm.display === 'prevent-hidden') {
           this.displayedColumns.push(colunm.name);
+        }        
+      }); 
+      //bugfixed because of double header show
+      setTimeout( () => {
+        if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
+          this.displayedColumns.unshift('row-checkbox');
         }
-        // this.displayedColumns[index] = colunm.name;
-      });
-      if (this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') {
-        //bugfixed becuse of double header show
-        setTimeout(() => {
-          this.displayedColumns = ['row-checkbox', ...this.displayedColumns];
-        }, 500);
-        console.log(this.displayedColumns);        
-        
-        console.log(this.displayedColumns);
-        // requestAnimationFrame( () => {
-        //   console.log(this.displayedColumns);        
-        //   this.displayedColumns = ['row-checkbox', ...this.displayedColumns];
-        //   console.log(this.displayedColumns);        
-        // });
-      }
+      }, 0);
+
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
       }
     }
     this.updatePagination();
-    // this.cdr.detectChanges();
   }
 
-  requestFullscreen(element: ElementRef) {
+  requestFullscreen(element: ElementRef) {    
     if (element.nativeElement.requestFullscreen) {
       element.nativeElement.requestFullscreen();
     } else if (element.nativeElement.webkitRequestFullscreen) { /* Safari */
@@ -415,7 +381,7 @@ export class TableCoreDirective<T extends TableRow> {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
         this.dataSource.allData[from].id = to;
         this.dataSource.allData[to].id = from;
-        // console.log('move',from, to);        
+        console.log('move',from, to);        
         moveItemInArray(this.dataSource.allData, from, to);
         this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
     }
@@ -429,7 +395,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   refreshColumn(columns: TableField<T>[]) {
-    if (this.viewport) {
+    if (this.viewport) {      
       const currentOffset = this.viewport.measureScrollOffset();
       this.columns = columns;
       this.setDisplayedColumns();
@@ -437,7 +403,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {
+  saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {    
     if (tableSetting !== null) {
       this.tableSetting = tableSetting;
       this.refreshColumn(tableSetting.columnSetting);

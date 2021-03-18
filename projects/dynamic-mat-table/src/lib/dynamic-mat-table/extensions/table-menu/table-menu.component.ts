@@ -33,9 +33,8 @@ export class TableMenuComponent {
   }
 
   screenMode_OnClick() {
-    this.currentTableSetting.screenMode = this.currentTableSetting.screenMode === 'fullscreen' ? 'normal' : 'fullscreen';
     this.menuActionChange.emit({
-      type: 'TableSetting',
+      type: 'FullScreenMode',
       data: this.currentTableSetting,
     });
   }
@@ -110,6 +109,6 @@ export class TableMenuComponent {
 }
 
 export interface MenuActionChange {
-  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print' | 'ScreenMode';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print' | 'FullScreenMode';
   data?: any;
 }

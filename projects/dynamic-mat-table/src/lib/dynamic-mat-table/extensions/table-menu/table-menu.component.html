@@ -8,12 +8,11 @@
 </button>
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
-  <button
-    *ngIf="tableSetting.screenMode !== 'none'"
+  <button   
     mat-menu-item
     (click)="screenMode_OnClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
-    <mat-icon>{{ tableSetting.screenMode === 'fullscreen' ? 'fullscreen_exit' : 'fullscreen'}}</mat-icon>
+    <mat-icon>fullscreen</mat-icon>
     <span>{{ languagePack.menuLabels.fullScreen }}</span>
   </button>
   <button
