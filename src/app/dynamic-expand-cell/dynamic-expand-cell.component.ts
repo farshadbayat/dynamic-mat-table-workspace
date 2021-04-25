@@ -19,10 +19,14 @@ export class DynamicExpandCellComponent implements OnInit, IDynamicCell, AfterVi
     
   }
   
-  ngOnInit() {    
+  ngOnInit() {        
+    
     if( this.row) {             
       this.row.option.expandCallback = (data) =>{
-        console.log('expand ', data);        
+        console.log('expand ', data);  
+        console.log(this.row);
+        console.log(this.column);
+        console.log(this.parent);      
       };
     }
   }

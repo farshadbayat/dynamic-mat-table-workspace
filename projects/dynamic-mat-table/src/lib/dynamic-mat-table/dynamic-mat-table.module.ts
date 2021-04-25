@@ -12,7 +12,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
-
+import { MatDividerModule } from '@angular/material/divider';
 import { TableIntl } from '../international/table-Intl';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { RowMenuModule } from './extensions/row-menu/row-menu.module';
@@ -23,6 +23,7 @@ import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
 import { DynamicCellDirective } from '../cores/dynamic-cell/dynamic-cell.directive';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
+import { MatMenuModule } from '@angular/material/menu';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -56,6 +57,8 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     MatPaginatorModule,
     MatDialogModule,
     MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
     ExtentionsModule,
     // NoopAnimationsModule
   ],

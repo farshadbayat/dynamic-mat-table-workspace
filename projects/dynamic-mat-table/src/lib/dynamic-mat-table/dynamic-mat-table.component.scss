@@ -1,11 +1,3 @@
-.viewport {
-  height: calc( 100% - 0px);
-}
-
-.viewport-with-pagination {
-  height: calc( 100% - 48px);
-}
-
 @import './dynamic-mat-table.style.scss';
 
 :host {
@@ -22,6 +14,14 @@
 
 mat-cell:first-of-type:not(.row-checkbox) {
   padding-left: 0 !important;
+}
+
+.viewport {
+  height: calc( 100% - 0px);
+}
+
+.viewport-with-pagination {
+  height: calc( 100% - 48px);
 }
 
 .table-paginator {
@@ -63,6 +63,7 @@ mat-cell, mat-footer-cell, mat-header-cell {
 @include progress;
 @include no-records;
 @include dmf-class;
+@include context-menu;
 
 
 cdk-virtual-scroll-viewport {
@@ -89,9 +90,13 @@ cdk-virtual-scroll-viewport {
 
 // Table Column Select
 .row-checkbox{
-  max-width: 34px;
-  //padding-right: 10px !important;
-  //padding-left: 24px !important;
+  display: contents;
+  mat-checkbox {
+    padding: 15px;
+  }
+  mat-icon {
+    padding: 15px !important;
+  }
 }
 
 // table action menu
@@ -255,20 +260,3 @@ mat-header-cell:hover {
   width: 100%;
   z-index: 2;
 }
-
-
-
-// ::ng-deep .cdk-virtual-scroll-content-wrapper {
-//   transform: translateY(0px) !important;
-// }
-
-
-// .full-screen {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right: 0;
-//   bottom: 0;
-//   height: 100vh;
-//   z-index: 1000;
-// }

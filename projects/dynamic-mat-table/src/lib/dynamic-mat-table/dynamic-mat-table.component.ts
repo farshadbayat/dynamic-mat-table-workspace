@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChildren,
          QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnDestroy, ContentChildren} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
-import { IRowEvent, RowActionMenu, TableRow } from '../models/table-row.model';
+import { TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
 import { TablePagination } from '../models/table-pagination.model';
@@ -20,7 +20,8 @@ import { TableSetting } from '../models/table-setting.model';
 import { delay } from 'rxjs/operators';
 import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
 import { Subscription } from 'rxjs';
-import { MatHeaderRowDef } from '@angular/material/table';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ContextMenuItem } from '../models/context-menu.model';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -74,6 +75,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   } 
 
+  @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
+  public contextMenuPosition = { x: '0px', y: '0px' };
   
   @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
   @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
@@ -157,6 +160,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       // style is high priority
       style = { ...this.setting.alternativeRowStyle ,...style};
     }
+    if (this.setting.rowStyle) {
+      style = { ...this.setting.rowStyle ,...style};
+    }    
     return style;
   }
 
@@ -201,6 +207,23 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
+  onContextMenu(event: MouseEvent, column: TableField<T>, row: any) {
+    if (this.contextMenuItems?.length === 0 ) {
+      return;
+    }
+    event.preventDefault();
+    this.contextMenuPosition.x = event.clientX + 'px';
+    this.contextMenuPosition.y = event.clientY + 'px';
+    this.contextMenu.menuData = { column: column, row: row};
+    this.contextMenu.menu.focusFirstItem('mouse');
+    this.onRowEvent.emit({ event: 'BeforContextMenuOpen', sender: {row: row, column: column, contextMenu: this.contextMenuItems}});
+    this.contextMenu.openMenu();
+  }
+
+  onContextMenuItemClick(data: ContextMenuItem) {
+    this.onRowEvent.emit({ event: 'BeforContextMenuOpen', sender: data });
+  }
+
   menuActionChange(e: MenuActionChange) {
     if (e.type === 'TableSetting') {      
        this.saveSetting(e.data, false);
@@ -208,7 +231,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.requestFullscreen(this.tbl.elementRef);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
-        this.tableService.exportToCsv(
+        this.tableService.exportToCsv<T>(
+          this.columns,
           this.dataSource.filteredData,
           this.rowSelectionModel
         );
@@ -220,7 +244,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === 'Print') {
       this.printConfig.displayedFields = this.columns
-        .filter((c) => isNullorUndefined(c.print) || c.print === true)
+        .filter((c) => isNullorUndefined(c.printable) || c.printable === true)
         .map((o) => o.name);
       this.printConfig.title = this.printConfig.title || this.tableName;
       this.printConfig.direction = this.tableSetting.direction || 'ltr';
@@ -241,7 +265,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   }
 
-  rowActionChange(menu: RowActionMenu, row: any) {
+  rowActionChange(menu: ContextMenuItem, row: any) {
     window.requestAnimationFrame(() => {            
       this.onRowEvent.emit({ event: 'RowActionMenu', sender: {row: row, column: menu} });
       this.rowActionMenuChange.emit({actionItem: menu, rowItem: row });
@@ -269,8 +293,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
-    console.log(index,type);
-    
+    // console.log(index,type);    
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     // console.log(this.resizeColumn.resizeHandler, this.resizeColumn.startX);
@@ -321,36 +344,12 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       (event) => {
         if (this.resizeColumn.resizeHandler !== null) {
           this.resizeColumn.resizeHandler = null;
-          this.resizeColumn.currentResizeIndex = -1;
-          // this.resizableMousemove();
-          // this.resizableMouseup();
+          this.resizeColumn.currentResizeIndex = -1;       
         }
       }
     );
   }
 
-  // setColumnWidth(column: any) {
-  //   console.log(column);
-    
-  //   const columnEls = Array.from(
-  //     document.getElementsByClassName('mat-column-' + column.field)
-  //   );
-  //   columnEls.forEach((el: HTMLDivElement) => {
-  //     el.style.width = column.width + 'px';
-  //   });
-  // }
-
-  // setTableResize(tableWidth: number) {
-  //   let totWidth = 0;
-  //   this.columns.forEach((column) => {
-  //     totWidth += column.width;
-  //   });
-  //   const scale = (tableWidth - 5) / totWidth;
-  //   this.columns.forEach((column) => {
-  //     column.width *= scale;
-  //     this.setColumnWidth(column);
-  //   });
-  // }
 
   public expandRow(rowIndex: number, mode: boolean = true) {    
     if( rowIndex === null || rowIndex === undefined) {

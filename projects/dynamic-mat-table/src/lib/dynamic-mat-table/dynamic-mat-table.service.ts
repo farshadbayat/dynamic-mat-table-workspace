@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { TableField } from '../models/table-field.model';
 import { SelectionModel } from '@angular/cdk/collections';
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class TableService {
   public tableName: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   /************************************* Local Export *****************************************/
   static getFormattedTime() {
@@ -20,62 +18,97 @@ export class TableService {
     const h = today.getHours();
     const mi = today.getMinutes();
     const s = today.getSeconds();
-    return y + '-' + m + '-' + d + '-' + h + '-' + mi + '-' + s;
+    return y + "-" + m + "-" + d + "-" + h + "-" + mi + "-" + s;
   }
 
-  private downloadBlob(blob: Blob, filename: string) {
-    if (navigator.msSaveBlob) { // IE 10+
+  // private downloadBlob(blob: any, filename: string) {
+  //   if (navigator.msSaveBlob) { // IE 10+
+  //     navigator.msSaveBlob(blob, filename);
+  //   } else {
+  //     const link = document.createElement('a');
+  //     if (link.download !== undefined) {
+  //       // Browsers that support HTML5 download attribute
+  //       const link = window.document.createElement('a');
+  //       const date = new Date();
+  //       link.className = 'download' + date.getUTCFullYear() + date.getUTCMonth() + date.getUTCSeconds();
+  //       link.setAttribute('href', blob);
+  //       link.setAttribute('download', filename);
+  //       link.style.visibility = 'hidden';
+  //       link.click();
+  //       // window.requestAnimationFrame(() => {
+  //       //   debugger
+  //       //   const g = document.body.getElementsByClassName(link.className);
+  //       //   document.body.removeChild(link);
+  //       // });
+  //     }
+  //   }
+  // }
+
+  private downloadBlob(blob: Blob | any, filename: string) {
+    if (navigator.msSaveBlob) {
+      // IE 10+
       navigator.msSaveBlob(blob, filename);
     } else {
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       if (link.download !== undefined) {
         // Browsers that support HTML5 download attribute
         const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        link.style.visibility = 'hidden';
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        link.style.visibility = "hidden";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
     }
-  }
+  }  
 
-  public exportToCsv( rows: object[], selectionModel: SelectionModel<any>, filename: string = '') {
-    filename = filename === '' ? this.tableName + TableService.getFormattedTime() + '.csv' : filename;
+  public exportToCsv<T>( columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "") {
+    filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
     if (!rows || !rows.length) {
       return;
     }
-    const separator = ',';
-    const keys =  Object.keys(rows[0]);
-    const csvContent =
-      keys.join(separator) +
-      '\n' +
-      rows.map(row => {
-        return keys.map(k => {
-          let cell = row[k] === null || row[k] === undefined ? '' : row[k];
-          cell = cell instanceof Date
-            ? cell.toLocaleString()
-            : cell.toString().replace(/"/g, '""');
-          if (cell.search(/("|,|\n)/g) >= 0) {
-            cell = `"${cell}"`;
-          }
-          return cell;
-        }).join(separator);
-      }).join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    debugger;
+    const fields = columns.filter((c) => c.exportable !== false && c.display !== 'hiden');
+    const separator = ",";
+    const CR_LF = "\n"; //'\u0D0A';
+    const keys = fields.map( f => f.name);
+    const headers = fields.map( f => f.header);
+    const csvContent = headers.join(separator) + CR_LF +
+      rows
+        .map((row) => {
+          return fields.map((f) => {              
+              let cell = f.toExport(row[f.name], "csv") || "";
+              cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
+              if (cell.search(/("|,|\n)/g) >= 0) {
+                cell = `"${cell}"`;
+              }
+              return cell;
+            }).join(separator);
+        }).join(CR_LF);
+    
+    const blob = new Blob([
+      new Uint8Array([0xEF, 0xBB, 0xBF]), /* UTF-8 BOM */
+      csvContent], {type : 'text/csv;charset=utf-8'});    
     this.downloadBlob(blob, filename);
   }
 
-  public exportToJson( rows: object[], filename: string = '') {
-    filename = filename === '' ? this.tableName + TableService.getFormattedTime() + '.json' : filename;
-    const blob = new Blob([ JSON.stringify(rows) ], { type: 'text/csv;charset=utf-8;' });
+  public exportToJson(rows: object[], filename: string = "") {
+    filename =
+      filename === ""
+        ? this.tableName + TableService.getFormattedTime() + ".json"
+        : filename;
+    const blob = new Blob([JSON.stringify(rows)], {
+      type: "text/csv;charset=utf-8;",
+    });
     this.downloadBlob(blob, filename);
   }
 
   /************************************* Save Setting into storage *****************************************/
-  public loadSavedColumnInfo(columnInfo: TableField<any>[], saveName?: string): TableField<any>[] {
+  public loadSavedColumnInfo(
+    columnInfo: TableField<any>[],
+    saveName?: string
+  ): TableField<any>[] {
     // Only load if a save name is passed in
     if (saveName) {
       if (!localStorage) {
@@ -92,7 +125,10 @@ export class TableService {
     }
   }
 
-  public saveColumnInfo(columnInfo: TableField<any>[], saveName: string = this.tableName): void {
+  public saveColumnInfo(
+    columnInfo: TableField<any>[],
+    saveName: string = this.tableName
+  ): void {
     // console.log(saveName);
     if (saveName) {
       if (!localStorage) {
@@ -102,5 +138,4 @@ export class TableService {
       localStorage.setItem(`${saveName}-columns`, JSON.stringify(columnInfo));
     }
   }
-
 }

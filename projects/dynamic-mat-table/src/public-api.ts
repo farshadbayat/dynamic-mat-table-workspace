@@ -19,6 +19,7 @@ Model Class
 */
 export * from './lib/models/language-pack.model';
 // export * from './lib/international/table-Intl';
+export * from './lib/models/context-menu.model';
 export * from './lib/models/table-row.model';
 export * from './lib/models/table-field.model';
 export * from './lib/models/print-config.model';

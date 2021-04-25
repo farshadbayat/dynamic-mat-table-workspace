@@ -7,6 +7,7 @@
   <dynamic-mat-table
     [ScrollStrategyType]="scrollStrategyType"
     [showReload] = "showReloadData"
+    [contextMenuItems]="contextMenuItems"
     [dir]="direction"
     [expandComponent]="expandComponent"
     [rowHeight]="rowHeight"
@@ -23,7 +24,7 @@
     [rowSelectionMode]="rowSelectionMode"
     [rowSelectionModel]="selectionModel"
     [showProgress]="showProgress"
-    [rowActionMenu]="rowActionMenu"    
+    [rowActionMenu]="contextMenuItems"    
     (onTableEvent)="tableEvent_onClick($event)"
     (onRowEvent)="rowEvent_onClick($event)"
     [class.conditional-class]="conditinalClass"
@@ -63,6 +64,9 @@
   <button mat-raised-button color="primary" (click)="table.clear()">
     Clear Data
   </button>
+  <button mat-raised-button color="primary" (click)="clearSelection_onClick()">
+    Clear Selection
+  </button>
   <button mat-raised-button color="primary" (click)="addNewColumn_onClick()">
     Add New Column
   </button>
@@ -84,7 +88,7 @@
   <button mat-raised-button color="primary" (click)="changeCell_onClick()">
     Change Cell
   </button>  
-  <mat-slider min="40" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
+  <mat-slider min="20" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 
 <section class="section">

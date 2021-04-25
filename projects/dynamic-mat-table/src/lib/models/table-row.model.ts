@@ -1,26 +1,19 @@
-import { ThemePalette } from '@angular/material/core';
 import { Dictionary } from '../cores/type';
+import { ContextMenuItem } from './context-menu.model';
 
 // this fields are for each row data
 export interface TableRow {
   id?: number;  
-  rowActionMenu?: { [key: string]: RowActionMenu; };
+  rowActionMenu?: { [key: string]: ContextMenuItem; };
   option?: RowOption;
 }
 
-export interface RowActionMenu {
-  name: string;
-  text: string;
-  color: ThemePalette;
-  icon?: string;
-  disabled?: boolean;
-  visible?: boolean;
-}
+
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';
 
 export interface IRowEvent {
-  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | any;
+  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'BeforContextMenuOpen' | any;
   sender: any;
 }
 
@@ -30,7 +23,7 @@ export interface ITableEvent {
 }
 
 export interface IRowActionMenuEvent<T> {
-  actionItem: RowActionMenu;
+  actionItem: ContextMenuItem;
   rowItem: T;
 }
 

@@ -5,19 +5,19 @@ import {
   TableField,
   PrintConfig,
   TableSetting,
-  RowActionMenu,
   TablePagination,
   TableSelectionMode,
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
   IRowEvent,
-  ITableEvent
+  ITableEvent  
 } from 'dynamic-mat-table';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
+import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
 import { DynamicCellComponent } from './dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(1000);
+const DATA = getData(10);
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -30,9 +30,10 @@ export class AppComponent implements OnInit {
   altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
   setting: TableSetting= {
-    alternativeRowStyle: {'background-color': '#d2d2d2'}
+    alternativeRowStyle: {'background-color': '#d2d2d2'},
+    rowStyle: {'border-bottom': 'solid 1px red;'}
   }; 
-  scrollStrategyType: TableScrollStrategy = 'fixed-size';
+  scrollStrategyType: TableScrollStrategy = 'fixed-size';  
   showReloadData = true;
   pending = false; 
   showNoData = true;
@@ -42,7 +43,7 @@ export class AppComponent implements OnInit {
   conditinalClass = false;
   paginationMode: string = 'none';
   direction: 'rtl' | 'ltr' = 'rtl';
-  rowActionMenu: RowActionMenu[] = [];
+  contextMenuItems: ContextMenuItem[] = [];
   rowSelectionMode: TableSelectionMode = 'multi';
   selectionModel: SelectionModel<TestElement> = null;
   dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
@@ -62,7 +63,7 @@ export class AppComponent implements OnInit {
   
 
   constructor() {   
-    this.rowActionMenu.push(
+    this.contextMenuItems.push(
       {
         name: 'Edit',
         text: 'ویرایش',
@@ -101,6 +102,9 @@ export class AppComponent implements OnInit {
        dynamicCellComponent: DynamicCellComponent,
        clickable: false,
        rowSelectionable: false,
+       toExport: (v, type)=>{
+         console.log(v);
+       }
        },
       { name: 'name', header: 'Element Name', sticky: 'start' },
       { name: 'weight' },
@@ -257,7 +261,7 @@ export class AppComponent implements OnInit {
   }
 
   addNew_onClick() {
-    console.log(this.dataSource.allData);        
+    //console.log(this.dataSource.allData);        
     this.dataSource.allData.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
     // this.dataSource.refreshFilterPredicate();
     //this.dataSource =  new TableVirtualScrollDataSource(this.dataSource.allData);
@@ -266,6 +270,11 @@ export class AppComponent implements OnInit {
 
   changeCell_onClick() {
     this.dataSource.allData[0].name = new Date().toString();
+  }
+
+  clearSelection_onClick() {
+    debugger
+    this.table.rowSelectionModel.clear();
   }
 
 }
@@ -287,9 +296,9 @@ export function getData(n = 1000): TestElement[] {
       Math.floor(Math.random() * 5)
     ],
     brand: [
-      'Irankhodro',
-      'SAIPA',
-      'Kerman Khodro',
+      'ایران خودرو',
+      'سایپا',
+      'کرمان خودرو',
       'Zanjan Benz',
       'Tehran PIKEY',
     ][Math.floor(Math.random() * 5)],

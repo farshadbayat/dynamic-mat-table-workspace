@@ -4,6 +4,8 @@ export declare type AtRenderFunc<R extends TableRow> = (row: R) => string;
 export declare type AtClassFunc = (row: any, col: any) => string;
 export declare type AtSortFunc<R extends TableRow> = (data: R[], col: any) => string;
 export declare type AtFilterFunc<R extends TableRow> = (data: R[], col: any) => string;
+export declare type ToPrint = (data: any) => any;
+export declare type ToExport = (data: any, type: any) => any;
 export declare type FieldType = 'text' | 'number' | 'date' | 'category';
 export declare type FieldDisplay = 'visible' | 'hiden' | 'prevent-hidden';
 export declare type FieldSticky = 'start' | 'end' | 'none';
@@ -16,6 +18,8 @@ export interface TableField<R extends TableRow> extends AbstractField {
     rowClass?: string | AtClassFunc;
     customSortFunction?: AtSortFunc<R>;
     customFilterFunction?: AtSortFunc<R>;    
+    toPrint?: ToPrint;
+    toExport?: ToExport;
 }
 
 export interface AbstractField {
@@ -24,7 +28,6 @@ export interface AbstractField {
   type?: FieldType;
   width?: number;
   header?: string;
-  print?: boolean;
   isKey?: boolean;
   inlineEdit?: boolean;
   display?: FieldDisplay;
@@ -39,7 +42,10 @@ export interface AbstractField {
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
-  clickable?: boolean;
+  clickable?: boolean;  
+  printable?: boolean;
+  exportable?: boolean;
+  enableContextMenu?: boolean;
   rowSelectionable?: boolean;
   option?: any; // for store share data show in cell of column
   categoryData?: any[];

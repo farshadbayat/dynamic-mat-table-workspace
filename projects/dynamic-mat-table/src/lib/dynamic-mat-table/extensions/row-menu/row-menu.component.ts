@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
 import { isNullorUndefined } from '../../../cores/type';
-import { RowActionMenu } from '../../../models/table-row.model';
+import { ContextMenuItem } from '../../../models/context-menu.model';
 import { TableSetting } from '../../../models/table-setting.model';
 
 @Component({
@@ -11,11 +11,11 @@ import { TableSetting } from '../../../models/table-setting.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RowMenuComponent<T> {
-  @Output() rowActionChange: EventEmitter<RowActionMenu> = new EventEmitter<RowActionMenu>();
-  @Input() actionMenus: RowActionMenu[] = [];
+  @Output() rowActionChange: EventEmitter<ContextMenuItem> = new EventEmitter<ContextMenuItem>();
+  @Input() actionMenus: ContextMenuItem[] = [];
   @Input() tableSetting: TableSetting;
-  @Input() rowActionMenu?: { [key: string]: RowActionMenu; };
-  visibleActionMenus: RowActionMenu[] = [];
+  @Input() rowActionMenu?: { [key: string]: ContextMenuItem; };
+  visibleActionMenus: ContextMenuItem[] = [];
 
   constructor() {
   }
@@ -25,7 +25,7 @@ export class RowMenuComponent<T> {
     e.preventDefault();
     this.visibleActionMenus = [];
     this.actionMenus.forEach(menu => {
-      const am: RowActionMenu = isNullorUndefined(this.rowActionMenu) || isNullorUndefined(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
+      const am: ContextMenuItem = isNullorUndefined(this.rowActionMenu) || isNullorUndefined(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
       if ( isNullorUndefined(am.visible) || am.visible) {
 
         this.visibleActionMenus.push({
@@ -37,31 +37,12 @@ export class RowMenuComponent<T> {
         });
       }
     });
-
   }
 
-
-  menuButton_OnClick(menu: RowActionMenu) {
+  menuButton_OnClick(menu: ContextMenuItem) {
     window.requestAnimationFrame(() => {
       this.rowActionChange.emit(menu);
     });
   }
-
-  // first priority is for attribute in data and then is  in global action menu
-  // getIcon(actionMenu: RowActionMenu) {
-  //   return ((this.rowData[actionMenu.name] as RowActionMenu) || actionMenu).icon;
-  // }
-
-  // getColor(actionMenu: RowActionMenu) {
-  //   return ((this.rowData[actionMenu.name] as RowActionMenu) || actionMenu).color;
-  // }
-
-  // getDisabled(actionMenu: RowActionMenu) {
-  //   return ((this.rowData[actionMenu.name] as RowActionMenu) || actionMenu).disabled;
-  // }
-
-  // getText(actionMenu: RowActionMenu) {
-  //   return ((this.rowData[actionMenu.name] as RowActionMenu) || actionMenu).text;
-  // }
 }
 

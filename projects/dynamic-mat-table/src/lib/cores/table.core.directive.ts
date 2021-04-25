@@ -1,4 +1,4 @@
-import { IRowEvent, IRowActionMenuEvent, RowActionMenu, RowOption, TableRow, TableSelectionMode, ITableEvent } from '../models/table-row.model';
+import { IRowEvent, IRowActionMenuEvent, TableRow, TableSelectionMode, ITableEvent } from '../models/table-row.model';
 import { TableVirtualScrollDataSource } from './table-data-source';
 import { ViewChild, Input, Output, EventEmitter, HostBinding, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { TableField } from '../models/table-field.model';
@@ -16,6 +16,7 @@ import { MatTable } from '@angular/material/table';
 import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
 import { TableScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
+import { ContextMenuItem } from '../models/context-menu.model';
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[core]'
@@ -33,6 +34,8 @@ export class TableCoreDirective<T extends TableRow> {
   set direction(value: Direction) {
     this.tableSetting.direction = value;
   }
+
+  @Input() contextMenuItems: ContextMenuItem[] = [];
 
   @Input()
   get ScrollStrategyType() {
@@ -127,7 +130,7 @@ export class TableCoreDirective<T extends TableRow> {
   } 
   set dataSource(value: TableVirtualScrollDataSource<T>) {       
     this.clear();    
-    console.log(typeof value);
+    // console.log(typeof value);
     
     if (!isNullorUndefined(value)) {      
       this.addUpdateSystemField(value.data);
@@ -162,7 +165,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  @Input() public rowActionMenu: RowActionMenu[];
+  @Input() public rowActionMenu: ContextMenuItem[];
 
   // @Input()
   // get menu() {
@@ -190,13 +193,18 @@ export class TableCoreDirective<T extends TableRow> {
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
-      f.print = f.print || true;
+      f.printable = f.printable || true;
+      f.exportable = f.exportable || true;
+      f.toExport = f.toExport || ((value, type) => typeof value === 'object' ? null : value || '');
+      f.toPrint = (value) =>  typeof value === 'object' ? null : value || '';
+      f.enableContextMenu = f.enableContextMenu || true;
       f.header = f.header || titleCase(f.name);
-      f.display = getObjectProp('display', 'visible' , settingField, f ); // f.display ? f.display : 'visible';
-      f.filter = getObjectProp('filter', 'client-side' , settingField, f ); // f.filter ? f.filter : 'client-side';
-      f.sort = getObjectProp('sort', 'client-side' , settingField, f ); // f.sort ? f.sort : 'client-side';
-      f.sticky = getObjectProp('sticky', 'none' , settingField, f ); // f.sticky ? f.sticky : 'none';
-      f.width =  getObjectProp('width', this.defaultWidth , settingField, f ); // f.width ? f.width : this.defaultWidth;
+      f.display = getObjectProp('display', 'visible' , settingField, f );
+      f.filter = getObjectProp('filter', 'client-side' , settingField, f );
+      f.sort = getObjectProp('sort', 'client-side' , settingField, f );
+      f.sticky = getObjectProp('sticky', 'none' , settingField, f );
+      f.width =  getObjectProp('width', this.defaultWidth , settingField, f );
+
     });
     this.tableColumns = fields;   
     this.updateColumn();     
@@ -332,6 +340,9 @@ export class TableCoreDirective<T extends TableRow> {
         }        
       }); 
       //bugfixed because of double header show
+      // if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
+      //   this.displayedColumns.unshift('row-checkbox');
+      // } 
       setTimeout( () => {
         if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
           this.displayedColumns.unshift('row-checkbox');
@@ -381,7 +392,7 @@ export class TableCoreDirective<T extends TableRow> {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
         this.dataSource.allData[from].id = to;
         this.dataSource.allData[to].id = from;
-        console.log('move',from, to);        
+        // console.log('move',from, to);        
         moveItemInArray(this.dataSource.allData, from, to);
         this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
     }

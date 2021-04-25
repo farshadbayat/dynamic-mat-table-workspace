@@ -12,6 +12,8 @@ export interface TableSetting {
   alternativeRowStyle?: any;
   normalRowStyle?: any;
   scrollStrategy?: TableScrollStrategy;
+  rowStyle?: any;
+  enableContextMenu?: boolean;
 }
 
 export interface VisibleActionMenu {
