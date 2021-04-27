@@ -11,9 +11,10 @@ export interface TableRow {
 
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';
+export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
 
 export interface IRowEvent {
-  event: 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'BeforContextMenuOpen' | any;
+  event: RowEventType | any;
   sender: any;
 }
 

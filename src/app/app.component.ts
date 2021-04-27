@@ -80,7 +80,7 @@ export class AppComponent implements OnInit {
         disabled: false,
         visible: true,
       }
-    );
+    );    
     //this.fetchData_onClick();    
   }
   ngOnInit(): void {
@@ -118,6 +118,9 @@ export class AppComponent implements OnInit {
         option: 2,
         clickable: false,
         rowSelectionable: false,
+        toExport: (d, t) => {
+          return 1;
+        }
         // filterable: false,
         // draggable: false,
         // sortable: false,
@@ -217,7 +220,7 @@ export class AppComponent implements OnInit {
     this.expandIndex++;
   }
 
-  tableEvent_onClick(e: ITableEvent) {
+  tableEvent_onClick(e: ITableEvent) {    
     if (e.event === 'ReloadData') {
       this.fetchData_onClick();
     }
@@ -225,7 +228,7 @@ export class AppComponent implements OnInit {
   
   rowEvent_onClick(e: IRowEvent) {
     // console.log(this.table.dataSource.allData);
-    
+    console.log(e);
     // console.log(e.event);
     if (e.event === 'RowSelectionChange') {
       // console.log('Row Selection Change',e.sender);      
@@ -272,8 +275,7 @@ export class AppComponent implements OnInit {
     this.dataSource.allData[0].name = new Date().toString();
   }
 
-  clearSelection_onClick() {
-    debugger
+  clearSelection_onClick() {    
     this.table.rowSelectionModel.clear();
   }
 

@@ -67,8 +67,7 @@ export class TableService {
     filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
     if (!rows || !rows.length) {
       return;
-    }
-    debugger;
+    }    
     const fields = columns.filter((c) => c.exportable !== false && c.display !== 'hiden');
     const separator = ",";
     const CR_LF = "\n"; //'\u0D0A';
@@ -78,7 +77,7 @@ export class TableService {
       rows
         .map((row) => {
           return fields.map((f) => {              
-              let cell = f.toExport(row[f.name], "csv") || "";
+              let cell = f.toExport(row, "csv") || "";
               cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
               if (cell.search(/("|,|\n)/g) >= 0) {
                 cell = `"${cell}"`;

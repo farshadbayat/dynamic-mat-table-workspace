@@ -221,7 +221,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   onContextMenuItemClick(data: ContextMenuItem) {
-    this.onRowEvent.emit({ event: 'BeforContextMenuOpen', sender: data });
+    this.onRowEvent.emit({ event: 'ContextMenuClick', sender: data });
   }
 
   menuActionChange(e: MenuActionChange) {
