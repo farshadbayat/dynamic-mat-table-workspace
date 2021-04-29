@@ -111,7 +111,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   focusToLastInput() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       if (this.filterInputList.length > 0) {
         this.filterInputList.last.focus();
       }
@@ -126,7 +126,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
         this.focusToLastInput();
       }
     } else if (action === 2 && this.filters.length > 1) { // delete
-      window.requestAnimationFrame(() => {
+      setTimeout(() => {
         this.filters.splice(index, 1);
         this.cdr.detectChanges();
         this.focusToLastInput();

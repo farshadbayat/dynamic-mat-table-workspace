@@ -35,7 +35,7 @@ export class TableService {
   //       link.setAttribute('download', filename);
   //       link.style.visibility = 'hidden';
   //       link.click();
-  //       // window.requestAnimationFrame(() => {
+  //       // setTimeout(() => {
   //       //   debugger
   //       //   const g = document.body.getElementsByClassName(link.className);
   //       //   document.body.removeChild(link);

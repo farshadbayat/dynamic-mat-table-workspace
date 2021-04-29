@@ -40,7 +40,7 @@ export class RowMenuComponent<T> {
   }
 
   menuButton_OnClick(menu: ContextMenuItem) {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.rowActionChange.emit(menu);
     });
   }

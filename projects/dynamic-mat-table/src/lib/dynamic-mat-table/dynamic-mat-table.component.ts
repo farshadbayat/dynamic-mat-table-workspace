@@ -12,7 +12,7 @@ import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialo
 import { trigger, transition, style, animate, query, stagger, state } from '@angular/animations';
 import { ResizeColumn } from '../models/resize-column.mode';
 import { TableIntl } from '../international/table-Intl';
-import { MenuActionChange } from './extensions/table-menu/table-menu.component';
+import { TableMenuActionChange } from './extensions/table-menu/table-menu.component';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isNullorUndefined } from '../cores/type';
 import 'hammerjs';
@@ -22,6 +22,7 @@ import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-v
 import { Subscription } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ContextMenuItem } from '../models/context-menu.model';
+import { OverlayContainer } from '@angular/cdk/overlay';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -96,9 +97,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     public languagePack: TableIntl,
     public tableService: TableService,
     public cdr: ChangeDetectorRef,
+    private overlayContainer: OverlayContainer
   ) {
     super(tableService, cdr); 
-
+    this.overlayContainer.getContainerElement().addEventListener('contextmenu', (e) =>{
+      e.preventDefault(); return false;
+    });
+    
     this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
       if (this.tableSetting.columnSetting[data.i]) {
@@ -107,6 +112,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.refreshGrid();
     });
   }
+
   ngOnDestroy(): void {    
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
@@ -207,24 +213,32 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
-  onContextMenu(event: MouseEvent, column: TableField<T>, row: any) {
+  currentContextMenuSender: any = {};
+  onContextMenu(event: MouseEvent, column: TableField<T>, row: any) {    
+    if(this.currentContextMenuSender?.time && (new Date().getTime() - this.currentContextMenuSender.time) < 500) {
+      return;
+    }
+    this.contextMenu.closeMenu();
     if (this.contextMenuItems?.length === 0 ) {
       return;
     }
     event.preventDefault();
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
-    this.contextMenu.menuData = { column: column, row: row};
-    this.contextMenu.menu.focusFirstItem('mouse');
+    this.currentContextMenuSender = { column: column, row: row, time: new Date().getTime()};
+    this.contextMenu.menuData = this.currentContextMenuSender;
+    this.contextMenu.menu.focusFirstItem('mouse');    
     this.onRowEvent.emit({ event: 'BeforContextMenuOpen', sender: {row: row, column: column, contextMenu: this.contextMenuItems}});
     this.contextMenu.openMenu();
   }
 
-  onContextMenuItemClick(data: ContextMenuItem) {
-    this.onRowEvent.emit({ event: 'ContextMenuClick', sender: data });
+  onContextMenuItemClick(data: ContextMenuItem) {    
+    this.contextMenu.menuData.item = data;
+    this.onRowEvent.emit({ event: 'ContextMenuClick', sender: this.contextMenu.menuData });
   }
 
-  menuActionChange(e: MenuActionChange) {
+
+  tableMenuActionChange(e: TableMenuActionChange) {
     if (e.type === 'TableSetting') {      
        this.saveSetting(e.data, false);
     } else if(e.type === 'FullScreenMode') {
@@ -266,7 +280,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   rowActionChange(menu: ContextMenuItem, row: any) {
-    window.requestAnimationFrame(() => {            
+    setTimeout(() => {
       this.onRowEvent.emit({ event: 'RowActionMenu', sender: {row: row, column: menu} });
       this.rowActionMenuChange.emit({actionItem: menu, rowItem: row });
     });

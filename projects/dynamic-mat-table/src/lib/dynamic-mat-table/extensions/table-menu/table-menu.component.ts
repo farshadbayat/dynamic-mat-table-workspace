@@ -13,7 +13,7 @@ import { clone, deepClone, isNullorUndefined } from '../../../cores/type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TableMenuComponent {
-  @Output() menuActionChange: EventEmitter<MenuActionChange> = new EventEmitter<MenuActionChange>();
+  @Output() menuActionChange: EventEmitter<TableMenuActionChange> = new EventEmitter<TableMenuActionChange>();
   @Input()
   get tableSetting(): TableSetting {
     return this.currentTableSetting;
@@ -58,7 +58,7 @@ export class TableMenuComponent {
   apply_OnClick(e) {
     e.stopPropagation();
     e.preventDefault();
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.menuActionChange.emit({
         type: 'TableSetting',
         data: this.currentTableSetting,
@@ -81,34 +81,34 @@ export class TableMenuComponent {
 
   /*****  Save ********/
   saveSetting_OnClick() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.menuActionChange.emit({ type: 'SaveSetting' });
     });
   }
 
   /*****  Filter ********/
   clearFilter_OnClick() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.menuActionChange.emit({ type: 'FilterClear' });
     });
   }
 
   /******* Save File ***********/
   download_OnClick(type: string) {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.menuActionChange.emit({ type: 'Download', data: type });
     });
   }
 
   print_OnClick(menu) {
     menu._overlayRef._host.parentElement.click();
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       this.menuActionChange.emit({ type: 'Print', data: null });
     });
   }
 }
 
-export interface MenuActionChange {
+export interface TableMenuActionChange {
   type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print' | 'FullScreenMode';
   data?: any;
 }

@@ -89,11 +89,17 @@ export class TableCoreDirective<T extends TableRow> {
   get rowSelectionMode() {
     return this._rowSelectionMode;
   }
-  set rowSelectionMode(selection: TableSelectionMode) {
-    this._rowSelectionMode = selection || 'none';
-    this._rowSelectionModel = this._rowSelectionMode === 'none' ? null : new SelectionModel<T>(this._rowSelectionMode === 'multi', []);
-    this.setDisplayedColumns();    
-    //this.rowSelectionChange.emit(this.tableSelection);
+  set rowSelectionMode(selection: TableSelectionMode) {    
+    selection = selection || 'none';
+    this._rowSelectionModel = selection === 'none' ? null : new SelectionModel<T>(selection === 'multi', []);    
+    if(selection === 'none' && this._rowSelectionMode !== 'none' && this.displayedColumns[0] === 'row-checkbox') {
+      this.displayedColumns.shift();            
+      this.saveSetting(this.tableSetting,false);
+    } else if(selection !== 'none' && this._rowSelectionMode === 'none') {
+      this.displayedColumns.unshift('row-checkbox');            
+      this.saveSetting(this.tableSetting,false);
+    }
+    this._rowSelectionMode = selection || 'none';    
   }
 
   @Input()
@@ -130,8 +136,6 @@ export class TableCoreDirective<T extends TableRow> {
   } 
   set dataSource(value: TableVirtualScrollDataSource<T>) {       
     this.clear();    
-    // console.log(typeof value);
-    
     if (!isNullorUndefined(value)) {      
       this.addUpdateSystemField(value.data);
       this.tvsDataSource = value;
@@ -140,7 +144,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  private async addUpdateSystemField(data: T[]) {
+  private addUpdateSystemField(data: T[]) {
     data = data.map( (item, index) => {
       item.id = index ;
       item.option = item.option || {};
@@ -155,8 +159,7 @@ export class TableCoreDirective<T extends TableRow> {
   get expandComponent(): any {    
     return this._expandComponent;
   }
-  set expandComponent(value: any) {
-    // console.log(this.expandColumn);
+  set expandComponent(value: any) {    
     this._expandComponent = value;
     if (this._expandComponent !== null && this._expandComponent !== undefined) {
       this.expandColumn = ['expandedDetail'];
@@ -165,7 +168,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  @Input() public rowActionMenu: ContextMenuItem[];
+  @Input() public rowContextMenuItems: ContextMenuItem[];
 
   // @Input()
   // get menu() {
@@ -306,9 +309,6 @@ export class TableCoreDirective<T extends TableRow> {
       }
     }
     this.tvsDataSource.refreshFilterPredicate();
-    // window.requestAnimationFrame(() => {      
-      
-    // });
   }
 
   public clear() {
@@ -322,13 +322,18 @@ export class TableCoreDirective<T extends TableRow> {
     if(this._rowSelectionModel) {
       this._rowSelectionModel.clear();
     }
-    this.cdr.detectChanges();
+    // now // this.cdr.detectChanges();
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
 
   trackBy = (_: number, item: any) => {
     return item.Id;
   } 
+
+  gg() {
+    this.setDisplayedColumns;
+    return this.displayedColumns;
+  }
  
   setDisplayedColumns() {    
     if (this.columns) {
@@ -368,7 +373,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   /************************************ Drag & Drop Column *******************************************/ 
   // public refreshGrid() {    
-  //   window.requestAnimationFrame( () =>{
+  //   setTimeout( () =>{
   //     this.table.renderRows();
   //   this.cdr.markForCheck();
   //   this.refreshTableSetting();
@@ -382,7 +387,7 @@ export class TableCoreDirective<T extends TableRow> {
 
   public refreshGrid() {
     this.table.renderRows();
-    this.cdr.markForCheck();
+    // now // this.cdr.markForCheck();
     // if (this.dataSource && this.dataSource.allData) {
     //   this.dataSource = new TableVirtualScrollDataSource<T>(this.dataSource.allData);
     // }
@@ -391,15 +396,14 @@ export class TableCoreDirective<T extends TableRow> {
   public moveRow(from: number, to: number) {
     if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
         this.dataSource.allData[from].id = to;
-        this.dataSource.allData[to].id = from;
-        // console.log('move',from, to);        
+        this.dataSource.allData[to].id = from;        
         moveItemInArray(this.dataSource.allData, from, to);
         this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
     }
   }
 
   moveColumn(from: number, to: number) {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       moveItemInArray(this.columns, from, to);
       this.refreshColumn(this.columns);
     });
@@ -449,12 +453,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: T): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  }
+  // checkboxLabel(row?: T): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  //   }
+  //   return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  // }
 
 }
 

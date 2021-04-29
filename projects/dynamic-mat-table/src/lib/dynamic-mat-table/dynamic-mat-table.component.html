@@ -27,10 +27,8 @@
         <mat-checkbox style="z-index: 10;"
           (change)="$event ? masterToggle() : null"
           [checked]="rowSelectionModel.hasValue() && isAllSelected()"
-          [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"
-          [aria-label]="checkboxLabel()"
-          *ngIf="rowSelectionMode === 'multi'"
-        >
+          [indeterminate]="rowSelectionModel.hasValue() && !isAllSelected()"         
+          *ngIf="rowSelectionMode === 'multi'">
         </mat-checkbox>
         <mat-icon *ngIf="rowSelectionMode === 'single'">indeterminate_check_box</mat-icon>
       </mat-header-cell>
@@ -38,8 +36,7 @@
         <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="onRowSelectionChange($event, row)"
-          [checked]="rowSelectionModel?.isSelected(row)"
-          [aria-label]="checkboxLabel(row)">
+          [checked]="rowSelectionModel?.isSelected(row)">
         </mat-checkbox>
       </mat-cell>
     </ng-container> 
@@ -121,16 +118,16 @@
       <mat-header-cell *matHeaderCellDef class="table-menu">
         <table-menu
           [tableSetting]="tableSetting"
-          (menuActionChange)="menuActionChange($event)"
+          (menuActionChange)="tableMenuActionChange($event)"
         ></table-menu> 
       </mat-header-cell>
       <mat-cell *matCellDef="let row" class="table-menu">
-        <row-menu *ngIf="rowActionMenu && rowActionMenu.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowActionMenu" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
+        <row-menu *ngIf="rowContextMenuItems && rowContextMenuItems.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowContextMenuItems" [tableSetting]="tableSetting" (rowActionChange)="rowActionChange($event, row)"></row-menu>
       </mat-cell>
     </ng-container>
     <!-- Row Table[Header, Data, Footer] -->    
     <mat-row 
-      *matRowDef="let row; columns: displayedColumns;"
+      *matRowDef="let row; columns: gg();"
       (dblclick)="onRowDblClick($event, row)"
       (click)="onRowClick($event, row)"
       [style.height.px]="rowHeight"
@@ -144,7 +141,7 @@
     <ng-container *ngIf="expandColumn.length > 0">      
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
     </ng-container>
-    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
+    <mat-header-row class="header" *matHeaderRowDef="gg(); sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
     <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top.px]="inverseOfTranslation + headerHeight - 5" ></mat-header-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>

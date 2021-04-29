@@ -20,7 +20,7 @@ export class PrintTableDialogComponent implements OnInit {
   }
 
   print() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       const dialogConfig = 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no';
       const printDoc = `
     <html>
