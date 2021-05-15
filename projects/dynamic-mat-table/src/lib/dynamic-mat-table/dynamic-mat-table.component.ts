@@ -15,7 +15,6 @@ import { TableIntl } from '../international/table-Intl';
 import { TableMenuActionChange } from './extensions/table-menu/table-menu.component';
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isNullorUndefined } from '../cores/type';
-import 'hammerjs';
 import { TableSetting } from '../models/table-setting.model';
 import { delay } from 'rxjs/operators';
 import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
@@ -279,11 +278,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   }
 
-  rowActionChange(menu: ContextMenuItem, row: any) {
-    setTimeout(() => {
-      this.onRowEvent.emit({ event: 'RowActionMenu', sender: {row: row, column: menu} });
-      this.rowActionMenuChange.emit({actionItem: menu, rowItem: row });
-    });
+  rowActionChange(contextMenuItem: ContextMenuItem, row: any) {
+    this.onRowEvent.emit({ event: 'RowActionMenu', sender: {row: row, column: contextMenuItem} });
+    this.rowActionMenuChange.emit({actionItem: contextMenuItem, rowItem: row });
   }
 
   doRendering(e) {

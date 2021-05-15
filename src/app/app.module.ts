@@ -20,7 +20,9 @@ import { DynamicExpandCellComponent } from './dynamic-expand-cell/dynamic-expand
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import {MatBadgeModule} from '@angular/material/badge';
-
+import { TabComponentComponent } from './tab-component/tab-component.component';
+import { FullFeaturesDmtComponent } from './full-features-dmt/full-features-dmt.component';
+import {MatTabsModule} from '@angular/material/tabs';
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
@@ -28,11 +30,13 @@ export function languageIntl() {
 }
 
 @NgModule({
-  declarations: [		
+  declarations: [				
     AppComponent,
     DynamicCellComponent,
     OrderTableComponent,
-    DynamicExpandCellComponent
+    DynamicExpandCellComponent,
+      TabComponentComponent,
+      FullFeaturesDmtComponent
    ],
   imports: [
     BrowserModule,
@@ -48,7 +52,8 @@ export function languageIntl() {
     DragDropModule,
     MatTableModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatTabsModule
   ],
   entryComponents:[
     DynamicCellComponent,
