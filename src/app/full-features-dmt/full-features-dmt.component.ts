@@ -17,7 +17,7 @@ import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
 import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
 
-const DATA = getData(10);
+const DATA = getData(1000);
 @Component({
   selector: 'app-full-features-dmt',
   templateUrl: './full-features-dmt.component.html',
@@ -279,6 +279,10 @@ export class FullFeaturesDmtComponent implements OnInit {
 
   clearSelection_onClick() {    
     this.table.rowSelectionModel.clear();
+  }
+
+  refresh_onClick() {
+    this.table.refreshUI();
   }
 
 }

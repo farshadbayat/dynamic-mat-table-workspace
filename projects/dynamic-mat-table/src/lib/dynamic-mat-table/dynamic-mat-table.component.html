@@ -43,7 +43,8 @@
   
     <!-- Table Columns -->
     <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column.name"
-      [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
+      [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">      
+      <!-- ************************** Table Header ************************* -->
       <mat-header-cell *matHeaderCellDef                
         cdkDrag 
         [cdkDragDisabled]="column?.draggable === false"
@@ -64,6 +65,17 @@
           (mousedown)="onResizeColumn($event, i, 'right')"
         ></div>
       </mat-header-cell>
+      <!-- ************************** Select Row ************************* -->
+      <!-- <ng-container  *ngIf="column.name == '">
+        <mat-cell *matCellDef="let row" class="row-checkbox">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="onRowSelectionChange($event, row)"
+            [checked]="rowSelectionModel?.isSelected(row)">
+          </mat-checkbox>
+        </mat-cell>
+      </ng-container>       -->
+      <!-- ************************** Table Cell ************************* -->
       <ng-container *ngIf="!column.dynamicCellComponent">
         <mat-cell *matCellDef="let row;" 
                   [style.maxWidth.px]="column.width"
@@ -78,6 +90,7 @@
         </mat-cell>
       </ng-container>
 
+      <!-- ************************** Dynamic Cell Component ************************* -->
       <ng-container *ngIf="column.dynamicCellComponent">
         <mat-cell *matCellDef="let row;"
                   [style.maxWidth.px]="column.width"
@@ -112,7 +125,6 @@
         </div>
       </td>
     </ng-container>
-
     <!-- Table Menu[ Sort, Visible, Export] -->
     <ng-container matColumnDef="table-menu" [stickyEnd]="true" *ngIf="setting?.visibleTableMenu !== false">
       <mat-header-cell *matHeaderCellDef class="table-menu">

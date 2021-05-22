@@ -13,5 +13,9 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {    
   }
 
+  onTabChanged(e) {
+    console.log(e);    
+  }
+
 
 }

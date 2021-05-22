@@ -12,7 +12,7 @@
   border: 2px rgb(0, 150, 136);
 }
 
-mat-cell:first-of-type:not(.row-checkbox) {
+mat-cell:first-of-type, mat-header-cell:first-of-type:not(.row-checkbox), mat-footer-cell:first-of-type {
   padding-left: 0 !important;
 }
 

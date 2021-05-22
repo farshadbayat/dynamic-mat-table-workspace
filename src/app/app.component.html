@@ -4,15 +4,15 @@
   <!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
 
   <!-- [alternativeRowStyle]="altRowStyle" -->
-  <mat-tab-group>
+  <mat-tab-group (selectedTabChange)="onTabChanged($event)">
     <mat-tab label="Demo 1"> 
-      <app-full-features-dmt></app-full-features-dmt>
+      <app-full-features-dmt #demo1></app-full-features-dmt>
     </mat-tab>
     <mat-tab label="Demo 2"> 
-      <app-full-features-dmt></app-full-features-dmt>
+      <app-full-features-dmt #demo2></app-full-features-dmt>
     </mat-tab>
     <mat-tab label="Demo 3"> 
-      <app-full-features-dmt></app-full-features-dmt>
+      <app-full-features-dmt #demo3></app-full-features-dmt>
     </mat-tab>
   </mat-tab-group>
   

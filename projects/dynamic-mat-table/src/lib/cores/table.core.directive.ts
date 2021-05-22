@@ -187,8 +187,8 @@ export class TableCoreDirective<T extends TableRow> {
     return this.tableColumns;
   }
   set columns(fields: TableField<T>[]) {
+    debugger
     (fields || []).forEach((f, i) => {
-
       // key name error //
       if (f.name.toLowerCase() === 'id') {
         throw 'Field name is reserved.["id"]';
@@ -207,7 +207,6 @@ export class TableCoreDirective<T extends TableRow> {
       f.sort = getObjectProp('sort', 'client-side' , settingField, f );
       f.sticky = getObjectProp('sticky', 'none' , settingField, f );
       f.width =  getObjectProp('width', this.defaultWidth , settingField, f );
-
     });
     this.tableColumns = fields;   
     this.updateColumn();     
@@ -286,7 +285,7 @@ export class TableCoreDirective<T extends TableRow> {
   /**************************************** Methods **********************************************/
 
   refreshTableSetting() {
-    this.tableSetting = clone(this.tableSetting);
+    // this.tableSetting = clone(this.tableSetting);
   }
 
   updatePagination() {    

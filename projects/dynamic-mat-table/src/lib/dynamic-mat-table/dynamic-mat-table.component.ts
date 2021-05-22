@@ -118,8 +118,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     }
   }
 
+  public refreshUI() {
+    const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
+    scrollStrategy.viewport.checkViewportSize();
+  }
+
   ngOnInit() {    
     const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
+
     scrollStrategy.offsetChange.subscribe(offset => {      
       // console.log(offset);
     })

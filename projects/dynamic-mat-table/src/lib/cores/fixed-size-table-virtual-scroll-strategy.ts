@@ -113,7 +113,7 @@ export class FixedSizeTableVirtualScrollStrategy implements VirtualScrollStrateg
     }
   }
 
-  private updateContent() {
+  private updateContent() {    
     if (!this.viewport || !this.rowHeight) {
       return;
     }
