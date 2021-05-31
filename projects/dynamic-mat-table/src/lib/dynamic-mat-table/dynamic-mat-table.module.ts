@@ -24,6 +24,9 @@ import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialo
 import { DynamicCellDirective } from '../cores/dynamic-cell/dynamic-cell.directive';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { ToolbarComponent } from './extensions/toolbar/toolbar.component';
+import { MatRippleModule } from '@angular/material/core';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -59,10 +62,12 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     MatButtonModule,
     MatMenuModule,
     MatDividerModule,
+    MatTooltipModule,
+    MatRippleModule,
     ExtentionsModule,
     // NoopAnimationsModule
   ],
-  exports: [DynamicMatTableComponent],
+  exports: [DynamicMatTableComponent, ToolbarComponent],
   providers: [
     // bugfixed in library compiler not load and must create library
     {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
@@ -78,6 +83,7 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
   declarations: [
     DynamicMatTableComponent,
     PrintTableDialogComponent,
+    ToolbarComponent,
     TableCoreDirective,
     DynamicCellDirective
   ],

@@ -24,7 +24,9 @@ import { ContextMenuItem } from '../models/context-menu.model';
 export class TableCoreDirective<T extends TableRow> {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator; 
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; 
+
+  @Input() backgroundColor: string = null;
 
   @Input()
   @HostBinding('style.direction')
@@ -99,7 +101,7 @@ export class TableCoreDirective<T extends TableRow> {
       this.displayedColumns.unshift('row-checkbox');            
       this.saveSetting(this.tableSetting,false);
     }
-    this._rowSelectionMode = selection || 'none';    
+    this._rowSelectionMode = selection;    
   }
 
   @Input()
@@ -187,7 +189,6 @@ export class TableCoreDirective<T extends TableRow> {
     return this.tableColumns;
   }
   set columns(fields: TableField<T>[]) {
-    debugger
     (fields || []).forEach((f, i) => {
       // key name error //
       if (f.name.toLowerCase() === 'id') {
@@ -265,6 +266,7 @@ export class TableCoreDirective<T extends TableRow> {
       visibaleActionMenu: null
     };
   }
+
   // Variables //
   progressColumn: string[] = [];
   displayedColumns: string[] = [];
@@ -321,18 +323,10 @@ export class TableCoreDirective<T extends TableRow> {
     if(this._rowSelectionModel) {
       this._rowSelectionModel.clear();
     }
+    this.cdr.detectChanges()
     // now // this.cdr.detectChanges();
     // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
-
-  trackBy = (_: number, item: any) => {
-    return item.Id;
-  } 
-
-  gg() {
-    this.setDisplayedColumns;
-    return this.displayedColumns;
-  }
  
   setDisplayedColumns() {    
     if (this.columns) {
@@ -371,25 +365,10 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /************************************ Drag & Drop Column *******************************************/ 
-  // public refreshGrid() {    
-  //   setTimeout( () =>{
-  //     this.table.renderRows();
-  //   this.cdr.markForCheck();
-  //   this.refreshTableSetting();
-  //   this.cdr.detectChanges();      
-  //   });
-  //   this.table.renderRows();
-  //   this.cdr.markForCheck();
-  //   this.refreshTableSetting();
-  //   this.cdr.detectChanges();
-  // }  
-
   public refreshGrid() {
-    this.table.renderRows();
-    // now // this.cdr.markForCheck();
-    // if (this.dataSource && this.dataSource.allData) {
-    //   this.dataSource = new TableVirtualScrollDataSource<T>(this.dataSource.allData);
-    // }
+    this.cdr.detectChanges()
+    this.table.renderRows();  
+          
   }
 
   public moveRow(from: number, to: number) {

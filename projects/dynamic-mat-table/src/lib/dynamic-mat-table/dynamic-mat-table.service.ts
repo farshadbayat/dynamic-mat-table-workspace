@@ -36,7 +36,6 @@ export class TableService {
   //       link.style.visibility = 'hidden';
   //       link.click();
   //       // setTimeout(() => {
-  //       //   debugger
   //       //   const g = document.body.getElementsByClassName(link.className);
   //       //   document.body.removeChild(link);
   //       // });

@@ -54,6 +54,7 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation], 
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tbl') tbl; 
@@ -110,6 +111,14 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       }
       this.refreshGrid();
     });
+  }
+
+  indexTrackFn = (index: number) => {    
+    return index;
+  };
+
+  trackColumn(index: number, item: TableField<T>): string {
+    return `${item.index}`;
   }
 
   ngOnDestroy(): void {    
@@ -241,7 +250,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     this.contextMenu.menuData.item = data;
     this.onRowEvent.emit({ event: 'ContextMenuClick', sender: this.contextMenu.menuData });
   }
-
 
   tableMenuActionChange(e: TableMenuActionChange) {
     if (e.type === 'TableSetting') {      
@@ -450,6 +458,12 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
         to[key] = Array.isArray(from[key]) ? Object.assign([], from[key]) : Object.assign({}, from[key]);
       }
     });
+  }
+
+  getTooltip() {
+    console.log('ss');
+    
+    return 'abcde';
   }
 }
 

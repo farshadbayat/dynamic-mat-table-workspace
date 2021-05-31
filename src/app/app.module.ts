@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -23,6 +23,13 @@ import {MatBadgeModule} from '@angular/material/badge';
 import { TabComponentComponent } from './tab-component/tab-component.component';
 import { FullFeaturesDmtComponent } from './full-features-dmt/full-features-dmt.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import { FormlyCellComponent } from './formly-cell/formly-cell.component';
+import { FormlyMaterialModule } from '@ngx-formly/material';
+import { FormlyModule } from '@ngx-formly/core';
+import { TimePickerComponent } from './formly-cell/time-picker/time-picker.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
+import 'flatpickr/dist/flatpickr.css';
+
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
@@ -30,13 +37,15 @@ export function languageIntl() {
 }
 
 @NgModule({
-  declarations: [				
+  declarations: [						
     AppComponent,
     DynamicCellComponent,
     OrderTableComponent,
     DynamicExpandCellComponent,
       TabComponentComponent,
-      FullFeaturesDmtComponent
+      FullFeaturesDmtComponent,      
+      FormlyCellComponent,
+      TimePickerComponent
    ],
   imports: [
     BrowserModule,
@@ -46,6 +55,7 @@ export function languageIntl() {
     MatCheckboxModule,
     MatCardModule,
     FormsModule,
+    ReactiveFormsModule,
     MatExpansionModule,
     DynamicMatTableModule,
     MatSliderModule,
@@ -53,11 +63,15 @@ export function languageIntl() {
     MatTableModule,
     MatIconModule,
     MatBadgeModule,
-    MatTabsModule
+    MatTabsModule,
+    FormlyModule.forRoot(),
+    FormlyMaterialModule,
+    FlatpickrModule.forRoot()
   ],
   entryComponents:[
     DynamicCellComponent,
-    DynamicExpandCellComponent
+    DynamicExpandCellComponent,
+    FormlyCellComponent
   ],
   providers: [
     { provide: TableIntl, useFactory: languageIntl}

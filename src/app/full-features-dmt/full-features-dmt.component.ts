@@ -10,14 +10,16 @@ import {
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
   IRowEvent,
-  ITableEvent  
+  ITableEvent,  
+  ToolbarItem
 } from 'dynamic-mat-table';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
 import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
 import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
+import { FormlyCellComponent } from '../formly-cell/formly-cell.component';
 
-const DATA = getData(1000);
+const DATA = getData(200);
 @Component({
   selector: 'app-full-features-dmt',
   templateUrl: './full-features-dmt.component.html',
@@ -59,8 +61,7 @@ export class FullFeaturesDmtComponent implements OnInit {
     title: 'Print All Test Data',
     showParameters: true,
   };
-
-  
+  formulaActionList: ToolbarItem[] = [];
 
   constructor() {   
     this.contextMenuItems.push(
@@ -87,6 +88,14 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.initField();
 
     this.fetchData_onClick();
+    this.formulaActionList = [ 
+      {id: 0, name: 'load-list', tooltip: 'دریافت اطلاعات', matIcon: 'list', matIconColor: '#0980ab'},
+      {id: 1, name: 'refresh', tooltip: 'بروز رسانی', matIcon: 'refresh', matIconColor: '#0980ab', splitter: true},
+      {id: 2, name: 'new-record', tooltip: 'ردیف جدید', matIcon: 'add_box', matIconColor: '#478447'},            
+      {id: 3, name: 'delete', tooltip: 'حذف ردیف', matIcon: 'delete_forever', matIconColor: 'red', float: true},
+      {id: 4, name: 'clear', tooltip: 'پاک کردن', matIcon: 'clear_all', matIconColor: '#0980ab'},
+      {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},      
+    ];
   }
 
   initField() {
@@ -94,8 +103,15 @@ export class FullFeaturesDmtComponent implements OnInit {
       {
          name: 'row',
         // type: 'number',
+         width: 300,
          cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'}
      },
+     { 
+      name: 'FormlyColumn',
+      header: 'Formly Column',      
+      option: null,
+      dynamicCellComponent: FormlyCellComponent,
+      },
      { 
        name: 'order',
        header: 'Row Order',
@@ -105,8 +121,8 @@ export class FullFeaturesDmtComponent implements OnInit {
        clickable: false,
        rowSelectionable: false,
        toExport: (v, type)=>{
-         console.log(v);
-       }
+          console.log(v);
+        }
        },
       { name: 'name', header: 'Element Name', sticky: 'start' },
       { name: 'weight' },
@@ -285,6 +301,10 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.table.refreshUI();
   }
 
+  formula_onActionClick(item: ToolbarItem): void { 
+    
+  }
+
 }
 
 export interface TestElement extends TableRow {
@@ -298,6 +318,7 @@ export interface TestElement extends TableRow {
 export function getData(n = 1000): TestElement[] {
   return Array.from({ length: n }, (v, i) => ({
     row: i + 1,
+    FormlyColumn: {FormlyColumn: 'allah'},
     name: `Element #${i + 1}`,
     weight: Math.floor(Math.random() * 100) + ' KG',
     color: ['Red', 'Green', 'Blue', 'Yellow', 'Magenta'][

@@ -6,6 +6,7 @@
   [footerHeight]="headerHeight || 56"
   [headerEnabled]="headerEnable || true"
   [footerEnabled]="footerEnable || false"
+  [ngStyle]="{'background-color': backgroundColor || 'white'}" 
   [class.printpreview]="printing"
   (requestRendering)="doRendering($event)">
 
@@ -19,7 +20,7 @@
     (cdkDragStarted)="dragStarted($event)"
     (cdkDropListDropped)="dropListDropped($event)"    
     [@tableAnimation]
-    [trackBy]="trackBy"
+    [trackBy]="indexTrackFn"
     [dataSource]="dataSource">
     <!-- Checkbox Column -->
     <ng-container matColumnDef="row-checkbox">
@@ -42,7 +43,7 @@
     </ng-container> 
   
     <!-- Table Columns -->
-    <ng-container *ngFor="let column of columns; let i = index;" [matColumnDef]="column.name"
+    <ng-container *ngFor="let column of columns; let i = index; trackBy: trackColumn" [matColumnDef]="column.name"
       [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">      
       <!-- ************************** Table Header ************************* -->
       <mat-header-cell *matHeaderCellDef                
@@ -78,6 +79,7 @@
       <!-- ************************** Table Cell ************************* -->
       <ng-container *ngIf="!column.dynamicCellComponent">
         <mat-cell *matCellDef="let row;" 
+                  [matTooltip]="row[column.name]"
                   [style.maxWidth.px]="column.width"
                   [style.minWidth.px]="column.width"
                   [class]="row[column.cellClass]"
@@ -87,7 +89,7 @@
                   (contextmenu)="onContextMenu($event, column, row)">
           <mat-icon>{{cellIcon(row?.option, column?.name)}}</mat-icon>
           {{row[column.name]}}
-        </mat-cell>
+        </mat-cell> 
       </ng-container>
 
       <!-- ************************** Dynamic Cell Component ************************* -->
@@ -139,7 +141,7 @@
     </ng-container>
     <!-- Row Table[Header, Data, Footer] -->    
     <mat-row 
-      *matRowDef="let row; columns: gg();"
+      *matRowDef="let row; columns: displayedColumns;"
       (dblclick)="onRowDblClick($event, row)"
       (click)="onRowClick($event, row)"
       [style.height.px]="rowHeight"
@@ -153,9 +155,9 @@
     <ng-container *ngIf="expandColumn.length > 0">      
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
     </ng-container>
-    <mat-header-row class="header" *matHeaderRowDef="gg(); sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
+    <mat-header-row class="header" *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
     <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top.px]="inverseOfTranslation + headerHeight - 5" ></mat-header-row>
-  </mat-table>
+  </mat-table> 
 </cdk-virtual-scroll-viewport>
 <mat-paginator
   *ngIf="pagingMode !== 'none'"
@@ -166,6 +168,7 @@
   (page)="pagination_onChange($event)"
   [pageSizeOptions]="pagination?.pageSizeOptions">
 </mat-paginator>
+<ng-content></ng-content>
  
 <div class="no-records" *ngIf="showNoData === true && (!dataSource || dataSource.data.length === 0)">
   <!-- <mat-icon>web</mat-icon>  -->
@@ -175,7 +178,7 @@
 </div>
 
 <!-- Context Menu -->
-<div style="visibility: hidden; position: fixed"
+<div style="visibility: hidden; position: fixed"  
   [style.left]="contextMenuPosition.x"
   [style.top]="contextMenuPosition.y"
   [matMenuTriggerFor]="contextMenu">

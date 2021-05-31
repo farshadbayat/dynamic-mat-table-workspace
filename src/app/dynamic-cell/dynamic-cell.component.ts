@@ -51,13 +51,11 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
   }
  
   moveUp_onClick() {    
-    // const id = this.row.id;
-    // this.parent.moveRow(id, id-1 );
-    // // debugger
+     const id = this.row.id;
+     this.parent.moveRow(id, id-1 );    
     // console.log(this.parent.viewport);  
-    const viewport: CdkVirtualScrollViewport= this.parent.viewport;    
-    viewport.setTotalContentSize((Number(viewport._totalContentHeight.replace('px',''))+283) as number); //_totalContentSize
-
+    // const viewport: CdkVirtualScrollViewport= this.parent.viewport;    
+    // viewport.setTotalContentSize((Number(viewport._totalContentHeight.replace('px',''))+283) as number); //_totalContentSize
     //viewport.scrollToIndex(0, 'smooth')
   }
 
