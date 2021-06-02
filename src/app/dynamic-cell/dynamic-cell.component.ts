@@ -38,6 +38,11 @@ export class DynamicCellComponent implements OnInit, OnDestroy, IDynamicCell {
     if (this.row.option.expandCallback !== undefined && this.row.option.expandCallback !== null) {
       this.row.option.expandCallback(this.row);
     }
+    if( this.row.option.expand === true) {
+      this.row.option.style = { 'background-color' : 'red'};
+    } else {
+      this.row.option.style = { 'background-color' : 'transparent'};
+    }
   }
 
   raiseEvent_onClick() {

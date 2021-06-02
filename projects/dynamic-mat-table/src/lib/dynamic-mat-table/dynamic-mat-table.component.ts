@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChildren,
+import { Component, OnInit, AfterViewInit,
          QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnDestroy, ContentChildren} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { ContextMenuItem } from '../models/context-menu.model';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('* => *', [
@@ -47,6 +48,13 @@ export const expandAnimation = trigger('detailExpand', [
   state('expanded', style({height: '*'})),
   transition('expanded <=> collapsed', animate('100ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
 ]); 
+ 
+export const cellTooltipDefaults: MatTooltipDefaultOptions = {
+  showDelay: 500,
+  hideDelay: 400,
+  touchendHideDelay: 1000,
+  position: 'above',
+};
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -54,10 +62,13 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation], 
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    {provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: cellTooltipDefaults}
+  ],
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('tbl') tbl; 
+  @ViewChild('tbl', {static: true}) tbl; 
   @Input()
   get setting() {
     return this.tableSetting;
@@ -130,6 +141,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   public refreshUI() {
     const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
     scrollStrategy.viewport.checkViewportSize();
+    scrollStrategy.viewport.scrollToOffset(0);
+    this.cdr.detectChanges();
   }
 
   ngOnInit() {    
@@ -149,12 +162,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   ngAfterViewInit(): void {
+    
     // this.dataSource.sort.sortChange.subscribe((resp) => {
     //   this.pagination.pageIndex = 0;
     // });
-    this.dataSource.dataOfRange$.subscribe((data) => {
-      // console.log('dataOfRange');
-    });
+    // this.dataSource.dataOfRange$.subscribe((data) => {
+    //   // console.log('dataOfRange');
+    // });
   }
 
   public get inverseOfTranslation(): number {

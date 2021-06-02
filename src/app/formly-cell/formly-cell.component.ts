@@ -31,10 +31,7 @@ export class FormlyCellComponent implements OnInit, IDynamicCell {
       }
     }
   ];
-  ngOnInit() {
-    console.log(this.row[this.column.name]);
-    
-    //this.row[this.column.name] = {FormlyColumn : 'ss'}; 
+  ngOnInit() {    
   }
 
 }

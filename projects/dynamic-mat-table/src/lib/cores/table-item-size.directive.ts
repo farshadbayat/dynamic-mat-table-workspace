@@ -56,7 +56,7 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
   @Input()
   bufferMultiplier = defaults.bufferMultiplier;
 
-  @ContentChild(MatTable, { static: false }) table: MatTable<any>;
+  @ContentChild(MatTable, { static: true }) table: MatTable<any>;
 
   // @Output() requestRendering: EventEmitter<any> = new EventEmitter();
 

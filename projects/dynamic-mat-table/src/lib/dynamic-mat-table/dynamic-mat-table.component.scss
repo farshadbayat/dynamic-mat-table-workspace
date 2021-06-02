@@ -260,3 +260,13 @@ mat-header-cell:hover {
   width: 100%;
   z-index: 2;
 }
+
+::ng-deep .cell-tooltip {
+  padding: 8px;
+  background-color: rgb(255, 253, 164);
+  color: black !important;
+  font-size: 12px;
+  border: solid 1px rgb(214, 214, 214);
+  min-width: 100px;
+  text-align: center; 
+}

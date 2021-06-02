@@ -65,21 +65,12 @@
           class="right-resizer-handler"
           (mousedown)="onResizeColumn($event, i, 'right')"
         ></div>
-      </mat-header-cell>
-      <!-- ************************** Select Row ************************* -->
-      <!-- <ng-container  *ngIf="column.name == '">
-        <mat-cell *matCellDef="let row" class="row-checkbox">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="onRowSelectionChange($event, row)"
-            [checked]="rowSelectionModel?.isSelected(row)">
-          </mat-checkbox>
-        </mat-cell>
-      </ng-container>       -->
+      </mat-header-cell>      
       <!-- ************************** Table Cell ************************* -->
       <ng-container *ngIf="!column.dynamicCellComponent">
-        <mat-cell *matCellDef="let row;" 
-                  [matTooltip]="row[column.name]"
+        <mat-cell *matCellDef="let row;"  
+                  [matTooltip]="row[column.name]" 
+                  matTooltipClass="cell-tooltip"                  
                   [style.maxWidth.px]="column.width"
                   [style.minWidth.px]="column.width"
                   [class]="row[column.cellClass]"

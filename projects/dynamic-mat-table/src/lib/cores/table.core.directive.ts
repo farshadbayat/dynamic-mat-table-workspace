@@ -22,7 +22,6 @@ import { ContextMenuItem } from '../models/context-menu.model';
   selector: '[core]'
 })
 export class TableCoreDirective<T extends TableRow> {
-
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; 
 
@@ -131,22 +130,22 @@ export class TableCoreDirective<T extends TableRow> {
       return null;
     }    
     if (this.totalRecord !== this.tvsDataSource.allData.length) {
-      this.addUpdateSystemField(this.tvsDataSource.allData);           
-      this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);     
+      console.log('change');
+      this.initSystemField(this.tvsDataSource.allData);
     }
     return this.tvsDataSource;
   } 
   set dataSource(value: TableVirtualScrollDataSource<T>) {       
     this.clear();    
     if (!isNullorUndefined(value)) {      
-      this.addUpdateSystemField(value.data);
+      this.initSystemField(value.data);
       this.tvsDataSource = value;
       this.tvsDataSource.sort = this.sort;
       (this.tvsDataSource as any)._paginator = value;      
-    }
+    } 
   }
 
-  private addUpdateSystemField(data: T[]) {
+  private initSystemField(data: T[]) {
     data = data.map( (item, index) => {
       item.id = index ;
       item.option = item.option || {};
@@ -272,7 +271,7 @@ export class TableCoreDirective<T extends TableRow> {
   displayedColumns: string[] = [];
   // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
-  public tvsDataSource: TableVirtualScrollDataSource<T> = new TableVirtualScrollDataSource<T>([]);;
+  public tvsDataSource: TableVirtualScrollDataSource<T> = new TableVirtualScrollDataSource<T>([]);
 
   private _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
@@ -308,7 +307,7 @@ export class TableCoreDirective<T extends TableRow> {
       if ((this.tvsDataSource as any)._paginator !== undefined) {
         delete (this.tvsDataSource as any)._paginator;
       }
-    }
+    } 
     this.tvsDataSource.refreshFilterPredicate();
   }
 
@@ -324,8 +323,6 @@ export class TableCoreDirective<T extends TableRow> {
       this._rowSelectionModel.clear();
     }
     this.cdr.detectChanges()
-    // now // this.cdr.detectChanges();
-    // this.dataSource = new TableVirtualScrollDataSource<T>([]);
   }  
  
   setDisplayedColumns() {    

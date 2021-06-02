@@ -11,21 +11,15 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Input() direction: 'ltr' | 'rtl' = 'ltr';
   @Output() actionClick = new EventEmitter<ToolbarItem>();
 
-  @HostListener('document:keydown', ['$event'])
-  onKeydown(e) {
-    console.log(e);
-  }
-
   @HostListener('document:keyup', ['$event'])
-  onKeyup(e) {
+  onKeyup(e: KeyboardEvent) {
     console.log(e);
   }
 
   normalItemList: ToolbarItem[] = [];
   floatItemList: ToolbarItem[] = [];
 
-  constructor(public _el:ElementRef) {
-    console.log(_el.nativeElement);    
+  constructor(public _el:ElementRef) {    
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -53,3 +47,5 @@ export interface ToolbarItem {
   disable?: boolean;
   float?: boolean;
 }
+
+
