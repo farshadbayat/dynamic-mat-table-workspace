@@ -129,13 +129,12 @@ export class TableCoreDirective<T extends TableRow> {
     if(isNullorUndefined(this.tvsDataSource)) {      
       return null;
     }    
-    if (this.totalRecord !== this.tvsDataSource.allData.length) {
-      console.log('change');
+    if (this.totalRecord !== this.tvsDataSource.allData.length) {      
       this.initSystemField(this.tvsDataSource.allData);
     }
     return this.tvsDataSource;
   } 
-  set dataSource(value: TableVirtualScrollDataSource<T>) {       
+  set dataSource(value: TableVirtualScrollDataSource<T>) {           
     this.clear();    
     if (!isNullorUndefined(value)) {      
       this.initSystemField(value.data);
@@ -146,9 +145,10 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   private initSystemField(data: T[]) {
+    
     data = data.map( (item, index) => {
       item.id = index ;
-      item.option = item.option || {};
+      item.option = item.option || {};      
       return item;
     });
     this.totalRecord = this.tvsDataSource.allData.length;
@@ -221,20 +221,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /*************************************** I/O parameters *********************************/
-  @Input() printConfig: PrintConfig = {};
-  @Input()
-  get dir(): 'ltr' | 'rtl' {
-    return this.direction;
-  }
-  set dir( value: 'ltr' | 'rtl') {
-    this.direction = value;
-    // update in menu
-    this.tableSetting = {
-      direction: value,
-      visibaleActionMenu: this.tableSetting.visibaleActionMenu || null,
-      columnSetting: this.tableColumns
-    };
-  }
+  @Input() printConfig: PrintConfig = {};  
   @Input() sticky: boolean;
   @Input() pending: boolean;
   @Input() rowHeight = 48;
@@ -342,30 +329,19 @@ export class TableCoreDirective<T extends TableRow> {
         if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
           this.displayedColumns.unshift('row-checkbox');
         }
-      }, 0);
+      }, 0); 
 
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
       }
     }
-    this.updatePagination();
-  }
-
-  requestFullscreen(element: ElementRef) {    
-    if (element.nativeElement.requestFullscreen) {
-      element.nativeElement.requestFullscreen();
-    } else if (element.nativeElement.webkitRequestFullscreen) { /* Safari */
-      element.nativeElement.webkitRequestFullscreen();
-    } else if (element.nativeElement.msRequestFullscreen) { /* IE11 */
-      element.nativeElement.msRequestFullscreen();
-    }
+    // this.updatePagination();
   }
 
   /************************************ Drag & Drop Column *******************************************/ 
   public refreshGrid() {
     this.cdr.detectChanges()
-    this.table.renderRows();  
-          
+    this.table.renderRows();
   }
 
   public moveRow(from: number, to: number) {
@@ -421,7 +397,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   onRowSelectionChange(e: any, row: T) {
-    if (e) {
+    if (e) {      
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({ event: 'RowSelectionChange', sender:  this._rowSelectionModel});
     }
@@ -433,7 +409,7 @@ export class TableCoreDirective<T extends TableRow> {
   //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
   //   }
   //   return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  // }
+  // } 
 
 }
 

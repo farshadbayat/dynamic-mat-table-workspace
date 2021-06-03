@@ -23,15 +23,12 @@ export class RowMenuComponent<T> {
   }
 
   menuOnClick(e) {
-    console.log();
-    
     e.stopPropagation();
     e.preventDefault();
     this.visibleActionMenus = [];
     this.actionMenus.forEach(menu => {
       const am: ContextMenuItem = isNullorUndefined(this.rowActionMenu) || isNullorUndefined(this.rowActionMenu[menu.name]) ? menu : this.rowActionMenu[menu.name];
       if ( isNullorUndefined(am.visible) || am.visible) {
-
         this.visibleActionMenus.push({
           name: menu.name,
           text: am.text || menu.text,

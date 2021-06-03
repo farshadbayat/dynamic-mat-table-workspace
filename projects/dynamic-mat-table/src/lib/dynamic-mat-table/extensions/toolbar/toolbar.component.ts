@@ -12,8 +12,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   @Output() actionClick = new EventEmitter<ToolbarItem>();
 
   @HostListener('document:keyup', ['$event'])
-  onKeyup(e: KeyboardEvent) {
-    console.log(e);
+  onKeyup(e: KeyboardEvent) {    
   }
 
   normalItemList: ToolbarItem[] = [];
@@ -23,7 +22,7 @@ export class ToolbarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes.itemList.currentValue) {
+    if(changes.itemList && this.itemList) {
       this.normalItemList = this.itemList.filter( item => item.float === undefined || item.float == false);
       this.floatItemList = this.itemList.filter( item => item?.float == true);
     }

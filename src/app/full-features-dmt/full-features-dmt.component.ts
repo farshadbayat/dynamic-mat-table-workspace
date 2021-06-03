@@ -19,7 +19,7 @@ import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
 import { FormlyCellComponent } from '../formly-cell/formly-cell.component';
 
-const DATA = getData(200);
+const DATA = getData(2000);
 @Component({
   selector: 'app-full-features-dmt',
   templateUrl: './full-features-dmt.component.html',
@@ -111,6 +111,8 @@ export class FullFeaturesDmtComponent implements OnInit {
       header: 'Formly Column',      
       option: null,
       dynamicCellComponent: FormlyCellComponent,
+      draggable: false,
+      filterable: false,
       },
      { 
        name: 'order',

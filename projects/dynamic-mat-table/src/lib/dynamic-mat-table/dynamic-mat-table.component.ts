@@ -23,22 +23,22 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { ContextMenuItem } from '../models/context-menu.model';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { MatTooltipDefaultOptions, MAT_TOOLTIP_DEFAULT_OPTIONS } from '@angular/material/tooltip';
+import { requestFullscreen } from '../utilies/html.helper';
 
 export const tableAnimation = trigger('tableAnimation', [
-  transition('* => *', [
+  transition('void => *', [
     query(':enter', style({ transform: 'translateX(-50%)', opacity: 0 }), {
-      limit: 11,
+      //limit: 5,
       optional: true,
     }),
-    query(
-      ':enter',
+    query(':enter',
       stagger('0.01s', [
-        animate(
-          '0.5s ease',
-          style({ transform: 'translateX(0%)', opacity: 1 })
+        animate('0.5s ease', style({ transform: 'translateX(0%)', opacity: 1 })
         ),
       ]),
-      { limit: 11, optional: true }
+      {  
+        //limit: 5, 
+        optional: true }
     ),
   ]),
 ]);
@@ -88,8 +88,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   } 
 
   @ViewChild(MatMenuTrigger) contextMenu: MatMenuTrigger;
-  public contextMenuPosition = { x: '0px', y: '0px' };
-  
+  public contextMenuPosition = { x: '0px', y: '0px' };  
   @ViewChild('printRef', { static: true }) printRef !: TemplateRef<any>;
   @ViewChild('printContentRef', { static: true }) printContentRef !: ElementRef;
   @ContentChildren(HeaderFilterComponent) headerFilterList !: QueryList<HeaderFilterComponent>;  
@@ -115,6 +114,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       e.preventDefault(); return false;
     });
     
+    
+    this.direction
     this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
       if (this.tableSetting.columnSetting[data.i]) {
@@ -141,7 +142,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   public refreshUI() {
     const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
     scrollStrategy.viewport.checkViewportSize();
-    scrollStrategy.viewport.scrollToOffset(0);
+    scrollStrategy.viewport.scrollToOffset(0);    
     this.cdr.detectChanges();
   }
 
@@ -163,9 +164,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   ngAfterViewInit(): void {
     
-    // this.dataSource.sort.sortChange.subscribe((resp) => {
-    //   this.pagination.pageIndex = 0;
-    // });
+    this.dataSource.sort.sortChange.subscribe((resp) => {
+      this.pagination.pageIndex = 0;
+    });
     // this.dataSource.dataOfRange$.subscribe((data) => {
     //   // console.log('dataOfRange');
     // });
@@ -269,7 +270,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     if (e.type === 'TableSetting') {      
        this.saveSetting(e.data, false);
     } else if(e.type === 'FullScreenMode') {
-      this.requestFullscreen(this.tbl.elementRef);
+      requestFullscreen(this.tbl.elementRef);
     } else if (e.type === 'Download') {
       if (e.data === 'CSV') {
         this.tableService.exportToCsv<T>(

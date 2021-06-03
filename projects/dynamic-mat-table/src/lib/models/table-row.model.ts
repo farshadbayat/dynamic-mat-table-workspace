@@ -31,5 +31,6 @@ export interface IRowActionMenuEvent<T> {
 export interface RowOption extends Dictionary<any> {
   style?: any;
   class?: any; 
+  selected?: boolean;
   expand?: boolean; 
 }
