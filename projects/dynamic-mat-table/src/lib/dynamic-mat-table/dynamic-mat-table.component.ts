@@ -114,8 +114,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       e.preventDefault(); return false;
     });
     
-    
-    this.direction
     this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
       this.columns[data.i].width = data.w;
       if (this.tableSetting.columnSetting[data.i]) {
@@ -164,8 +162,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   ngAfterViewInit(): void {
     
-    this.dataSource.sort.sortChange.subscribe((resp) => {
+    this.dataSource.sort.sortChange.subscribe(sort => {
       this.pagination.pageIndex = 0;
+      this.onTableEvent.emit({ event: 'SortChanged', sender: sort })
     });
     // this.dataSource.dataOfRange$.subscribe((data) => {
     //   // console.log('dataOfRange');

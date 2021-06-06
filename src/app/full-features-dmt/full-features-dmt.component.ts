@@ -239,10 +239,13 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.table.expandRow( this.expandIndex);
     this.expandIndex++;
   }
-
+ 
   tableEvent_onClick(e: ITableEvent) {    
     if (e.event === 'ReloadData') {
       this.fetchData_onClick();
+    } else if( e.event === 'SortChanged') {
+      console.log(e.sender);
+      
     }
   }
   
