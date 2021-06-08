@@ -29,16 +29,17 @@ mat-cell:first-of-type, mat-header-cell:first-of-type:not(.row-checkbox), mat-fo
 }
 
 .viewport-with-pagination {
-  height: calc( 100% - 32px);
+  height: calc( 100% - 44px);
 }
 
 .table-paginator {
   position: sticky;
   bottom: 0;
   display: flex;
-  max-height: 32px;
+  max-height: 44px;
   align-items: center;
   overflow: hidden;
+  direction: ltr;
 }
 
 mat-footer-row, mat-row{
