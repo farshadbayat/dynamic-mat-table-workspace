@@ -3,15 +3,13 @@ import { ContextMenuItem } from './context-menu.model';
 
 // this fields are for each row data
 export interface TableRow {
-  id?: number;  
+  id?: number;
   rowActionMenu?: { [key: string]: ContextMenuItem; };
   option?: RowOption;
 }
 
-
-
 export type TableSelectionMode = 'single' | 'multi' | 'none';
-export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
+export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'LabelClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
 
 export interface IRowEvent {
   event: RowEventType | any;
@@ -30,7 +28,7 @@ export interface IRowActionMenuEvent<T> {
 
 export interface RowOption extends Dictionary<any> {
   style?: any;
-  class?: any; 
+  class?: any;
   selected?: boolean;
-  expand?: boolean; 
+  expand?: boolean;
 }

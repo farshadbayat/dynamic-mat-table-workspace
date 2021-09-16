@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
 import { isNullorUndefined } from '../../../cores/type';
 import { ContextMenuItem } from '../../../models/context-menu.model';
-import { IRowEvent } from '../../../models/table-row.model';
 import { TableSetting } from '../../../models/table-setting.model';
 
 @Component({
@@ -11,9 +10,8 @@ import { TableSetting } from '../../../models/table-setting.model';
   styleUrls: ['./row-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RowMenuComponent<T> {
-  // @Output() rowActionChange: EventEmitter<ContextMenuItem> = new EventEmitter<ContextMenuItem>();
-  @Output() rowActionChange: EventEmitter<IRowEvent> = new EventEmitter<IRowEvent>();
+export class RowMenuComponent<T> {  
+  @Output() rowActionChange: EventEmitter<ContextMenuItem> = new EventEmitter<ContextMenuItem>();
   @Input() actionMenus: ContextMenuItem[] = [];
   @Input() tableSetting: TableSetting;
   @Input() rowActionMenu?: { [key: string]: ContextMenuItem; };
@@ -42,10 +40,7 @@ export class RowMenuComponent<T> {
 
   menuButton_OnClick(menu: ContextMenuItem) {
     setTimeout(() => {
-      this.rowActionChange.emit({
-        event: '',
-        sender: menu
-      });
+      this.rowActionChange.emit(menu);
     });
   }
 }

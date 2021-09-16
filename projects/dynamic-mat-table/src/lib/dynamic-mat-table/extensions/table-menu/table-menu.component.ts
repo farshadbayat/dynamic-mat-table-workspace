@@ -24,6 +24,9 @@ export class TableMenuComponent {
     this.currentTableSetting = clone<TableSetting>(value);
   }
 
+  newSettingName = '';
+  showNewSetting = false;
+
   currentColumn: number = null;
   reverseDirection: string = null;
   originalTableSetting: TableSetting;
@@ -32,7 +35,7 @@ export class TableMenuComponent {
   constructor(public languagePack: TableIntl, public tableService: TableService) {
   }
 
-  screenMode_OnClick() {
+  screenMode_onClick() {
     this.menuActionChange.emit({
       type: 'FullScreenMode',
       data: this.currentTableSetting,
@@ -55,7 +58,7 @@ export class TableMenuComponent {
     colFound.display = colFound.display === 'visible' ? 'hiden' : 'visible';
   }
 
-  apply_OnClick(e) {
+  apply_onClick(e) {
     e.stopPropagation();
     e.preventDefault();
     setTimeout(() => {
@@ -71,7 +74,7 @@ export class TableMenuComponent {
     this.currentColumn = i;
   }
 
-  cancel_OnClick() {
+  cancel_onClick() {
     this.currentTableSetting = deepClone(this.originalTableSetting);
   }
 
@@ -80,27 +83,41 @@ export class TableMenuComponent {
   }
 
   /*****  Save ********/
-  saveSetting_OnClick() {
+  saveSetting_onClick() {
     setTimeout(() => {
       this.menuActionChange.emit({ type: 'SaveSetting' });
     });
   }
 
+  newSetting_onClick(e) {
+    this.showNewSetting = true;
+    e.stopPropagation();
+  }
+
+  loadSetting_onClick(setting) {
+    this.menuActionChange.emit({ type: 'LoadSetting', data: setting });
+  }
+
+  cancle_onClick() {
+    this.newSettingName='';
+    this.showNewSetting = false;
+  }
+
   /*****  Filter ********/
-  clearFilter_OnClick() {
+  clearFilter_onClick() {
     setTimeout(() => {
       this.menuActionChange.emit({ type: 'FilterClear' });
     });
   }
 
   /******* Save File ***********/
-  download_OnClick(type: string) {
+  download_onClick(type: string) {
     setTimeout(() => {
       this.menuActionChange.emit({ type: 'Download', data: type });
     });
   }
 
-  print_OnClick(menu) {
+  print_onClick(menu) {
     menu._overlayRef._host.parentElement.click();
     setTimeout(() => {
       this.menuActionChange.emit({ type: 'Print', data: null });
@@ -109,6 +126,6 @@ export class TableMenuComponent {
 }
 
 export interface TableMenuActionChange {
-  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'Print' | 'FullScreenMode';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'LoadSetting' | 'Print' | 'FullScreenMode';
   data?: any;
 }

@@ -2,7 +2,7 @@ import { TableScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-st
 import { AbstractField } from './table-field.model';
 
 export type Direction = 'rtl' | 'ltr';
-export type ScreenMode = 'visible' | 'hiden' | 'none'  ;
+export type DisplayMode = 'visible' | 'hiden' | 'none'  ;
 export interface TableSetting {
   // screenMode?: ScreenMode;
   direction?: Direction;
@@ -14,6 +14,8 @@ export interface TableSetting {
   scrollStrategy?: TableScrollStrategy;
   rowStyle?: any;
   enableContextMenu?: boolean;
+  autoHeight?: boolean;
+  settingList?: string[];
 }
 
 export interface VisibleActionMenu {

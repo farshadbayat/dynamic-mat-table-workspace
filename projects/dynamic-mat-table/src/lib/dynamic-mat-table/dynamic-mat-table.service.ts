@@ -63,6 +63,7 @@ export class TableService {
   }  
 
   public exportToCsv<T>( columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "") {
+    debugger
     filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
     if (!rows || !rows.length) {
       return;

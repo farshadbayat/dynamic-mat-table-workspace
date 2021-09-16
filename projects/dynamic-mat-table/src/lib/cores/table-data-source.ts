@@ -4,10 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
-import { OnInit } from '@angular/core';
 import { titleCase } from '../utilies/text.utils';
 
-export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> implements OnInit {
+export  class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> {
   public dataToRender$: Subject<T[]>;
   public dataOfRange$: Subject<T[]>;
   private streamsReady: boolean;
@@ -82,9 +81,6 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
       this.filterPredicate = (data: T, filter: string) => true;
     }
     this.filter = conditionsString;        
-  }
-
-  ngOnInit(): void {
   }
 
   // When client paging active use for reterive paging data

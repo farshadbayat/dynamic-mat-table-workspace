@@ -6,15 +6,24 @@
   table-layout: fixed;
   min-height: 200px;
   position: relative;
-  overflow: auto;  
+  overflow: auto;
   transition: .3s cubic-bezier(0.46, -0.72, 0.46, 1.54);
   background-color: #f3f3f3;
   border: 2px rgb(0, 150, 136);
 }
 
+/* Fixed Scroll */
+::ng-deep .cdk-virtual-scroll-content-wrapper {
+  left: auto !important;
+}
+
+.label-cell {
+  width: 100%;
+}
+
 mat-cell:first-of-type, mat-header-cell:first-of-type:not(.row-checkbox), mat-footer-cell:first-of-type {
   padding-left: 0 !important;
-}  
+}
 
 .rtl-cell {
   padding-right: 20px;
@@ -29,14 +38,14 @@ mat-cell:first-of-type, mat-header-cell:first-of-type:not(.row-checkbox), mat-fo
 }
 
 .viewport-with-pagination {
-  height: calc( 100% - 44px);
+  height: calc( 100% - 48px);
 }
 
 .table-paginator {
   position: sticky;
   bottom: 0;
   display: flex;
-  max-height: 44px;
+  max-height: 48px;
   align-items: center;
   overflow: hidden;
   direction: ltr;
@@ -71,7 +80,7 @@ mat-cell, mat-footer-cell, mat-header-cell {
 
 // mat-cell, mat-footer-cell, mat-header-cell {
 //   min-width: 100px;
-// } 
+// }
 
 
 @include table-base;
@@ -105,12 +114,14 @@ cdk-virtual-scroll-viewport {
 
 // Table Column Select
 .row-checkbox{
-  display: contents;
+  padding-left: 0;
+  max-width: 42px;
+  min-width: 42px;
   mat-checkbox {
     padding: 15px;
   }
   mat-icon {
-    padding: 15px !important;
+    padding: 11px !important;
   }
 }
 
@@ -120,14 +131,14 @@ cdk-virtual-scroll-viewport {
   min-width: initial;
   padding: 0 !important;
   background-color: inherit;
-} 
+}
 
 .column-icon {
   :host .mat-header-row > .mat-header-cell:hover &{
     opacity: 0;
     transform: translateY(5px);
     transition: all 0.2s;
-  }  
+  }
 }
 
 mat-header-cell:hover {
@@ -151,7 +162,8 @@ mat-header-cell:hover {
   position: sticky;
   cursor: col-resize;
   border-width: 0 0 0 1px;
-  left: 0;
+  left: 0px;
+  background-color: white;
 }
 
 .right-resizer-handler {
@@ -162,7 +174,8 @@ mat-header-cell:hover {
   position: sticky;
   cursor: col-resize;
   border-width: 0 1px 0 0;
-  right: 0;
+  right: 0px;
+  background-color: white;
 }
 
 // .active-resizing {
@@ -178,15 +191,15 @@ mat-header-cell:hover {
 //   background-color: red;
 //   mat-cell:nth-last-child(2){
 //     max-width: initial !important;
-//     background-color: aqua;    
-//   }  
+//     background-color: aqua;
+//   }
 // }
 
 // ::ng-deep .mat-header {
 //   mat-header-cell:nth-last-child(2){
 //     max-width: initial !important;
-//     background-color: aqua;    
-//   }  
+//     background-color: aqua;
+//   }
 // }
 
 .drag-indicator{
@@ -194,7 +207,7 @@ mat-header-cell:hover {
   @include header-icon-base;
   cursor: move;
   :host .mat-header-row > .mat-header-cell:hover &{
-    opacity: 1;    
+    opacity: 1;
     pointer-events: fill;
     transform: translateY(0px);
   }
@@ -278,11 +291,36 @@ mat-header-cell:hover {
 
 ::ng-deep .cell-tooltip {
   padding: 8px;
-  // background-color: rgb(255, 253, 164);
-  // color: black !important;
   font-size: 12px;
-  // border: solid 1px rgb(214, 214, 214);
   min-width: 100px;
-  text-align: center; 
+  text-align: center;
   margin-right: -20px;
+}
+
+
+/* Custom Tooltip */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  min-width: 120px;
+  background-color: #e91e63;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 43px;
+  margin-left: -86%;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  white-space: pre;
 }

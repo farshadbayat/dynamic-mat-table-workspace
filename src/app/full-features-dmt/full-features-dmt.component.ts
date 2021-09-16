@@ -10,11 +10,12 @@ import {
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
   IRowEvent,
-  ITableEvent,  
+  ITableEvent,
   ToolbarItem
 } from 'dynamic-mat-table';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
 import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
+import { BehaviorSubject, Observable, Observer, of } from 'rxjs';
 import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
 import { FormlyCellComponent } from '../formly-cell/formly-cell.component';
@@ -28,16 +29,18 @@ const DATA = getData(2000);
 export class FullFeaturesDmtComponent implements OnInit {
   eventLog = [];
   title = 'dynamic-mat-table';
+  private data: any[] = [];
+  public dataSource$: BehaviorSubject<any[]>;
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
   altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
   setting: TableSetting= {
     alternativeRowStyle: {'background-color': '#d2d2d2'},
     rowStyle: {'border-bottom': 'solid 1px red;'}
-  }; 
-  scrollStrategyType: TableScrollStrategy = 'fixed-size';  
+  };
+  scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
-  pending = false; 
+  pending = false;
   showNoData = true;
   stickyHeader = true;
   showProgress = true;
@@ -48,7 +51,7 @@ export class FullFeaturesDmtComponent implements OnInit {
   contextMenuItems: ContextMenuItem[] = [];
   rowSelectionMode: TableSelectionMode = 'multi';
   selectionModel: SelectionModel<TestElement> = null;
-  dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
+  // dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
   rowHeight = 48;
   expandComponent = DynamicExpandCellComponent;
 
@@ -63,7 +66,7 @@ export class FullFeaturesDmtComponent implements OnInit {
   };
   formulaActionList: ToolbarItem[] = [];
 
-  constructor() {   
+  constructor() {
     this.contextMenuItems.push(
       {
         name: 'Edit',
@@ -81,20 +84,21 @@ export class FullFeaturesDmtComponent implements OnInit {
         disabled: false,
         visible: true,
       }
-    );    
-    //this.fetchData_onClick();    
+    );
+    //this.fetchData_onClick();
   }
   ngOnInit(): void {
+    this.dataSource$ = new BehaviorSubject<any[]>(this.data);
     this.initField();
 
     this.fetchData_onClick();
-    this.formulaActionList = [ 
+    this.formulaActionList = [
       {id: 0, name: 'load-list', tooltip: 'دریافت اطلاعات', matIcon: 'list', matIconColor: '#0980ab'},
       {id: 1, name: 'refresh', tooltip: 'بروز رسانی', matIcon: 'refresh', matIconColor: '#0980ab', splitter: true},
-      {id: 2, name: 'new-record', tooltip: 'ردیف جدید', matIcon: 'add_box', matIconColor: '#478447'},            
+      {id: 2, name: 'new-record', tooltip: 'ردیف جدید', matIcon: 'add_box', matIconColor: '#478447'},
       {id: 3, name: 'delete', tooltip: 'حذف ردیف', matIcon: 'delete_forever', matIconColor: 'red', float: true},
       {id: 4, name: 'clear', tooltip: 'پاک کردن', matIcon: 'clear_all', matIconColor: '#0980ab'},
-      {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},      
+      {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},
     ];
   }
 
@@ -104,17 +108,18 @@ export class FullFeaturesDmtComponent implements OnInit {
          name: 'row',
         // type: 'number',
          width: 300,
-         cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'}
+         cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'},
+         display: 'prevent-hidden'
      },
-     { 
+     {
       name: 'FormlyColumn',
-      header: 'Formly Column',      
+      header: 'Formly Column',
       option: null,
       dynamicCellComponent: FormlyCellComponent,
       draggable: false,
       filterable: false,
       },
-     { 
+     {
        name: 'order',
        header: 'Row Order',
        sticky: 'start',
@@ -127,9 +132,12 @@ export class FullFeaturesDmtComponent implements OnInit {
         }
        },
       { name: 'name', header: 'Element Name', sticky: 'start' },
-      { name: 'weight' },
+      { name: 'weight',
+        sort: 'server-side',
+        clickType: 'label'
+       },
       { name: 'color' },
-      { name: 'brand' },      
+      { name: 'brand' },
       {
         name: 'setting',
         icon: 'chrome_reader_mode',
@@ -148,14 +156,14 @@ export class FullFeaturesDmtComponent implements OnInit {
     ];
   }
 
-  fetchData_onClick() {    
-    const d = DATA.map( item =>{return {...item, option:{ expandCallback: null, style: null}}});
-    d[1].option.style = { 'background-color' : 'red' };
-    this.dataSource.data = d;
+  fetchData_onClick() {
+    this.data = DATA.map( item =>{return {...item, option:{ expandCallback: null, style: null}}});
+    this.data[1].option.style = { 'background-color' : 'red' };
+    this.dataSource$.next(this.data);
   }
 
   table_onChangeSetting(setting) {
-    // console.log(setting);
+    console.log(setting);
   }
 
   tableonRowActionChange(e) {
@@ -184,11 +192,11 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   selectToggle_onClick() {
-    const selection: SelectionModel<TestElement> = new SelectionModel(true);    
-    for(let i=0 ; i< 10 ; i++) {
-      selection.select(this.dataSource.allData[i]);
-    }    
-    this.selectionModel = selection;
+    // const selection: SelectionModel<TestElement> = new SelectionModel(true);
+    // for(let i=0 ; i< 10 ; i++) {
+    //   selection.select(this.dataSource$.value[i]);
+    // }
+    // this.selectionModel = selection;
   }
 
   tableVST_onClick() {
@@ -197,7 +205,7 @@ export class FullFeaturesDmtComponent implements OnInit {
 
   table_onRowSelectionChange(e) {
     // console.log(e);
-  } 
+  }
 
   addNewColumn_onClick() {
     this.fields.push({
@@ -211,11 +219,15 @@ export class FullFeaturesDmtComponent implements OnInit {
   addNewLongColumn_onClick() {
     this.fields.push({
       name: 'longText',
-      header: 'Long Text',
+      header: 'Long Text Header',
+      cellTooltipEnable: true,
+      cellEllipsisRow: 3,
+      headerEllipsisRow: 1,
+      headerTooltipEnable: true
     });
     const cloned = this.fields.map((x) => Object.assign({}, x));
     this.fields = cloned;
-  } 
+  }
 
   paginationMode_onClick() {
     if (this.paginationMode === 'client') {
@@ -235,35 +247,35 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   expandIndex = 0;
-  expandToggle_onClick() {    
+  expandToggle_onClick() {
     this.table.expandRow( this.expandIndex);
     this.expandIndex++;
   }
- 
-  tableEvent_onClick(e: ITableEvent) {    
+
+  tableEvent_onClick(e: ITableEvent) {
     if (e.event === 'ReloadData') {
       this.fetchData_onClick();
     } else if( e.event === 'SortChanged') {
       console.log(e.sender);
-      
+
     }
   }
-  
+
   rowEvent_onClick(e: IRowEvent) {
     // console.log(this.table.dataSource.allData);
     console.log(e);
     // console.log(e.event);
     if (e.event === 'RowSelectionChange') {
-      // console.log('Row Selection Change',e.sender);      
+      // console.log('Row Selection Change',e.sender);
     } else if(e.event === 'RowClick' &&  e.sender.row) {
       // change style
       if(!e.sender.row.option){
         e.sender.row.option = {};
       }
       // if option not defined
-      if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {        
+      if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {
         e.sender.row.option[e.sender.column.name] = {};
-      }      
+      }
     } else if(e.event === 'CellClick' && e.sender.column) {
       if (e.sender.row.option[e.sender.column.name] === undefined) {
         e.sender.row.option[e.sender.column.name] = {};
@@ -287,18 +299,18 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   addNew_onClick() {
-    //console.log(this.dataSource.allData);        
-    this.dataSource.allData.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
+    //console.log(this.dataSource.allData);
+    // this.dataSource$.value.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
     // this.dataSource.refreshFilterPredicate();
     //this.dataSource =  new TableVirtualScrollDataSource(this.dataSource.allData);
     //this.table.refreshTableSetting();
   }
 
   changeCell_onClick() {
-    this.dataSource.allData[0].name = new Date().toString();
+    // this.dataSource$.value[0].name = new Date().toString();
   }
 
-  clearSelection_onClick() {    
+  clearSelection_onClick() {
     this.table.rowSelectionModel.clear();
   }
 
@@ -306,8 +318,8 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.table.refreshUI();
   }
 
-  formula_onActionClick(item: ToolbarItem): void { 
-    
+  formula_onActionClick(item: ToolbarItem): void {
+
   }
 
 }
@@ -323,7 +335,7 @@ export interface TestElement extends TableRow {
 export function getData(n = 1000): TestElement[] {
   return Array.from({ length: n }, (v, i) => ({
     row: i + 1,
-    FormlyColumn: {FormlyColumn: 'allah'},
+    FormlyColumn: 'allah',
     name: `Element #${i + 1}`,
     weight: Math.floor(Math.random() * 100) + ' KG',
     color: ['Red', 'Green', 'Blue', 'Yellow', 'Magenta'][

@@ -29,20 +29,22 @@
   }
 }
 
-@mixin progress {    
+@mixin progress {
   .mat-header-row.progress {
     border: none;
     max-height: 4px;
     min-height: 4px;
     height: 0;
     margin-top: -4px;
-    background-color: transparent;
+    background-color: transparent !important;
+    border-top: transparent !important;
+    background: transparent !important;
     .mat-header-cell {
       border: 0;
       padding: 0;
     }
 
-    mat-progress-bar {      
+    mat-progress-bar {
       transition: height 0.3s, opacity 0.25s linear;
       &:not(.show) {
         height: 0;
@@ -55,18 +57,18 @@
 @mixin  no-records {
   .no-records {
     display: flex;
-    align-items: center;    
+    align-items: center;
     top: 50%;
     left: 50%;
     margin: -42px 0 0 -25px;
     line-height: 42px;
     position: absolute;
     z-index: 1;
-    pointer-events: none;   
+    pointer-events: none;
     button {
       pointer-events: initial;
     }
-  } 
+  }
 }
 
 @mixin dmf-class {
@@ -79,7 +81,7 @@
      max-width: 100%;
     .mat-form-field-wrapper {
         padding-bottom: 0 !important;
-    }  
+    }
     ::ng-deep .mat-form-field-underline {
         bottom: 0 !important;
     }
@@ -92,13 +94,13 @@
       float: left;
     }
   }
-  
+
   .button-menu {
     width: 100%;
     line-height: 48px;
     &::ng-deep .mat-button-wrapper {
       display: flex;
-  
+
       span {
         display: inline-block;
         width: 100%;
@@ -111,22 +113,22 @@
       }
     }
   }
-  
+
   mat-button-wrapper .button-menu {
     display: inline-block !important;
   }
-  
+
   .text-align-left {
     text-align: left !important;
   }
-  
+
   .text-align-right {
     text-align: right !important;
   }
-  
+
   .mat-menu-panel {
     min-height: unset !important;
-  }  
+  }
 }
 
 @media print {

@@ -11,8 +11,9 @@ export class PersianLanguage implements LanguagePack {
   }
 
   menuLabels: MenuLabels = {
-    fullScreen: 'تمام صفحه',    
-    saveData: 'ذخیره داده ها ',
+    fullScreen: 'تمام صفحه',
+    saveData: 'ذخیره تنظیمات ',
+    newSetting: 'تنظیمات جدید',
     columnSetting: 'تنظیمات ستون ها ',
     saveTableSetting: 'ذخیره  تنظیمات جدول',
     clearFilter: 'فیلتر را پاک کنید',
@@ -55,7 +56,7 @@ export class PersianLanguage implements LanguagePack {
           : startIndex + pageSize;
       return `${startIndex + 1} - ${endIndex} از ${length}`;
     },
-  }; 
+  };
 
   tableLabels: TableLabels = {
     NoData: 'هیچ رکوردی پیدا نشد',

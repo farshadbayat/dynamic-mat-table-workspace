@@ -52,9 +52,10 @@ export interface FilterLabels {
 
 export interface MenuLabels {
   saveData: string;
+  newSetting: string;
   columnSetting: string;
   saveTableSetting: string;
-  fullScreen: string;  
+  fullScreen: string;
   clearFilter: string;
   jsonFile: string;
   csvFile: string;

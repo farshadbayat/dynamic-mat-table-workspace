@@ -4,8 +4,8 @@ export declare type AtRenderFunc<R extends TableRow> = (row: R) => string;
 export declare type AtClassFunc = (row: any, col: any) => string;
 export declare type AtSortFunc<R extends TableRow> = (data: R[], col: any) => string;
 export declare type AtFilterFunc<R extends TableRow> = (data: R[], col: any) => string;
-export declare type ToPrint = (data: any) => any;
-export declare type ToExport = (data: any, type: any) => any;
+export declare type ToPrint = (row: any) => any;
+export declare type ToExport = (row: any, type: any) => any;
 export declare type FieldType = 'text' | 'number' | 'date' | 'category';
 export declare type FieldDisplay = 'visible' | 'hiden' | 'prevent-hidden';
 export declare type FieldSticky = 'start' | 'end' | 'none';
@@ -17,7 +17,7 @@ export interface TableField<R extends TableRow> extends AbstractField {
     classNames?: string;
     rowClass?: string | AtClassFunc;
     customSortFunction?: AtSortFunc<R>;
-    customFilterFunction?: AtSortFunc<R>;    
+    customFilterFunction?: AtSortFunc<R>;
     toPrint?: ToPrint;
     toExport?: ToExport;
 }
@@ -37,19 +37,26 @@ export interface AbstractField {
   cellClass?: string;
   cellStyle?: any;
   icon?: string;
-  iconColor?: string;  
+  iconColor?: string;
   dynamicCellComponent?: any;
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
-  clickable?: boolean;  
+  clickable?: boolean;
+  clickType?: 'cell' | 'label' | 'custom';
   printable?: boolean;
   exportable?: boolean;
   enableContextMenu?: boolean;
   rowSelectionable?: boolean;
+  /* For Ellipsis Text */
+  cellEllipsisRow?: number;
+  cellTooltipEnable?: boolean;
+  headerEllipsisRow?: number;
+  headerTooltipEnable?: boolean;
   option?: any; // for store share data show in cell of column
   categoryData?: any[];
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
+
 }
 

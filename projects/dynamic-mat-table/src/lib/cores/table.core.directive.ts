@@ -17,16 +17,17 @@ import { Directive } from '@angular/core';
 import { clone, getObjectProp, isNullorUndefined } from './type';
 import { TableScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
 import { ContextMenuItem } from '../models/context-menu.model';
+import { BehaviorSubject, Observable } from 'rxjs';
+
 @Directive({
   // tslint:disable-next-line:directive-selector
   selector: '[core]'
 })
 export class TableCoreDirective<T extends TableRow> {
   @ViewChild(MatSort, { static: true }) sort: MatSort;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator; 
-
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @Input() public dataSource: BehaviorSubject<any[]>;
   @Input() backgroundColor: string = null;
-
   @Input()
   @HostBinding('style.direction')
   get direction(): Direction {
@@ -37,12 +38,11 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input() contextMenuItems: ContextMenuItem[] = [];
-
   @Input()
   get ScrollStrategyType() {
     return this.tableSetting.scrollStrategy;
   }
-  set ScrollStrategyType(value: TableScrollStrategy) {        
+  set ScrollStrategyType(value: TableScrollStrategy) {
     this.viewport['_scrollStrategy'].scrollStrategyMode = value;
     this.tableSetting.scrollStrategy = value;
   }
@@ -54,7 +54,7 @@ export class TableCoreDirective<T extends TableRow> {
   set pagingMode(value: TablePaginationMode) {
     this.tablePagingMode = value;
     this.updatePagination();
-  } 
+  }
 
   @Input()
   get pagination() {
@@ -71,13 +71,13 @@ export class TableCoreDirective<T extends TableRow> {
       }
       this.updatePagination();
     }
-  } 
+  }
 
   @Input()
   get rowSelectionModel() {
     return this._rowSelectionModel;
   }
-  set rowSelectionModel(value: SelectionModel<T>) { 
+  set rowSelectionModel(value: SelectionModel<T>) {
     if (!isNullorUndefined(value)) {
       if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
         this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
@@ -90,17 +90,17 @@ export class TableCoreDirective<T extends TableRow> {
   get rowSelectionMode() {
     return this._rowSelectionMode;
   }
-  set rowSelectionMode(selection: TableSelectionMode) {    
+  set rowSelectionMode(selection: TableSelectionMode) {
     selection = selection || 'none';
-    this._rowSelectionModel = selection === 'none' ? null : new SelectionModel<T>(selection === 'multi', []);    
+    this._rowSelectionModel = selection === 'none' ? null : new SelectionModel<T>(selection === 'multi', []);
     if(selection === 'none' && this._rowSelectionMode !== 'none' && this.displayedColumns[0] === 'row-checkbox') {
-      this.displayedColumns.shift();            
+      this.displayedColumns.shift();
       this.saveSetting(this.tableSetting,false);
     } else if(selection !== 'none' && this._rowSelectionMode === 'none') {
-      this.displayedColumns.unshift('row-checkbox');            
+      this.displayedColumns.unshift('row-checkbox');
       this.saveSetting(this.tableSetting,false);
     }
-    this._rowSelectionMode = selection;    
+    this._rowSelectionMode = selection;
   }
 
   @Input()
@@ -120,47 +120,45 @@ export class TableCoreDirective<T extends TableRow> {
     if (value === true) {
       this.progressColumn.push('progress');
     }
-  } 
-
-  private totalRecord = 0;
-
-  @Input() 
-  get dataSource() {    
-    if(isNullorUndefined(this.tvsDataSource)) {      
-      return null;
-    }    
-    if (this.totalRecord !== this.tvsDataSource.allData.length) {      
-      this.initSystemField(this.tvsDataSource.allData);
-    }
-    return this.tvsDataSource;
-  } 
-  set dataSource(value: TableVirtualScrollDataSource<T>) {           
-    this.clear();    
-    if (!isNullorUndefined(value)) {      
-      this.initSystemField(value.data);
-      this.tvsDataSource = value;
-      this.tvsDataSource.sort = this.sort;
-      (this.tvsDataSource as any)._paginator = value;      
-    } 
   }
 
-  private initSystemField(data: T[]) {
-    
+  // private totalRecord = 0;
+
+  // @Input()
+  // get dataSource() {
+  //   if(isNullorUndefined(this.tvsDataSource)) {
+  //     return null;
+  //   }
+  //   if (this.totalRecord !== this.tvsDataSource.allData.length) {
+  //     this.initSystemField(this.tvsDataSource.allData);
+  //   }
+  //   return this.tvsDataSource;
+  // }
+  // set dataSource(value: TableVirtualScrollDataSource<T>) {
+  //   this.clear();
+  //   if (!isNullorUndefined(value)) {
+  //     this.initSystemField(value.data);
+  //     this.tvsDataSource = value;
+  //     this.tvsDataSource.sort = this.sort;
+  //     (this.tvsDataSource as any)._paginator = value;
+  //   }
+  // }
+
+  protected initSystemField(data: any[]) {
     data = data.map( (item, index) => {
       item.id = index ;
-      item.option = item.option || {};      
+      item.option = item.option || {};
       return item;
     });
-    this.totalRecord = this.tvsDataSource.allData.length;
   }
 
   public expandColumn = [];
   private _expandComponent: any;
   @Input()
-  get expandComponent(): any {    
+  get expandComponent(): any {
     return this._expandComponent;
   }
-  set expandComponent(value: any) {    
+  set expandComponent(value: any) {
     this._expandComponent = value;
     if (this._expandComponent !== null && this._expandComponent !== undefined) {
       this.expandColumn = ['expandedDetail'];
@@ -170,19 +168,8 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input() public rowContextMenuItems: ContextMenuItem[];
-
-  // @Input()
-  // get menu() {
-  //   return this.menus;
-  // }
-  // set menu(menus: TableMenu[]) {
-  //   this.menus = menus;
-  // }
-
   @Input() defaultWidth: number = null;
-
   @Input() minWidth = 120;
-
   @Input()
   get columns() {
     return this.tableColumns;
@@ -192,14 +179,14 @@ export class TableCoreDirective<T extends TableRow> {
       // key name error //
       if (f.name.toLowerCase() === 'id') {
         throw 'Field name is reserved.["id"]';
-      }      
+      }
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
       // default value for fields
       f.printable = f.printable || true;
       f.exportable = f.exportable || true;
-      f.toExport = f.toExport || ((value, type) => typeof value === 'object' ? null : value || '');
-      f.toPrint = (value) =>  typeof value === 'object' ? null : value || '';
+      f.toExport = f.toExport || ((row, type) => typeof row === 'object' ? row[f.name] : '');
+      f.toPrint = (row) =>  typeof row === 'object' ? row[f.name] : '';
       f.enableContextMenu = f.enableContextMenu || true;
       f.header = f.header || titleCase(f.name);
       f.display = getObjectProp('display', 'visible' , settingField, f );
@@ -208,8 +195,8 @@ export class TableCoreDirective<T extends TableRow> {
       f.sticky = getObjectProp('sticky', 'none' , settingField, f );
       f.width =  getObjectProp('width', this.defaultWidth , settingField, f );
     });
-    this.tableColumns = fields;   
-    this.updateColumn();     
+    this.tableColumns = fields;
+    this.updateColumn();
   }
 
   public updateColumn() {
@@ -221,7 +208,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /*************************************** I/O parameters *********************************/
-  @Input() printConfig: PrintConfig = {};  
+  @Input() printConfig: PrintConfig = {};
   @Input() sticky: boolean;
   @Input() pending: boolean;
   @Input() rowHeight = 48;
@@ -230,21 +217,21 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() headerEnable = true;
   @Input() footerEnable = false;
   @Input() showNoData: boolean;
-  @Input() showReload: boolean;  
+  @Input() showReload: boolean;
   // tslint:disable-next-line: no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
   @Output() settingChange: EventEmitter<any> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> = new EventEmitter();
-  
+  public noData: boolean = true;
 
   //**this event is deperact and move to onRowEvent */
-  @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
-  
+  // @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
+
   /*************************************** Expand Row *********************************/
   expandedElement: TableRow | null;
 
-  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {    
+  constructor(public tableService: TableService, public cdr: ChangeDetectorRef) {
     this.showProgress = true;
     this.tableSetting = {
       direction: 'ltr',
@@ -269,17 +256,17 @@ export class TableCoreDirective<T extends TableRow> {
 
   /**************************************** Refrence Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table !: MatTable<any>;
-  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;    
+  @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;
   /**************************************** Methods **********************************************/
 
   refreshTableSetting() {
     // this.tableSetting = clone(this.tableSetting);
   }
 
-  updatePagination() {    
+  updatePagination() {
     if (isNullorUndefined(this.tvsDataSource)){
       return;
-    }      
+    }
     if (this.tablePagingMode === 'client-side' || this.tablePagingMode === 'server-side') {
       this.viewportClass = 'viewport-with-pagination';
       if ( !isNullorUndefined(this.tvsDataSource.paginator)) {
@@ -288,13 +275,13 @@ export class TableCoreDirective<T extends TableRow> {
           dataLen = this._tablePagination.length;
         }
         this.tvsDataSource.paginator.length = dataLen;
-      } 
+      }
     } else {
       this.viewportClass = 'viewport';
       if ((this.tvsDataSource as any)._paginator !== undefined) {
         delete (this.tvsDataSource as any)._paginator;
       }
-    } 
+    }
     this.tvsDataSource.refreshFilterPredicate();
   }
 
@@ -310,26 +297,26 @@ export class TableCoreDirective<T extends TableRow> {
       this._rowSelectionModel.clear();
     }
     this.cdr.detectChanges()
-  }  
- 
-  setDisplayedColumns() {    
+  }
+
+  setDisplayedColumns() {
     if (this.columns) {
       this.displayedColumns = [];
       this.columns.forEach((colunm, index) => {
         colunm.index = index;
         if (colunm.display === undefined || colunm.display === 'visible' || colunm.display === 'prevent-hidden') {
           this.displayedColumns.push(colunm.name);
-        }        
-      }); 
+        }
+      });
       //bugfixed because of double header show
       // if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
       //   this.displayedColumns.unshift('row-checkbox');
-      // } 
+      // }
       setTimeout( () => {
         if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
           this.displayedColumns.unshift('row-checkbox');
         }
-      }, 0); 
+      }, 0);
 
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
@@ -338,18 +325,18 @@ export class TableCoreDirective<T extends TableRow> {
     // this.updatePagination();
   }
 
-  /************************************ Drag & Drop Column *******************************************/ 
+  /************************************ Drag & Drop Column *******************************************/
   public refreshGrid() {
     this.cdr.detectChanges()
     this.table.renderRows();
   }
 
   public moveRow(from: number, to: number) {
-    if (from >= 0 && from < this.dataSource.allData.length  && to >= 0 && to < this.dataSource.allData.length ) {      
-        this.dataSource.allData[from].id = to;
-        this.dataSource.allData[to].id = from;        
-        moveItemInArray(this.dataSource.allData, from, to);
-        this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
+    if (from >= 0 && from < this.tvsDataSource.data.length  && to >= 0 && to < this.tvsDataSource.data.length ) {
+      this.tvsDataSource.data[from].id = to;
+      this.tvsDataSource.data[to].id = from;
+      moveItemInArray(this.tvsDataSource.data, from, to);
+      this.tvsDataSource.data = Object.assign([], this.tvsDataSource.data);
     }
   }
 
@@ -361,7 +348,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   refreshColumn(columns: TableField<T>[]) {
-    if (this.viewport) {      
+    if (this.viewport) {
       const currentOffset = this.viewport.measureScrollOffset();
       this.columns = columns;
       this.setDisplayedColumns();
@@ -369,7 +356,8 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {    
+  saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {
+    debugger
     if (tableSetting !== null) {
       this.tableSetting = tableSetting;
       this.refreshColumn(tableSetting.columnSetting);
@@ -384,7 +372,7 @@ export class TableCoreDirective<T extends TableRow> {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this._rowSelectionModel.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.tvsDataSource.data.length;
     return numSelected === numRows;
   }
 
@@ -392,12 +380,12 @@ export class TableCoreDirective<T extends TableRow> {
   masterToggle() {
     this.isAllSelected() ?
       this._rowSelectionModel.clear() :
-      this.dataSource.data.forEach(row => this._rowSelectionModel.select(row));    
+      this.tvsDataSource.data.forEach(row => this._rowSelectionModel.select(row));
     this.onRowEvent.emit({ event: 'MasterSelectionChange', sender:  this._rowSelectionModel});
   }
 
   onRowSelectionChange(e: any, row: T) {
-    if (e) {      
+    if (e) {
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({ event: 'RowSelectionChange', sender:  this._rowSelectionModel});
     }
@@ -409,7 +397,7 @@ export class TableCoreDirective<T extends TableRow> {
   //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
   //   }
   //   return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  // } 
+  // }
 
 }
 

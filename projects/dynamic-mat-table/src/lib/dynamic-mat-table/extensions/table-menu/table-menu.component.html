@@ -8,9 +8,9 @@
 </button>
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
-  <button   
+  <button
     mat-menu-item
-    (click)="screenMode_OnClick()"
+    (click)="screenMode_onClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>fullscreen</mat-icon>
     <span>{{ languagePack.menuLabels.fullScreen }}</span>
@@ -31,32 +31,55 @@
     <mat-icon>view_column</mat-icon>
     <span>{{ languagePack.menuLabels.columnSetting }}</span>
   </button>
+  <!-- (click)="saveSetting_onClick()" -->
   <button
     mat-menu-item
-    (click)="saveSetting_OnClick()"
+    [matMenuTriggerFor]="saveTableSetting"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>grading</mat-icon>
     <span>{{ languagePack.menuLabels.saveTableSetting }}</span>
   </button>
   <button
     mat-menu-item
-    (click)="clearFilter_OnClick()"
+    (click)="clearFilter_onClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>clear</mat-icon>
     <span>{{ languagePack.menuLabels.clearFilter }}</span>
   </button>
 </mat-menu>
 
+<!-- Save Table Config Menu -->
+
+<mat-menu #saveTableSetting="matMenu">
+  <button mat-menu-item (click)="newSetting_onClick($event)" *ngIf="showNewSetting === false" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon>tune</mat-icon>
+    <span>{{ languagePack.menuLabels.newSetting }}</span>
+  </button>
+  <section *ngIf="showNewSetting === true" class="new-setting" mat-menu-item  (click)="$event.stopPropagation()">
+    <input matInput type="text" [placeholder]="languagePack.menuLabels.newSetting" [(ngModel)]="newSettingName">
+    <button  matSuffix mat-icon-button (click)="cancle_onClick()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button  matSuffix mat-icon-button (click)="cancle_onClick()">
+      <mat-icon>done</mat-icon>
+    </button>
+  </section>
+  <button mat-menu-item *ngFor="let setting of tableSetting?.settingList" (click)="loadSetting_onClick(setting)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon>edit_note</mat-icon>
+    <span>{{setting}}</span>
+  </button>
+</mat-menu>
+
 <!-- Convert Sub Menu -->
 
 <mat-menu #convertMenu="matMenu">
-  <button mat-menu-item (click)="download_OnClick('JSON')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="download_onClick('JSON')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.jsonFile }}</span>
   </button>
-  <button mat-menu-item (click)="download_OnClick('CSV')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="download_onClick('CSV')" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.csvFile }}</span>
   </button>
-  <button mat-menu-item (click)="print_OnClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+  <button mat-menu-item (click)="print_onClick(menuTrigger)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.printTable }}</span>
   </button>
 </mat-menu>
@@ -78,15 +101,15 @@
         class="dragable-row"
         cdkDrag
         [cdkDragData]="{ columnIndex: i, columnTitle: column.header }"
-        (cdkDragDropped)="columnMenuDropped($event)">        
+        (cdkDragDropped)="columnMenuDropped($event)">
         <mat-icon cdkDragHandle>drag_indicator</mat-icon>
         <mat-checkbox
           [disabled]="column?.display === 'prevent-hidden'"
-          [checked]="column?.display === 'visible'"
+          [checked]="column?.display === 'visible' || column?.display === 'prevent-hidden'"
           (click)="$event.stopPropagation()"
           (change)="toggleSelectedColumn(column.index)">
           {{ column.header }}
-        </mat-checkbox> 
+        </mat-checkbox>
         <mat-icon class="column-setting-button" (click)="setting_onClick(i)" #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
         <!-- <button
           mat-icon-button
@@ -109,14 +132,14 @@
         mat-menu-item
         color="primary"
         class="done-setting"
-        (click)="apply_OnClick($event)">
+        (click)="apply_onClick($event)">
         <mat-icon color="primary">done</mat-icon>
       </button>
       <button
         mat-menu-item
         color="primary"
         class="done-setting"
-        (click)="cancel_OnClick()">
+        (click)="cancel_onClick()">
         <mat-icon color="primary">clear</mat-icon>
       </button>
     </div>
@@ -159,7 +182,7 @@
       </mat-radio-group>
     </ng-container>
 
-    <ng-container 
+    <ng-container
       *ngIf="isVisible(currentTableSetting?.visibaleActionMenu?.columnSettingFilter)">
       <div class="column-setting-header">
         <mat-icon color="primary">print</mat-icon>{{ languagePack.menuLabels.printMode }}

@@ -168,5 +168,8 @@
       }
     }
   },
-  "defaultProject": "dynamic-mat-table-demo"
+  "defaultProject": "dynamic-mat-table-demo",
+  "cli": {
+    "analytics": "9a44fd71-e4fe-44a7-9d1d-17f5c208cce2"
+  }
 }

@@ -10,7 +10,7 @@
   }
 }
 
-.main-menu {  
+.main-menu {
   width: 38px !important;
   line-height: 24px !important;
 }
@@ -31,11 +31,11 @@
   background-color: green !important;
 }
 
-.dragable-row {  
+.dragable-row {
   mat-checkbox {
     width: 100%;
-    line-height: 28px;  
-    display: inline-flex;  
+    line-height: 28px;
+    display: inline-flex;
   }
 }
 
@@ -54,6 +54,18 @@
   cursor: pointer !important;
   font-size: 24px;
   margin-right: 5px;
+}
+
+.new-setting {
+  line-height: 42px;
+  max-height: 36px;
+  border: solid 1px #cccccc;
+  border-radius: 5px;
+  background-color: #efefef;
+  text-align: center;
+  min-width: calc( 100% + 17px ) !important;
+  margin-left: -11px;
+  margin-top: 5px;
 }
 
 // .va-mat-table-dragable-container .dragable-row .column-setting-button {
@@ -125,7 +137,7 @@
 .done-setting {
   width: 50% !important;
   display: inline-flex;
-  text-align: center;  
+  text-align: center;
   height: 42px;
   mat-icon{
     line-height: 38px !important;

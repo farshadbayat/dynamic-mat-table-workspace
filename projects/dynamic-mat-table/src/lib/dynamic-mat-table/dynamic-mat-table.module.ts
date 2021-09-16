@@ -1,6 +1,6 @@
 import { Compiler, CompilerFactory, COMPILER_OPTIONS, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTableModule } from '@angular/material/table';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
@@ -27,6 +27,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ToolbarComponent } from './extensions/toolbar/toolbar.component';
 import { MatRippleModule } from '@angular/material/core';
+import { TooltipComponent } from '../tooltip/tooltip.component';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { TooltipDirective } from '../tooltip/tooltip.directive';
+import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
+import { FormsModule } from '@angular/forms';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -46,6 +51,7 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     MatTableModule,
     ScrollingModule,
     TableVirtualScrollModule,
@@ -64,6 +70,7 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     MatDividerModule,
     MatTooltipModule,
     MatRippleModule,
+    OverlayModule,
     ExtentionsModule,
     // NoopAnimationsModule
   ],
@@ -85,8 +92,11 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     PrintTableDialogComponent,
     ToolbarComponent,
     TableCoreDirective,
-    DynamicCellDirective
+    DynamicCellDirective,
+    TooltipComponent,
+    TooltipDirective,
+    TemplateOrStringDirective
   ],
-  entryComponents: [PrintTableDialogComponent],
+  entryComponents: [PrintTableDialogComponent, TooltipComponent],
 })
 export class DynamicMatTableModule {}
