@@ -57,15 +57,97 @@
 }
 
 .new-setting {
-  line-height: 42px;
-  max-height: 36px;
-  border: solid 1px #cccccc;
-  border-radius: 5px;
-  background-color: #efefef;
   text-align: center;
-  min-width: calc( 100% + 17px ) !important;
-  margin-left: -11px;
+  margin-left: 0px;
+  margin-top: 0px;
+  align-items: center;
+  user-select: none;
+  outline: none;
+  border: none;
+  line-height: 48px;
+  height: 48px;
+  // position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  width:100%;
+  .input-container{
+    width:64%
+  }
+  input {
+    line-height: 33px;
+    background-color: white;
+    border: none;
+    padding-right: 77px;
+    padding-left: 5px;
+    border-radius: 4px;
+    outline: none;
+    text-align: center;
+    direction: ltr;
+  }
+}
+
+.setting-item {
+  line-height: 48px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    color: #0000008a;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 50%;
+    &:hover {
+      background-color: #dbdbdb;
+    }
+  }
+  span {
+    cursor: pointer;
+    width: 154px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: list-item;
+  }
+}
+
+.setting-item-active {
+  background-color: #e4e2de;
+}
+
+::ng-deep .mat-menu-panel {
+  min-height: auto !important;
+}
+
+.save-table-setting {
+  display: flex;
+  min-width: 70px;
+  // margin-left: -60px;
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+  }
+}
+
+.delete-table-setting {
+  position: absolute;
+  cursor: pointer;
+  line-height: 38px !important;
+  height: 38px;
+  width: 38px;
+  border-radius: 100%;
+  text-align: center;
+  pointer-events: none;
   margin-top: 5px;
+  &:hover {
+    color: white;
+    background-color: #afafaf;
+  }
 }
 
 // .va-mat-table-dragable-container .dragable-row .column-setting-button {

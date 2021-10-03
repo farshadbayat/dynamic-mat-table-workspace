@@ -36,7 +36,8 @@ export class FullFeaturesDmtComponent implements OnInit {
   fields: TableField<any>[] = []; /* REQUIRED */
   setting: TableSetting= {
     alternativeRowStyle: {'background-color': '#d2d2d2'},
-    rowStyle: {'border-bottom': 'solid 1px red;'}
+    rowStyle: {'border-bottom': 'solid 1px red;'},
+    saveSettingMode: 'multi'
   };
   scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
@@ -164,6 +165,10 @@ export class FullFeaturesDmtComponent implements OnInit {
 
   table_onChangeSetting(setting) {
     console.log(setting);
+    localStorage.setItem('tableConfig',JSON.stringify(setting));
+    // if(setting && setting?.settingName !== '') {
+    //   this.setting.settingList.push(setting?.settingName);
+    // }
   }
 
   tableonRowActionChange(e) {
@@ -253,6 +258,7 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   tableEvent_onClick(e: ITableEvent) {
+    console.log(e);
     if (e.event === 'ReloadData') {
       this.fetchData_onClick();
     } else if( e.event === 'SortChanged') {
@@ -321,7 +327,11 @@ export class FullFeaturesDmtComponent implements OnInit {
   formula_onActionClick(item: ToolbarItem): void {
 
   }
-
+  loadSetting_onClick() {
+    if(localStorage.getItem('tableConfig')) {
+      this.setting = JSON.parse(localStorage.getItem('tableConfig'));
+    }
+  }
 }
 
 export interface TestElement extends TableRow {

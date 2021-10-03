@@ -39,11 +39,12 @@ export function createCompiler(compilerFactory: CompilerFactory): Compiler {
 
 export function paginatorLabels(tableIntl: TableIntl) {
   const paginatorIntl = new MatPaginatorIntl();
-  // paginatorIntl.itemsPerPageLabel = 'آیتم در هر صفحه:';
-  // paginatorIntl.nextPageLabel = 'صفحه بعد';
-  // paginatorIntl.previousPageLabel = 'صفحه قبل';
-  paginatorIntl.getRangeLabel = paginatorIntl.getRangeLabel;
-
+  paginatorIntl.firstPageLabel = tableIntl?.paginatorLabels?.firstPageLabel;
+  paginatorIntl.getRangeLabel = tableIntl?.paginatorLabels?.getRangeLabel;
+  paginatorIntl.itemsPerPageLabel = tableIntl?.paginatorLabels?.itemsPerPageLabel;
+  paginatorIntl.lastPageLabel = tableIntl?.paginatorLabels?.lastPageLabel;
+  paginatorIntl.nextPageLabel = tableIntl?.paginatorLabels?.nextPageLabel;
+  paginatorIntl.previousPageLabel = tableIntl?.paginatorLabels?.previousPageLabel;
   return paginatorIntl || null;
 }
 

@@ -1,25 +1,24 @@
   <h2>Demo Dynamic Mat Table</h2>
-  <app-time-picker></app-time-picker>
+  <!-- <app-time-picker></app-time-picker> -->
   <!-- minimal use -->
   <!-- <dynamic-mat-table tableName="demo_table" [columns]="fields" [dataSource]="dataSource"></dynamic-mat-table> -->
 
-  <app-full-features-dmt #demo0></app-full-features-dmt> 
+  <app-full-features-dmt #demo0></app-full-features-dmt>
   <!-- [alternativeRowStyle]="altRowStyle" -->
-  <mat-tab-group (selectedTabChange)="onTabChanged($event)">    
-    <mat-tab label="Demo 1"> 
+  <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+    <mat-tab label="Demo 1">
       <ng-template matTabContent>
         <app-full-features-dmt #demo1></app-full-features-dmt>
-      </ng-template>      
+      </ng-template>
     </mat-tab>
-    <mat-tab label="Demo 2">       
+    <mat-tab label="Demo 2">
       <ng-template matTabContent>
         <app-full-features-dmt #demo2></app-full-features-dmt>
       </ng-template>
     </mat-tab>
-    <mat-tab label="Demo 3"> 
+    <mat-tab label="Demo 3">
       <ng-template matTabContent>
         <app-full-features-dmt #demo3></app-full-features-dmt>
-      </ng-template>      
+      </ng-template>
     </mat-tab>
   </mat-tab-group>
-  

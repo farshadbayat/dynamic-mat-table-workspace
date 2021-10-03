@@ -33,17 +33,18 @@ import 'flatpickr/dist/flatpickr.css';
 
 export function languageIntl() {
   // return new TableIntl(); /* For EN */
+  console.log(new PersianLanguage());
   return new PersianLanguage(); /* For FA */
 }
 
 @NgModule({
-  declarations: [						
+  declarations: [
     AppComponent,
     DynamicCellComponent,
     OrderTableComponent,
     DynamicExpandCellComponent,
       TabComponentComponent,
-      FullFeaturesDmtComponent,      
+      FullFeaturesDmtComponent,
       FormlyCellComponent,
       TimePickerComponent
    ],

@@ -1,6 +1,6 @@
-# dynamic-mat-table
+# Dynamic Table for Angular
 
-Dynamic tables built with angular material.
+![example](https://github.com/Mawi137/ngx-image-cropper/raw/master/cropper-example.png)
 
 ## Online Demo
 Latest Version:
@@ -207,8 +207,7 @@ export class PersionLanguage implements LanguagePack {
     previousPageLabel: 'صفحه قبلی:',
     firstPageLabel: 'اولین صفحه:',
     lastPageLabel: 'آخرین صفحه:',
-    getRangeLabel : (page: number, pageSize: number, length: number) => {
-      // console.log(page, pageSize, length);
+    getRangeLabel : (page: number, pageSize: number, length: number) => {      
       if (length === 0 || pageSize === 0) { return `0 از ${length}`; }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;

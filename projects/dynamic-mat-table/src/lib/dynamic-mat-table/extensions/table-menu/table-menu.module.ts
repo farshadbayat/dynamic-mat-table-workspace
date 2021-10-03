@@ -8,6 +8,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { TableMenuComponent } from './table-menu.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDividerModule } from '@angular/material/divider';
 
 const components = [TableMenuComponent];
 
@@ -23,6 +24,7 @@ const components = [TableMenuComponent];
     DragDropModule,
     MatMenuModule,
     MatRadioModule,
+    MatDividerModule
   ],
 })
 export class TableMenuModule {}

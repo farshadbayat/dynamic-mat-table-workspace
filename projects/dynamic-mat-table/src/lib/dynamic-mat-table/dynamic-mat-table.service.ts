@@ -44,9 +44,9 @@ export class TableService {
   // }
 
   private downloadBlob(blob: Blob | any, filename: string) {
-    if (navigator.msSaveBlob) {
+    if ((navigator as any).msSaveBlob) {
       // IE 10+
-      navigator.msSaveBlob(blob, filename);
+      (navigator as any).msSaveBlob(blob, filename);
     } else {
       const link = document.createElement("a");
       if (link.download !== undefined) {
@@ -60,14 +60,13 @@ export class TableService {
         document.body.removeChild(link);
       }
     }
-  }  
+  }
 
   public exportToCsv<T>( columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "") {
-    debugger
     filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
     if (!rows || !rows.length) {
       return;
-    }    
+    }
     const fields = columns.filter((c) => c.exportable !== false && c.display !== 'hiden');
     const separator = ",";
     const CR_LF = "\n"; //'\u0D0A';
@@ -76,7 +75,7 @@ export class TableService {
     const csvContent = headers.join(separator) + CR_LF +
       rows
         .map((row) => {
-          return fields.map((f) => {              
+          return fields.map((f) => {
               let cell = f.toExport(row, "csv") || "";
               cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
               if (cell.search(/("|,|\n)/g) >= 0) {
@@ -85,10 +84,10 @@ export class TableService {
               return cell;
             }).join(separator);
         }).join(CR_LF);
-    
+
     const blob = new Blob([
       new Uint8Array([0xEF, 0xBB, 0xBF]), /* UTF-8 BOM */
-      csvContent], {type : 'text/csv;charset=utf-8'});    
+      csvContent], {type : 'text/csv;charset=utf-8'});
     this.downloadBlob(blob, filename);
   }
 
@@ -124,11 +123,7 @@ export class TableService {
     }
   }
 
-  public saveColumnInfo(
-    columnInfo: TableField<any>[],
-    saveName: string = this.tableName
-  ): void {
-    // console.log(saveName);
+  public saveColumnInfo( columnInfo: TableField<any>[], saveName: string = this.tableName): void {
     if (saveName) {
       if (!localStorage) {
         return;

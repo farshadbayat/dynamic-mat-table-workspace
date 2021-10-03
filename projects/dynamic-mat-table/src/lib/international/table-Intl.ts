@@ -11,6 +11,7 @@ export class TableIntl implements LanguagePack {
   menuLabels: MenuLabels = {
     saveData: 'Save Data',
     newSetting: 'New Setting',
+    noSetting: 'No Setting',
     fullScreen: 'Full Screen',
 
     columnSetting: 'Column Setting',

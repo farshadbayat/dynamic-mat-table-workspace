@@ -15,7 +15,10 @@ export interface TableSetting {
   rowStyle?: any;
   enableContextMenu?: boolean;
   autoHeight?: boolean;
-  settingList?: string[];
+  saveSettingMode?: 'simple' | 'multi' | 'none';
+  settingName?: string;
+  settingList?: TableSetting[];
+  currentSetting?: string;
 }
 
 export interface VisibleActionMenu {

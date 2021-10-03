@@ -12,7 +12,7 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   @Input() component: any;
   @Input() column: TableField<any>;
   @Input() row: any;
-  @Input() onRowEvent: EventEmitter<IRowEvent>;  
+  @Input() onRowEvent: EventEmitter<IRowEvent>;
   componentRef: ComponentRef<IDynamicCell> = null;
 
   constructor(
@@ -20,16 +20,16 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
     private cfr: ComponentFactoryResolver,
     private vc: ViewContainerRef,
     private parent: DynamicMatTableComponent<any>
-    ) {}    
+    ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.componentRef === null || this.componentRef === undefined) {
       this.initComponent();
-    }    
+    }
     // pass input parameters
     if (changes.column && changes.column.currentValue) {
       this.componentRef.instance.column = this.column;
-    }    
+    }
     if (changes.row && changes.row.currentValue) {
       (this.componentRef.instance as any).row = this.row;
     }
@@ -49,25 +49,25 @@ export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy  {
   initComponent() {
     try{
       const componentFactory = this.cfr.resolveComponentFactory<IDynamicCell>(this.component);
-      this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);      
+      this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);
       this.updateInput();
     } catch (e) {
-      // console.log(e);
-    } 
+      console.log(e);
+    }
   }
 
   updateInput() {
     if (this.parent) {
       (this.componentRef.instance as IDynamicCell).parent = this.parent;
-    }    
+    }
     if (this.column) {
       this.componentRef.instance.column = this.column;
-    }   
+    }
     if (this.row) {
       (this.componentRef.instance as IDynamicCell).row = this.row;
     }
     if (this.onRowEvent) {
       (this.componentRef.instance as IDynamicCell).onRowEvent = this.onRowEvent;
-    }    
+    }
   }
 }

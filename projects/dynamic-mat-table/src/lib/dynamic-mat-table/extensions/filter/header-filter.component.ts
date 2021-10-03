@@ -52,12 +52,12 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostBinding('class.has-value')
   get hasValue(): boolean {
-    return this.filters && this.filters.filter( f => f.hasValue() === true).length > 0;
+    return this.filterList && this.filterList.filter( f => f.hasValue() === true).length > 0;
   }
 
   @HostBinding('class.show-trigger')
   get showTrigger(): boolean {
-    if(this.menu === undefined) { 
+    if(this.menu === undefined) {
       return false;
     } else {
       return this.menu.menuOpen || this.hasValue;
@@ -67,7 +67,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
   }
 
-  ngOnDestroy(): void {    
+  ngOnDestroy(): void {
     if (this.eventsSubscription) {
       this.eventsSubscription.unsubscribe();
     }
@@ -141,6 +141,10 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   applyFilter_OnClick() {
     this.filterChanged.emit(this.filterList);
+  }
+
+  test() {
+    console.log(this.field);
   }
 
 }

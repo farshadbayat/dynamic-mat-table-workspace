@@ -6,13 +6,11 @@ import {
   TableLabels,
 } from 'dynamic-mat-table';
 export class PersianLanguage implements LanguagePack {
-  constructor() {
-    // console.log('international');
-  }
 
   menuLabels: MenuLabels = {
     fullScreen: 'تمام صفحه',
     saveData: 'ذخیره تنظیمات ',
+    noSetting: 'هیچ تنظیماتی موجود نمی باشد',
     newSetting: 'تنظیمات جدید',
     columnSetting: 'تنظیمات ستون ها ',
     saveTableSetting: 'ذخیره  تنظیمات جدول',
@@ -44,7 +42,6 @@ export class PersianLanguage implements LanguagePack {
     firstPageLabel: 'اولین صفحه:',
     lastPageLabel: 'آخرین صفحه:',
     getRangeLabel: (page: number, pageSize: number, length: number) => {
-      // console.log(page, pageSize, length);
       if (length === 0 || pageSize === 0) {
         return `0 از ${length}`;
       }

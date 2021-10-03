@@ -18,7 +18,7 @@ tableName="demo_table"
 [rowSelectionMode]="rowSelectionMode"
 [rowSelectionModel]="selectionModel"
 [showProgress]="showProgress"
-[rowContextMenuItems]="contextMenuItems"    
+[rowContextMenuItems]="contextMenuItems"
 (onTableEvent)="tableEvent_onClick($event)"
 (onRowEvent)="rowEvent_onClick($event)"
 [class.conditional-class]="conditinalClass"
@@ -30,7 +30,7 @@ tableName="demo_table"
 <section class="section">
     <button mat-raised-button color="primary" (click)="refresh_onClick()">
         Refresh
-    </button>    
+    </button>
     <button mat-raised-button color="primary" (click)="fetchData_onClick()">
         Fetch Car Data
     </button>
@@ -78,13 +78,16 @@ tableName="demo_table"
     </button>
     <button mat-raised-button color="primary" (click)="expandToggle_onClick()">
     Expand Toggle Row {{ expandIndex }}
-    </button>  
+    </button>
     <button mat-raised-button color="primary" (click)="addNew_onClick()">
     Add New
-    </button>  
+    </button>
     <button mat-raised-button color="primary" (click)="changeCell_onClick()">
     Change Cell
-    </button>  
+    </button>
+    <button mat-raised-button color="primary" (click)="loadSetting_onClick()">
+    Load Setting
+    </button>
     <mat-slider min="20" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 

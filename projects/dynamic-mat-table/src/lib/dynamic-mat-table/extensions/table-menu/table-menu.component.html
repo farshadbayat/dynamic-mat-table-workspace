@@ -31,9 +31,18 @@
     <mat-icon>view_column</mat-icon>
     <span>{{ languagePack.menuLabels.columnSetting }}</span>
   </button>
-  <!-- (click)="saveSetting_onClick()" -->
+
   <button
     mat-menu-item
+    *ngIf="currentTableSetting?.saveSettingMode === 'simple'"
+    (click)="saveSetting_onClick($event, null)"
+    [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon>grading</mat-icon>
+    <span>{{ languagePack.menuLabels.saveTableSetting }}</span>
+  </button>
+  <button
+    mat-menu-item
+    *ngIf="currentTableSetting?.saveSettingMode === 'multi'"
     [matMenuTriggerFor]="saveTableSetting"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>grading</mat-icon>
@@ -53,21 +62,28 @@
 <mat-menu #saveTableSetting="matMenu">
   <button mat-menu-item (click)="newSetting_onClick($event)" *ngIf="showNewSetting === false" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>tune</mat-icon>
-    <span>{{ languagePack.menuLabels.newSetting }}</span>
+    <span>{{languagePack.menuLabels.newSetting }}</span>
   </button>
-  <section *ngIf="showNewSetting === true" class="new-setting" mat-menu-item  (click)="$event.stopPropagation()">
-    <input matInput type="text" [placeholder]="languagePack.menuLabels.newSetting" [(ngModel)]="newSettingName">
-    <button  matSuffix mat-icon-button (click)="cancle_onClick()">
-      <mat-icon>close</mat-icon>
-    </button>
-    <button  matSuffix mat-icon-button (click)="cancle_onClick()">
-      <mat-icon>done</mat-icon>
-    </button>
+  <section *ngIf="showNewSetting === true" class="new-setting" (click)="$event.stopPropagation()">
+    <div class="input-container" >
+      <input matInput type="text" #newSetting [placeholder]="languagePack.menuLabels.newSetting" [(ngModel)]="newSettingName" (keydown.enter)="applySaveSetting_onClick($event)">
+    </div>
+    <div class="save-table-setting">
+      <mat-icon (click)="cancleSaveSetting_onClick($event)">close</mat-icon>
+      <mat-icon (click)="applySaveSetting_onClick($event)">done</mat-icon>
+    </div>
   </section>
-  <button mat-menu-item *ngFor="let setting of tableSetting?.settingList" (click)="loadSetting_onClick(setting)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
-    <mat-icon>edit_note</mat-icon>
-    <span>{{setting}}</span>
-  </button>
+  <mat-divider></mat-divider>
+  <section class="setting-item" [class.setting-item-active]="tableSetting?.currentSetting == setting.settingName" *ngFor="let setting of tableSetting?.settingList" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon style="color: #dcc48f;">{{ (tableSetting?.currentSetting == setting.settingName) ? 'star' : 'star_outline'}} </mat-icon>
+    <span (click)="selectSetting_onClick($event, setting)">{{setting.settingName}}</span>
+    <mat-icon (click)="saveSetting_onClick($event, setting)">save</mat-icon>
+    <mat-icon style="color: #ff4081;" (click)="deleteSetting_onClick($event, setting)">delete</mat-icon>
+  </section>
+  <section *ngIf="tableSetting?.settingList?.length === 0"  mat-menu-item  (click)="$event.stopPropagation()">
+    <mat-icon style="color: #dcc48f;">lightbulb</mat-icon>
+    {{languagePack.menuLabels.noSetting}}
+  </section>
 </mat-menu>
 
 <!-- Convert Sub Menu -->
@@ -96,7 +112,7 @@
       cdkDropListOrientation="vertical"
       dir="ltr">
       <div
-        *ngFor="let column of currentTableSetting.columnSetting; let i = index"
+        *ngFor="let column of currentTableSetting?.columnSetting; let i = index"
         (click)="$event.stopPropagation(); $event.preventDefault()"
         class="dragable-row"
         cdkDrag
@@ -107,17 +123,10 @@
           [disabled]="column?.display === 'prevent-hidden'"
           [checked]="column?.display === 'visible' || column?.display === 'prevent-hidden'"
           (click)="$event.stopPropagation()"
-          (change)="toggleSelectedColumn(column.index)">
+          (change)="toggleSelectedColumn(column)">
           {{ column.header }}
         </mat-checkbox>
         <mat-icon class="column-setting-button" (click)="setting_onClick(i)" #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
-        <!-- <button
-          mat-icon-button
-          class="column-setting-button"
-          (click)="setting_onClick(i)">
-          <mat-icon (click)="setting_onClick(i)" #menuTrigger="matMenuTrigger"  [matMenuTriggerFor]="columnSettingMenu">settings</mat-icon>
-        </button> -->
-
         <div class="va-mat-table-drag-preview" *cdkDragPreview>
           <mat-icon>drag_indicator</mat-icon>
           <mat-checkbox [checked]="column?.display === 'visible'">

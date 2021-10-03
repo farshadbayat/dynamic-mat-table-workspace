@@ -33,9 +33,9 @@ mat-cell:first-child {
 }
 
 mat-cell:not(:first-child):not(:last-child)::before, mat-header-cell:not(:first-child):not(:last-child)::before {
-content: '';
-height: 100%;
-border-right: solid 1px #c3c3c3;
+  content: '';
+  height: 100%;
+  border-right: solid 1px #c3c3c3;
 }
 /* not work in ltr */
 // mat-cell:not(:first-child):not(:last-child)::before {
@@ -43,17 +43,13 @@ border-right: solid 1px #c3c3c3;
 // }
 
 mat-header-cell table-menu .mat-icon-button .main-menu {
-width: 24px!important;
-//line-height: 42px!important;
+  width: 24px!important;
+  //line-height: 42px!important;
 }
 
 mat-header-row {
-border-top: solid 1px #e3e3e3 !important;
-background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(227,227,227,1) 50%, rgba(255,255,255,1) 100%) !important;
-}
-
-.left-resizer-handler, .right-resizer-handler {
-border: solid #ff572294;
+  border-top: solid 1px #e3e3e3 !important;
+  background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(227,227,227,1) 50%, rgba(255,255,255,1) 100%) !important;
 }
 
 mat-row:hover {

@@ -92,13 +92,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set rowSelectionMode(selection: TableSelectionMode) {
     selection = selection || 'none';
-    this._rowSelectionModel = selection === 'none' ? null : new SelectionModel<T>(selection === 'multi', []);
-    if(selection === 'none' && this._rowSelectionMode !== 'none' && this.displayedColumns[0] === 'row-checkbox') {
+    const isSelectionColumn = (selection === 'single' || selection === 'multi');
+    this._rowSelectionModel = this._rowSelectionModel || new SelectionModel<T>(selection === 'multi', []);
+    if(this.displayedColumns?.length > 0 && !isSelectionColumn && this.displayedColumns[0] === 'row-checkbox') {
       this.displayedColumns.shift();
-      this.saveSetting(this.tableSetting,false);
-    } else if(selection !== 'none' && this._rowSelectionMode === 'none') {
+    } else if(this.displayedColumns?.length > 0 && isSelectionColumn && this.displayedColumns[0] !== 'row-checkbox') {
       this.displayedColumns.unshift('row-checkbox');
-      this.saveSetting(this.tableSetting,false);
     }
     this._rowSelectionMode = selection;
   }
@@ -122,34 +121,14 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  // private totalRecord = 0;
-
-  // @Input()
-  // get dataSource() {
-  //   if(isNullorUndefined(this.tvsDataSource)) {
-  //     return null;
-  //   }
-  //   if (this.totalRecord !== this.tvsDataSource.allData.length) {
-  //     this.initSystemField(this.tvsDataSource.allData);
-  //   }
-  //   return this.tvsDataSource;
-  // }
-  // set dataSource(value: TableVirtualScrollDataSource<T>) {
-  //   this.clear();
-  //   if (!isNullorUndefined(value)) {
-  //     this.initSystemField(value.data);
-  //     this.tvsDataSource = value;
-  //     this.tvsDataSource.sort = this.sort;
-  //     (this.tvsDataSource as any)._paginator = value;
-  //   }
-  // }
-
   protected initSystemField(data: any[]) {
-    data = data.map( (item, index) => {
-      item.id = index ;
-      item.option = item.option || {};
-      return item;
-    });
+    if(data) {
+      data = data.map( (item, index) => {
+        item.id = index ;
+        item.option = item.option || {};
+        return item;
+      });
+    }
   }
 
   public expandColumn = [];
@@ -202,7 +181,6 @@ export class TableCoreDirective<T extends TableRow> {
   public updateColumn() {
     if (isNullorUndefined(this.tableSetting.columnSetting)) {
       this.tableSetting.columnSetting = clone(this.tableColumns);
-      this.refreshTableSetting();
     }
     this.setDisplayedColumns();
   }
@@ -247,7 +225,7 @@ export class TableCoreDirective<T extends TableRow> {
   public tableColumns: TableField<T>[];
   public tvsDataSource: TableVirtualScrollDataSource<T> = new TableVirtualScrollDataSource<T>([]);
 
-  private _rowSelectionMode: TableSelectionMode;
+  protected _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
   private _tablePagination: TablePagination = { };
   public tablePagingMode: TablePaginationMode  = 'none';
@@ -259,9 +237,6 @@ export class TableCoreDirective<T extends TableRow> {
   @ViewChild(CdkVirtualScrollViewport, { static: true }) viewport !: CdkVirtualScrollViewport;
   /**************************************** Methods **********************************************/
 
-  refreshTableSetting() {
-    // this.tableSetting = clone(this.tableSetting);
-  }
 
   updatePagination() {
     if (isNullorUndefined(this.tvsDataSource)){
@@ -299,24 +274,34 @@ export class TableCoreDirective<T extends TableRow> {
     this.cdr.detectChanges()
   }
 
+  swap(list: any[], x: number, y: number) {
+    var b = this[x];
+    this[x] = this[y];
+    this[y] = b;
+    return this;
+  }
+
   setDisplayedColumns() {
     if (this.columns) {
-      this.displayedColumns = [];
+      this.displayedColumns.splice(0, this.displayedColumns.length);
       this.columns.forEach((colunm, index) => {
         colunm.index = index;
         if (colunm.display === undefined || colunm.display === 'visible' || colunm.display === 'prevent-hidden') {
           this.displayedColumns.push(colunm.name);
         }
       });
+      if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
+        this.displayedColumns.unshift('row-checkbox');
+      }
       //bugfixed because of double header show
       // if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
       //   this.displayedColumns.unshift('row-checkbox');
       // }
-      setTimeout( () => {
-        if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
-          this.displayedColumns.unshift('row-checkbox');
-        }
-      }, 0);
+      // setTimeout( () => {
+      //   if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
+      //     this.displayedColumns.unshift('row-checkbox');
+      //   }
+      // }, 0);
 
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
@@ -351,21 +336,21 @@ export class TableCoreDirective<T extends TableRow> {
     if (this.viewport) {
       const currentOffset = this.viewport.measureScrollOffset();
       this.columns = columns;
-      this.setDisplayedColumns();
+      // this.setDisplayedColumns();
       setTimeout(() => this.viewport.scrollTo({ top: currentOffset, behavior: 'auto' }), 0);
     }
   }
 
-  saveSetting(tableSetting: TableSetting, raiseEvent: boolean = false) {
-    debugger
-    if (tableSetting !== null) {
-      this.tableSetting = tableSetting;
-      this.refreshColumn(tableSetting.columnSetting);
-    }
-    if (raiseEvent === true) {
-      this.settingChange.emit(this.tableSetting);
-    }
-  }
+  // saveSetting(tableSetting: TableSetting, settingName: string, raiseEvent: boolean = false) {
+  //   this.settingChange.emit({setting: this.tableSetting, settingName: settingName});
+  //   // if (tableSetting !== null) {
+  //   //   this.tableSetting = tableSetting;
+  //   //   this.refreshColumn(tableSetting.columnSetting);
+  //   // }
+  //   // if (raiseEvent === true) {
+  //   //   this.settingChange.emit({setting: this.tableSetting, settingName: settingName});
+  //   // }
+  // }
 
   /************************************ Selection Table Row *******************************************/
 

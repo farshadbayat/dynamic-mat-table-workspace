@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Output, Input, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TableSetting } from '../../../models/table-setting.model';
 import { TableIntl } from '../../../international/table-Intl';
 import { clone, deepClone, isNullorUndefined } from '../../../cores/type';
+import { AbstractField } from '../../../models/table-field.model';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -19,10 +20,14 @@ export class TableMenuComponent {
     return this.currentTableSetting;
   }
   set tableSetting(value: TableSetting) {
+    value.settingList = value.settingList === undefined ? [] : value.settingList;
     this.originalTableSetting = value;
     this.reverseDirection = value.direction === 'rtl' ? 'ltr' : 'rtl';
-    this.currentTableSetting = clone<TableSetting>(value);
+    this.currentTableSetting = value;
   }
+
+  @Output() tableSettingChange = new EventEmitter<TableSetting>();
+  @ViewChild('newSetting', {static: false}) newSettingElement: ElementRef;
 
   newSettingName = '';
   showNewSetting = false;
@@ -51,23 +56,26 @@ export class TableMenuComponent {
     );
   }
 
-  toggleSelectedColumn(columnIndex: number) {
-    const colFound = this.currentTableSetting.columnSetting.find(
-      (col) => col.index === columnIndex
-    );
-    colFound.display = colFound.display === 'visible' ? 'hiden' : 'visible';
+  toggleSelectedColumn(column: AbstractField) {
+    // const colFound = this.currentTableSetting.columnSetting.find(c => c === column);
+    column.display = column.display === 'visible' ? 'hiden' : 'visible';
   }
 
   apply_onClick(e) {
     e.stopPropagation();
     e.preventDefault();
-    setTimeout(() => {
-      this.menuActionChange.emit({
-        type: 'TableSetting',
-        data: this.currentTableSetting,
-      });
-      this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
+    this.menuActionChange.emit({
+      type: 'TableSetting',
+      data: this.currentTableSetting,
     });
+    this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
+    // setTimeout(() => {
+    //   this.menuActionChange.emit({
+    //     type: 'TableSetting',
+    //     data: this.currentTableSetting,
+    //   });
+    //   this.tableService.saveColumnInfo(this.currentTableSetting.columnSetting);
+    // });
   }
 
   setting_onClick(i) {
@@ -83,25 +91,45 @@ export class TableMenuComponent {
   }
 
   /*****  Save ********/
-  saveSetting_onClick() {
-    setTimeout(() => {
-      this.menuActionChange.emit({ type: 'SaveSetting' });
-    });
+  saveSetting_onClick(e, setting) {
+    e.stopPropagation();
+    this.menuActionChange.emit({ type: 'SaveSetting', data: setting.settingName });
   }
 
   newSetting_onClick(e) {
     this.showNewSetting = true;
+    this.newSettingName ='';
+    window.requestAnimationFrame(() =>{
+      this.newSettingElement.nativeElement.focus();
+    });
     e.stopPropagation();
   }
 
-  loadSetting_onClick(setting) {
-    this.menuActionChange.emit({ type: 'LoadSetting', data: setting });
+  selectSetting_onClick(e, setting: TableSetting) {
+    e.stopPropagation();
+    this.menuActionChange.emit({ type: 'SelectSetting', data: setting.settingName });
   }
 
-  cancle_onClick() {
+  applySaveSetting_onClick(e) {
+    e.stopPropagation();
+    this.menuActionChange.emit({ type: 'SaveSetting', data: this.newSettingName });
+    this.showNewSetting = false;
+  }
+
+  cancleSaveSetting_onClick(e) {
+    e.stopPropagation();
     this.newSettingName='';
     this.showNewSetting = false;
   }
+
+  deleteSetting_onClick(e, setting) {
+    e.stopPropagation();
+    this.menuActionChange.emit({ type: 'DeleteSetting', data: setting });
+    this.newSettingName ='';
+    this.showNewSetting = false;
+  }
+
+
 
   /*****  Filter ********/
   clearFilter_onClick() {
@@ -126,6 +154,6 @@ export class TableMenuComponent {
 }
 
 export interface TableMenuActionChange {
-  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'LoadSetting' | 'Print' | 'FullScreenMode';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'DeleteSetting' | 'SelectSetting' | 'Print' | 'FullScreenMode';
   data?: any;
 }

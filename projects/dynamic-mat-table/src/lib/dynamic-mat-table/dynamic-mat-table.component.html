@@ -10,8 +10,7 @@
   [headerEnabled]="headerEnable || true"
   [footerEnabled]="footerEnable || false"
   [ngStyle]="{'background-color': backgroundColor || 'white'}"
-  [class.printpreview]="printing"
-  (requestRendering)="doRendering($event)">
+  [class.printpreview]="printing"  >
 
   <mat-table
     matSort
@@ -60,6 +59,7 @@
           [class.active-resize]="resizeColumn.currentResizeIndex===i" cdkDragBoundary="mat-header-row">
           <!-- class="left-resizer-handler" -->
           <div
+            class="resizer-handler"
             [ngClass]="{'left-resizer-handler': tableSetting.direction === 'ltr', 'right-resizer-handler': tableSetting.direction === 'rtl'}"
             (mousedown)="onResizeColumn($event, i, 'left')"></div>
           <header-filter [field]="column" (filterChanged)="filter_onChanged(column, $event)" [filters]="tvsDataSource.getFilter(column.name)">
@@ -69,6 +69,7 @@
           </header-filter>
           <!-- class="right-resizer-handler" -->
           <div
+            class="resizer-handler"
             [ngClass]="{'right-resizer-handler': tableSetting.direction === 'ltr', 'left-resizer-handler': tableSetting.direction === 'rtl'}"
             (mousedown)="onResizeColumn($event, i, 'right')"
           ></div>
@@ -114,7 +115,7 @@
     <ng-container matColumnDef="table-menu" [stickyEnd]="true" *ngIf="setting?.visibleTableMenu !== false">
       <mat-header-cell *matHeaderCellDef class="table-menu">
         <table-menu
-          [tableSetting]="tableSetting"
+          [(tableSetting)]="tableSetting"
           (menuActionChange)="tableMenuActionChange($event)"
         ></table-menu>
       </mat-header-cell>

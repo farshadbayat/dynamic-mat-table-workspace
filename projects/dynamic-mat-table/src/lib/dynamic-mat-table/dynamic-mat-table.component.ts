@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit,
-         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectorRef, Input, OnDestroy, ContentChildren, ViewContainerRef, Injector, ComponentRef, HostBinding} from '@angular/core';
+         QueryList, ElementRef, ViewChild, TemplateRef, Renderer2, ChangeDetectorRef, Input, OnDestroy, ContentChildren, ViewContainerRef, Injector, ComponentRef, HostBinding, ChangeDetectionStrategy} from '@angular/core';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { TableService } from './dynamic-mat-table.service';
 import { TableRow } from '../models/table-row.model';
@@ -56,7 +56,7 @@ export const expandAnimation = trigger('detailExpand', [
   templateUrl: './dynamic-mat-table.component.html',
   styleUrls: ['./dynamic-mat-table.component.scss'],
   animations: [tableAnimation, expandAnimation],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirective<T> implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('tbl', {static: true}) tbl;
@@ -74,6 +74,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.visibaleActionMenu = value.visibaleActionMenu || this.tableSetting.visibaleActionMenu;
       value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
       value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
+      value.saveSettingMode = value.saveSettingMode ||  this.tableSetting.saveSettingMode || 'simple';
       this.tableSetting = value;
       this.setDisplayedColumns();
     }
@@ -123,9 +124,35 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     });
   }
 
+  ngAfterViewInit(): void {
+    this.tvsDataSource.paginator = this.paginator;
+    this.tvsDataSource.sort = this.sort;
+    this.dataSource.subscribe(x => {
+      x = x || [];
+      this.rowSelectionModel.clear();
+      this.tvsDataSource.data = [];
+      this.initSystemField(x);
+      this.tvsDataSource.data = x;
+      // this.cdr.detectChanges();
+      setTimeout(() =>{
+        if(this.tableSetting.autoHeight === true) {
+          this.height = this.autoHeight();
+        }
+        this.refreshUI();
+      }, 0);
+    });
+
+    this.tvsDataSource.sort.sortChange.subscribe(sort => {
+      this.pagination.pageIndex = 0;
+      this.onTableEvent.emit({ event: 'SortChanged', sender: sort })
+    });
+  }
+
+
   tooltip_onChanged(column: TableField<T>, row: any ,elementRef: any, show: boolean) {
     if (column.cellTooltipEnable === true ) {
-      if(show === true ) {
+      console.log(row[column.name]);
+      if(show === true && row[column.name] ) {
 
         if(this.overlayRef !== null) {
           this.closeTooltip();
@@ -159,11 +186,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
    this.overlayRef.detach();
   this.overlayRef = null;
   }
-
-  isEllipsisActive(e) {
-    return (e.offsetWidth < e.scrollWidth);
-  }
-
   ellipsis( column: TableField<T>, cell: boolean = true) {
     if(cell === true && column.cellEllipsisRow > 0) {
       return {
@@ -212,43 +234,15 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
 
     scrollStrategy.offsetChange.subscribe(offset => {
-      // console.log(offset);
     })
     this.viewport.renderedRangeStream.subscribe( t => {
       // in expanding row scrolling make not good apperance therefor close it.
       if (this.expandedElement && this.expandedElement.option && this.expandedElement.option.expand) {
-        // console.log('clear', t);
         // this.expandedElement.option.expand = false;
         // this.expandedElement = null;
       }
     })
   }
-
-  ngAfterViewInit(): void {
-    this.tvsDataSource.paginator = this.paginator;
-    this.tvsDataSource.sort = this.sort;
-    this.dataSource.subscribe(x => {
-      this.tvsDataSource.data = [];
-      this.initSystemField(x);
-      this.tvsDataSource.data = x;
-      // this.cdr.detectChanges();
-      setTimeout(() =>{
-        if(this.tableSetting.autoHeight === true) {
-          this.height = this.autoHeight();
-        }
-        this.refreshUI();
-      }, 0);
-    });
-
-    this.tvsDataSource.sort.sortChange.subscribe(sort => {
-      this.pagination.pageIndex = 0;
-      this.onTableEvent.emit({ event: 'SortChanged', sender: sort })
-    });
-    // this.dataSource.dataOfRange$.subscribe((data) => {
-    //   // console.log('dataOfRange');
-    // });
-  }
-
 
   public get inverseOfTranslation(): number {
     if (!this.viewport || !this.viewport["_renderedContentOffset"]) {
@@ -337,7 +331,32 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   tableMenuActionChange(e: TableMenuActionChange) {
     if (e.type === 'TableSetting') {
-       this.saveSetting(e.data, false);
+       // this.saveSetting(e.data, null, false);
+       this.settingChange.emit({setting: this.tableSetting});
+       this.refreshColumn(this.tableSetting.columnSetting);
+    } else if (e.type === 'SaveSetting') {
+      const newSetting = Object.assign({}, this.setting);
+      delete newSetting.settingList;
+      delete newSetting.currentSetting;
+      newSetting.settingName = e.data;
+      const settingIndex = (this.setting.settingList || []).findIndex(f => f.settingName === e.data);
+      if(settingIndex === -1) {
+        this.setting.settingList.push(JSON.parse(JSON.stringify(newSetting)));
+        this.settingChange.emit({setting: this.tableSetting});
+      } else {
+        this.setting.settingList[settingIndex] = JSON.parse(JSON.stringify(newSetting));
+        this.settingChange.emit({setting: this.tableSetting});
+      }
+    } else if (e.type === 'DeleteSetting') {
+      this.setting.settingList = this.setting.settingList.filter( s => s.settingName !== e.data.settingName);
+      this.settingChange.emit({setting: this.tableSetting});
+    } else if (e.type === 'SelectSetting') {
+      const newSetting = Object.assign({}, this.setting.settingList.find(s => s.settingName === e.data));
+      newSetting.settingList = this.setting.settingList;
+      newSetting.currentSetting = e.data;
+      this.tableSetting = newSetting;
+      this.settingChange.emit({setting: this.tableSetting});
+      this.refreshColumn(this.tableSetting.columnSetting);
     } else if(e.type === 'FullScreenMode') {
       requestFullscreen(this.tbl.elementRef);
     } else if (e.type === 'Download') {
@@ -371,8 +390,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
         width: '90vw',
         data: this.printConfig,
       });
-    } else if (e.type === 'SaveSetting') {
-      this.saveSetting(null, true);
     }
   }
 
@@ -381,15 +398,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     // this.rowActionMenuChange.emit({actionItem: contextMenuItem, rowItem: row });
   }
 
-  doRendering(e) {
-    this.pending = false;
-    if (this.viewport.getViewportSize() === 0) {
-      // console.log('zero');
-    }
-  }
-
   pagination_onChange(e: TablePagination) {
-    // console.log(e);
     this.pending = true;
     this.tvsDataSource.refreshFilterPredicate(); // pagination Bugfixed
     this.paginationChange.emit(e);
@@ -400,7 +409,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       (
         this.tbl.headerHeight +
         (this.tbl.rowHeight+1) * (this.dataSource.value.length)
-      ).toString() + "px"
+      ).toString() + 'px'
     );
   }
 
@@ -411,10 +420,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
-    // console.log(index,type);
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
-    // console.log(this.resizeColumn.resizeHandler, this.resizeColumn.startX);
     if (this.resizeColumn.resizeHandler === 'right') {
       this.resizeColumn.startWidth = event.target.parentElement.clientWidth;
       this.resizeColumn.currentResizeIndex = index;
@@ -508,7 +515,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   onCellClick(e, row, column: TableField<T>) {
     if(column.cellTooltipEnable === true) {
-      debugger
+      this.closeTooltip();/* Fixed BUG: Open Overlay when redirect to other route*/
      // this.openTooltip(e,1);
       // this.openTooltip(e?.srcElement);
       // this.tooltipText = e.srcElement.scrollHeight;
@@ -536,8 +543,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /************************************ Drag & Drop Column *******************************************/
 
   dragStarted(event: CdkDragStart) {
-    // console.log(event);
-    // debugger
     // this.dragDropData.dragColumnIndex = event.source.;
   }
 
