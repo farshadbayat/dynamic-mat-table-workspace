@@ -134,12 +134,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.initSystemField(x);
       this.tvsDataSource.data = x;
       // this.cdr.detectChanges();
-      setTimeout(() =>{
-        if(this.tableSetting.autoHeight === true) {
-          this.height = this.autoHeight();
-        }
-        this.refreshUI();
-      }, 0);
+      this.refreshUI();
+      // window.requestAnimationFrame(() => {
+      // });
     });
 
     this.tvsDataSource.sort.sortChange.subscribe(sort => {
@@ -151,9 +148,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   tooltip_onChanged(column: TableField<T>, row: any ,elementRef: any, show: boolean) {
     if (column.cellTooltipEnable === true ) {
-      console.log(row[column.name]);
       if(show === true && row[column.name] ) {
-
         if(this.overlayRef !== null) {
           this.closeTooltip();
         }
@@ -183,8 +178,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   closeTooltip() {
-   this.overlayRef.detach();
-  this.overlayRef = null;
+    this.overlayRef?.detach();
+    this.overlayRef = null;
   }
   ellipsis( column: TableField<T>, cell: boolean = true) {
     if(cell === true && column.cellEllipsisRow > 0) {
@@ -221,6 +216,12 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   public refreshUI() {
+    if(this.tableSetting.autoHeight === true) {
+      this.height = this.autoHeight();
+    } else {
+      this.height = null;
+    }
+    this.refreshColumn(this.tableSetting.columnSetting);
     const scrollStrategy: FixedSizeTableVirtualScrollStrategy = this.viewport['_scrollStrategy'];
     scrollStrategy?.viewport?.checkViewportSize();
     scrollStrategy?.viewport?.scrollToOffset(0);
@@ -405,12 +406,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   autoHeight() {
-    return (
-      (
-        this.tbl.headerHeight +
-        (this.tbl.rowHeight+1) * (this.dataSource.value.length)
-      ).toString() + 'px'
-    );
+    const minHeight =  this.headerHeight +
+                      (this.rowHeight + 1) * (this.dataSource.value.length) +
+                      this.footerHeight * 0;
+    return minHeight.toString();
   }
 
   reload_onClick(){

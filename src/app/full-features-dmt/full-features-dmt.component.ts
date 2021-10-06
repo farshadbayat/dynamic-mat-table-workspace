@@ -20,7 +20,7 @@ import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
 import { FormlyCellComponent } from '../formly-cell/formly-cell.component';
 
-const DATA = getData(2000);
+const DATA = getData(5);
 @Component({
   selector: 'app-full-features-dmt',
   templateUrl: './full-features-dmt.component.html',
@@ -34,11 +34,8 @@ export class FullFeaturesDmtComponent implements OnInit {
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
   altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
-  setting: TableSetting= {
-    alternativeRowStyle: {'background-color': '#d2d2d2'},
-    rowStyle: {'border-bottom': 'solid 1px red;'},
-    saveSettingMode: 'multi'
-  };
+  setting: TableSetting= null;
+
   scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
   pending = false;
@@ -90,8 +87,8 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
   ngOnInit(): void {
     this.dataSource$ = new BehaviorSubject<any[]>(this.data);
-    this.initField();
 
+    this.initField();
     this.fetchData_onClick();
     this.formulaActionList = [
       {id: 0, name: 'load-list', tooltip: 'دریافت اطلاعات', matIcon: 'list', matIconColor: '#0980ab'},
@@ -101,6 +98,411 @@ export class FullFeaturesDmtComponent implements OnInit {
       {id: 4, name: 'clear', tooltip: 'پاک کردن', matIcon: 'clear_all', matIconColor: '#0980ab'},
       {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},
     ];
+
+    this.loadSetting();
+  }
+
+  loadSetting() {
+    this.setting = {
+      "alternativeRowStyle": {
+          "background-color": "#d2d2d2"
+      },
+      "rowStyle": {
+          "border-bottom": "solid 1px red;"
+      },
+      "saveSettingMode": "multi",
+      "columnSetting": [
+          {
+              "name": "row",
+              "width": 300,
+              "cellStyle": {
+                  "background-color": "#3f51b5",
+                  "color": "#ffffff"
+              },
+              "display": "prevent-hidden",
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "header": "Row",
+              "filter": "client-side",
+              "sort": "client-side",
+              "sticky": "none",
+              "index": 0
+          },
+          {
+              "name": "FormlyColumn",
+              "header": "Formly Column",
+              "option": null,
+              "draggable": false,
+              "filterable": false,
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "display": "hiden",
+              "filter": "client-side",
+              "sort": "client-side",
+              "sticky": "none",
+              "width": null,
+              "index": 1
+          },
+          {
+              "name": "order",
+              "header": "Row Order",
+              "sticky": "start",
+              "option": 1,
+              "clickable": false,
+              "rowSelectionable": false,
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "display": "hiden",
+              "filter": "client-side",
+              "sort": "client-side",
+              "width": null,
+              "index": 2
+          },
+          {
+              "name": "name",
+              "header": "Element Name",
+              "sticky": "start",
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "display": "hiden",
+              "filter": "client-side",
+              "sort": "client-side",
+              "width": null,
+              "index": 3
+          },
+          {
+              "name": "weight",
+              "sort": "server-side",
+              "clickType": "label",
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "header": "Weight",
+              "display": "hiden",
+              "filter": "client-side",
+              "sticky": "none",
+              "width": null,
+              "index": 4
+          },
+          {
+              "name": "color",
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "header": "Color",
+              "display": "hiden",
+              "filter": "client-side",
+              "sort": "client-side",
+              "sticky": "none",
+              "width": null,
+              "index": 5
+          },
+          {
+              "name": "brand",
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "header": "Brand",
+              "display": "hiden",
+              "filter": "client-side",
+              "sort": "client-side",
+              "sticky": "none",
+              "width": null,
+              "index": 6
+          },
+          {
+              "name": "setting",
+              "icon": "chrome_reader_mode",
+              "iconColor": "blue",
+              "option": 2,
+              "clickable": false,
+              "rowSelectionable": false,
+              "printable": true,
+              "exportable": true,
+              "enableContextMenu": true,
+              "header": "Setting",
+              "display": "visible",
+              "filter": "client-side",
+              "sort": "client-side",
+              "sticky": "none",
+              "width": null,
+              "index": 7
+          }
+      ],
+      "direction": "rtl",
+      "visibaleActionMenu": null,
+      "settingName": "T2",
+      "settingList": [
+          {
+              "alternativeRowStyle": {
+                  "background-color": "#d2d2d2"
+              },
+              "rowStyle": {
+                  "border-bottom": "solid 1px red;"
+              },
+              "saveSettingMode": "multi",
+              "columnSetting": [
+                  {
+                      "name": "row",
+                      "width": 300,
+                      "cellStyle": {
+                          "background-color": "#3f51b5",
+                          "color": "#ffffff"
+                      },
+                      "display": "prevent-hidden",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Row",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none"
+                  },
+                  {
+                      "name": "FormlyColumn",
+                      "header": "Formly Column",
+                      "option": null,
+                      "draggable": false,
+                      "filterable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null
+                  },
+                  {
+                      "name": "order",
+                      "header": "Row Order",
+                      "sticky": "start",
+                      "option": 1,
+                      "clickable": false,
+                      "rowSelectionable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "width": null
+                  },
+                  {
+                      "name": "name",
+                      "header": "Element Name",
+                      "sticky": "start",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "width": null
+                  },
+                  {
+                      "name": "weight",
+                      "sort": "server-side",
+                      "clickType": "label",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Weight",
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sticky": "none",
+                      "width": null
+                  },
+                  {
+                      "name": "color",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Color",
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null
+                  },
+                  {
+                      "name": "brand",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Brand",
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null
+                  },
+                  {
+                      "name": "setting",
+                      "icon": "chrome_reader_mode",
+                      "iconColor": "blue",
+                      "option": 2,
+                      "clickable": false,
+                      "rowSelectionable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Setting",
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null
+                  }
+              ],
+              "direction": "rtl",
+              "visibaleActionMenu": null,
+              "settingName": "T1"
+          },
+          {
+              "alternativeRowStyle": {
+                  "background-color": "#d2d2d2"
+              },
+              "rowStyle": {
+                  "border-bottom": "solid 1px red;"
+              },
+              "saveSettingMode": "multi",
+              "columnSetting": [
+                  {
+                      "name": "row",
+                      "width": 300,
+                      "cellStyle": {
+                          "background-color": "#3f51b5",
+                          "color": "#ffffff"
+                      },
+                      "display": "prevent-hidden",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Row",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "index": 0
+                  },
+                  {
+                      "name": "FormlyColumn",
+                      "header": "Formly Column",
+                      "option": null,
+                      "draggable": false,
+                      "filterable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null,
+                      "index": 1
+                  },
+                  {
+                      "name": "order",
+                      "header": "Row Order",
+                      "sticky": "start",
+                      "option": 1,
+                      "clickable": false,
+                      "rowSelectionable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "width": null,
+                      "index": 2
+                  },
+                  {
+                      "name": "name",
+                      "header": "Element Name",
+                      "sticky": "start",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "width": null,
+                      "index": 3
+                  },
+                  {
+                      "name": "weight",
+                      "sort": "server-side",
+                      "clickType": "label",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Weight",
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sticky": "none",
+                      "width": null,
+                      "index": 4
+                  },
+                  {
+                      "name": "color",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Color",
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null,
+                      "index": 5
+                  },
+                  {
+                      "name": "brand",
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Brand",
+                      "display": "hiden",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null,
+                      "index": 6
+                  },
+                  {
+                      "name": "setting",
+                      "icon": "chrome_reader_mode",
+                      "iconColor": "blue",
+                      "option": 2,
+                      "clickable": false,
+                      "rowSelectionable": false,
+                      "printable": true,
+                      "exportable": true,
+                      "enableContextMenu": true,
+                      "header": "Setting",
+                      "display": "visible",
+                      "filter": "client-side",
+                      "sort": "client-side",
+                      "sticky": "none",
+                      "width": null,
+                      "index": 7
+                  }
+              ],
+              "direction": "rtl",
+              "visibaleActionMenu": null,
+              "settingName": "T2"
+          }
+      ],
+      "currentSetting": "T2"
+    };
+    setTimeout(() => {
+      this.table.refreshUI();
+    }, 100);
   }
 
   initField() {
@@ -321,6 +723,7 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   refresh_onClick() {
+    this.loadSetting();
     this.table.refreshUI();
   }
 
@@ -331,6 +734,11 @@ export class FullFeaturesDmtComponent implements OnInit {
     if(localStorage.getItem('tableConfig')) {
       this.setting = JSON.parse(localStorage.getItem('tableConfig'));
     }
+  }
+
+  autoHeight_onClick() {
+    this.setting.autoHeight = ! this.setting?.autoHeight;
+    this.dataSource$.next(this.dataSource$.value);
   }
 }
 

@@ -24,27 +24,27 @@ export interface TableField<R extends TableRow> extends AbstractField {
 
 export interface AbstractField {
   index?: number;
-  name: string;
-  type?: FieldType;
-  width?: number;
-  header?: string;
+  name: string;           /* The key of the data */
+  type?: FieldType;       /* Type of data in the field */
+  width?: number;         /* width of column */
+  header?: string;        /* The title of the column */
   isKey?: boolean;
   inlineEdit?: boolean;
-  display?: FieldDisplay;
-  sticky?: FieldSticky;
+  display?: FieldDisplay; /* Hide and visible this column */
+  sticky?: FieldSticky;   /* sticky this column to start or end */
   filter?: FieldFilter;
   sort?: FieldSort;
-  cellClass?: string;
-  cellStyle?: any;
-  icon?: string;
-  iconColor?: string;
-  dynamicCellComponent?: any;
+  cellClass?: string;     /* Apply a class to a cell, class name must be in the global stylesheet */
+  cellStyle?: any;        /* Apply a style to a cell, style must be object ex: [...].cellStyle = {'color' : 'red'} */
+  icon?: string;          /* Set Icon in Column */
+  iconColor?: string;     /* Set Icon Color */
+  dynamicCellComponent?: any; /* Set Dynamic Component in Cell */
   draggable?: boolean;
   filterable?: boolean;
   sortable?: boolean;
   clickable?: boolean;
   clickType?: 'cell' | 'label' | 'custom';
-  printable?: boolean;
+  printable?: boolean;    /* disply in printing view by defualt is true */
   exportable?: boolean;
   enableContextMenu?: boolean;
   rowSelectionable?: boolean;
@@ -57,6 +57,5 @@ export interface AbstractField {
   categoryData?: any[];
   toString?: (column: TableField<any>, row: TableRow) => string;
   customSort?: (column: TableField<any>, row: any) => string;
-
 }
 

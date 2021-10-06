@@ -79,6 +79,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set rowSelectionModel(value: SelectionModel<T>) {
     if (!isNullorUndefined(value)) {
+      console.log(value);
       if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
         this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
       }
@@ -93,7 +94,10 @@ export class TableCoreDirective<T extends TableRow> {
   set rowSelectionMode(selection: TableSelectionMode) {
     selection = selection || 'none';
     const isSelectionColumn = (selection === 'single' || selection === 'multi');
-    this._rowSelectionModel = this._rowSelectionModel || new SelectionModel<T>(selection === 'multi', []);
+    if( this._rowSelectionModel === null || (this._rowSelectionModel.isMultipleSelection() === true && selection === 'single') ||
+       (this._rowSelectionModel.isMultipleSelection() === false && selection === 'multi')) {
+      this._rowSelectionModel = new SelectionModel<T>(selection === 'multi', []);
+    }
     if(this.displayedColumns?.length > 0 && !isSelectionColumn && this.displayedColumns[0] === 'row-checkbox') {
       this.displayedColumns.shift();
     } else if(this.displayedColumns?.length > 0 && isSelectionColumn && this.displayedColumns[0] !== 'row-checkbox') {
@@ -313,6 +317,7 @@ export class TableCoreDirective<T extends TableRow> {
   /************************************ Drag & Drop Column *******************************************/
   public refreshGrid() {
     this.cdr.detectChanges()
+    this.refreshColumn(this.tableSetting.columnSetting);
     this.table.renderRows();
   }
 
