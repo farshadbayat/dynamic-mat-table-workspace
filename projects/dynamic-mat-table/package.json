@@ -1,24 +1,37 @@
 {
   "name": "dynamic-mat-table",
-  "version": "1.1.7",
+  "version": "1.4.16",
   "description": "dynamic-mat-table is an Angular component for presenting large and complex data with a lightning fast performance (at least 10x faster) and excellent level of control over the presentation.",
   "peerDependencies": {
-    "@angular/common": "^8.2.14",
-    "@angular/core": "^8.2.14",
-    "@angular/material": ">8.2.11"
+    "@angular/common": ">=8.0.0",
+    "@angular/core": ">=8.0.0",
+    "@angular/cdk": ">=8.0.0",
+    "@angular/material": ">=8.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/farshadbayat/dynamic-mat-table-workspace"
   },
+  "bugs": {
+    "url": "https://github.com/farshadbayat/dynamic-mat-table-workspace/issues"
+  },
   "keywords": [
     "angular",
+    "material",
     "angular2",
     "advance table",
     "high performance",
     "rtl support",
     "configurable setting",
-    "material"
+    "material",
+    "virtual scroll",
+    "table",
+    "multi setting configuration",
+    "auto height",
+    "multi language"
   ],
   "author": "FB",
   "homepage": "http://tavanasys.ir/site/portfolio",

@@ -52,8 +52,11 @@ export interface FilterLabels {
 
 export interface MenuLabels {
   saveData: string;
+  newSetting: string;
+  noSetting: string;
   columnSetting: string;
   saveTableSetting: string;
+  fullScreen: string;
   clearFilter: string;
   jsonFile: string;
   csvFile: string;
@@ -71,4 +74,5 @@ export interface MenuLabels {
   pinNoneMode: string;
   pinStartMode: string;
   pinEndMode: string;
+  thereIsNoColumn: string;
 }

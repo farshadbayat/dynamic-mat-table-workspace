@@ -10,25 +10,30 @@ import { Subject } from 'rxjs';
 export class TableIntl implements LanguagePack {
   menuLabels: MenuLabels = {
     saveData: 'Save Data',
+    newSetting: 'New Setting',
+    noSetting: 'No Setting',
+    fullScreen: 'Full Screen',
+
     columnSetting: 'Column Setting',
     saveTableSetting: 'Save Table Setting',
     clearFilter: 'Clear Filter',
     jsonFile: 'Json File',
     csvFile: 'CSV File',
     printTable: 'Print Table',
-    filterMode: 'Filter Mode',
+    filterMode: 'Filter Mode:',
     filterLocalMode: 'Local',
     filterServerMode: 'Server',
-    sortMode: 'Sort Mode',
+    sortMode: 'Sort Mode:',
     sortLocalMode: 'Local',
     sortServerMode: 'Server',
     printMode: 'Print Mode',
     printYesMode: 'Yes',
     printNoMode: 'No',
-    pinMode: 'Pin Mode',
+    pinMode: 'Pin Mode:',
     pinNoneMode: 'None',
     pinStartMode: 'Start',
     pinEndMode: 'End',
+    thereIsNoColumn: 'There is no column.'
   };
 
   paginatorLabels: MatPaginatorIntl = {

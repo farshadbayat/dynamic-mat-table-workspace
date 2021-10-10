@@ -10,9 +10,14 @@
   }
 }
 
+.main-menu {
+  width: 38px !important;
+  line-height: 24px !important;
+}
+
 .va-mat-button-no-input {
   border: none;
-  background: transparent;
+  background-color: transparent;
   outline: none;
 }
 
@@ -26,38 +31,147 @@
   background-color: green !important;
 }
 
+.dragable-row {
+  mat-checkbox {
+    width: 100%;
+    line-height: 28px;
+    display: inline-flex;
+  }
+}
+
 .va-mat-table-dragable-container .dragable-row {
   background-color: white;
+  display: flex;
   width: 100%;
-  line-height: 26px;
+  height: 30px;
   font-size: 14px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.va-mat-table-dragable-container .dragable-row .column-setting-button {
-  float: right;
-  margin: 0 5px;
-  cursor: pointer;
-  width: 26px;
-  height: 26px;
-  mat-icon{
-    cursor: pointer;
-    font-size: 22px;
+.column-setting-button {
+  cursor: pointer !important;
+  font-size: 24px;
+  margin-right: 5px;
+}
+
+.new-setting {
+  text-align: center;
+  margin-left: 0px;
+  margin-top: 0px;
+  align-items: center;
+  user-select: none;
+  outline: none;
+  border: none;
+  line-height: 48px;
+  height: 48px;
+  // position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  width:100%;
+  .input-container{
+    width:64%
+  }
+  input {
+    line-height: 33px;
+    background-color: white;
+    border: none;
+    // padding-right: 77px;
+    padding-left: 5px;
+    border-radius: 4px;
+    outline: none;
+    text-align: center;
+    direction: ltr;
   }
 }
 
-.column-setting-button:dir(ltr) {
-  margin: 15px;
+.setting-item {
+  line-height: 48px;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 15px;
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    color: #0000008a;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 50%;
+    &:hover {
+      background-color: #dbdbdb;
+    }
+  }
+  span {
+    cursor: pointer;
+    width: 154px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: list-item;
+  }
 }
-.va-mat-table-dragable-container .dragable-row mat-icon {
-  margin-top: -2px;
+
+.setting-item-active {
+  background-color: #e4e2de;
 }
-.va-mat-table-dragable-container .dragable-row mat-icon,
-.va-mat-table-dragable-container .dragable-row mat-checkbox {
-  vertical-align: top;
+
+::ng-deep .mat-menu-panel {
+  min-height: auto !important;
 }
+
+.save-table-setting {
+  display: flex;
+  min-width: 70px;
+  // margin-left: -60px;
+  mat-icon {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    cursor: pointer;
+  }
+}
+
+.delete-table-setting {
+  position: absolute;
+  cursor: pointer;
+  line-height: 38px !important;
+  height: 38px;
+  width: 38px;
+  border-radius: 100%;
+  text-align: center;
+  pointer-events: none;
+  margin-top: 5px;
+  &:hover {
+    color: white;
+    background-color: #afafaf;
+  }
+}
+
+// .va-mat-table-dragable-container .dragable-row .column-setting-button {
+//   //float: right;
+//   margin: 0 5px;
+//   cursor: pointer;
+//   width: 26px;
+//   height: 26px;
+//   mat-icon{
+//     cursor: pointer;
+//     font-size: 22px;
+//   }
+// }
+
+// .column-setting-button:dir(ltr) {
+//   margin: 15px;
+// }
+// .va-mat-table-dragable-container .dragable-row mat-icon {
+//   margin-top: -2px;
+// }
+// .va-mat-table-dragable-container .dragable-row mat-icon,
+// .va-mat-table-dragable-container .dragable-row mat-checkbox {
+//   vertical-align: top;
+// }
 .va-mat-table-dragable-container .dragable-row mat-icon {
   line-height: 30px;
   opacity: 0.15;
@@ -104,15 +218,17 @@
 
 .done-setting {
   width: 50% !important;
-  display: inline-block;
+  display: inline-flex;
   text-align: center;
-  padding-left: 24px;
-  height: 34px;
+  height: 42px;
   mat-icon{
-    height: 38px;
+    line-height: 38px !important;
     opacity: 0.6;
     transition: opacity 0.5s;
     color: #616161;
+    width: 100%;
+    text-align: center;
+    margin: 0;
   }
   mat-icon:hover{
     opacity: 1;
@@ -128,8 +244,8 @@
     font-size: 12px;
     margin-top: -2px;
     mat-radio-button{
-      padding: 5px 0px 5px 10px !important;
-      // overflow: hidden !important;
+      padding: 5px;
+      width: 50%;
     }
 
     mat-radio-button:last-child {
@@ -169,3 +285,13 @@
   margin-right: 5px !important;
 }
 
+
+.mat-menu-item {
+  display: inline-flex;
+  span {
+    width: 100%;
+  }
+  mat-icon {
+    line-height: 48px !important;
+  }
+}

@@ -4,11 +4,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/abstract-filter';
-import { OnInit } from '@angular/core';
 import { titleCase } from '../utilies/text.utils';
 
-export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> implements OnInit {
-
+export  class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> {
   public dataToRender$: Subject<T[]>;
   public dataOfRange$: Subject<T[]>;
   private streamsReady: boolean;
@@ -82,12 +80,10 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     } else {
       this.filterPredicate = (data: T, filter: string) => true;
     }
-    this.filter = conditionsString;
+    this.filter = conditionsString;        
   }
 
-  ngOnInit(): void {
-  }
-
+  // When client paging active use for reterive paging data
   pagingData(data) {
     const p: MatPaginator = (this as any)._paginator;
     if ( p && p !== null) {
@@ -119,7 +115,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     // Last Paging
     const paginatedData = combineLatest([orderedData, pageChange]).pipe(map(([data]) => this.pagingData(data)));
 
-    this._renderChangesSubscription.unsubscribe();
+    this._renderChangesSubscription?.unsubscribe();
     this._renderChangesSubscription = new Subscription();
     this._renderChangesSubscription.add(paginatedData.subscribe(data => this.dataToRender$.next(data)));
     this._renderChangesSubscription.add(this.dataOfRange$.subscribe(data => renderData.next(data)));
@@ -129,6 +125,7 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> imple
     if (!this.streamsReady) {
       this.dataToRender$ = new ReplaySubject<T[]>(1);
       this.dataOfRange$ = new ReplaySubject<T[]>(1);
+      this.streamsReady = true;
     }
   }
 }
