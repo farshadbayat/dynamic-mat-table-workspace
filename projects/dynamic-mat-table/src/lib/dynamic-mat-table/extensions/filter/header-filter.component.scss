@@ -15,6 +15,7 @@
   // background-color: white;
   padding-left: 0 8px;
   :host.has-value & {
+    opacity: 1;
     color: rgba(0, 0, 0, 0.54);
   }
   :host:hover &,
@@ -41,12 +42,12 @@
 
 .menu-title{
   font-weight: bolder;
-  height: 24px;
+  // height: 24px;
   top: -8px;
   position: sticky;
   background-color: white;
   z-index: 1;
-  padding-top: 5px;
+  //padding-top: 5px;
 }
 
 .menu-action{
@@ -71,6 +72,8 @@
   overflow: hidden;
   font-size: 14px;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .filter-panel:nth-child(2) {

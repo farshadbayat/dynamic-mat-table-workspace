@@ -7,11 +7,14 @@ import { MatTable } from '@angular/material/table';
 import { FixedSizeTableVirtualScrollStrategy } from './fixed-size-table-virtual-scroll-strategy';
 import { CdkHeaderRowDef } from '@angular/cdk/table';
 import { Subject } from 'rxjs';
-import { isNumber } from 'util';
+
 
 export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemSizeDirective) {
   return tableDir.scrollStrategy;
 }
+
+const stickyHeaderSelector = '.mat-header-row .mat-table-sticky';
+const stickyFooterSelector = '.mat-footer-row .mat-table-sticky';
 
 const defaults = {
   rowHeight: 48,
@@ -55,11 +58,12 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
 
   @ContentChild(MatTable, { static: true }) table: MatTable<any>;
 
-  @Output() requestRendering: EventEmitter<any> = new EventEmitter();
+  // @Output() requestRendering: EventEmitter<any> = new EventEmitter();
 
   scrollStrategy = new FixedSizeTableVirtualScrollStrategy();
 
   dataSourceChanges = new Subject<void>();
+  private stickyPositions: Map<HTMLElement, number>;
 
   constructor(private zone: NgZone) {
   }
@@ -91,6 +95,11 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     this.scrollStrategy.stickyChange
       .pipe(
         filter(() => this.isStickyEnabled()),
+        tap(() => {
+          if (!this.stickyPositions) {
+            this.initStickyPositions();
+          }
+        }),
         takeWhile(this.isAlive())
       )
       .subscribe((stickyOffset) => {
@@ -98,37 +107,35 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
       });
   }
 
-  getPage(data, start, end): any[] {
-    this.requestRendering.emit({from: start, to: end});
-    return !isNumber(start) || !isNumber(end) ? data : data.slice(start, end);
-  }
-
   connectDataSource(dataSource: any) {
-    this.dataSourceChanges.next();
-    if (dataSource instanceof TableVirtualScrollDataSource) {
-      dataSource
-        .dataToRender$
-        .pipe(
-          distinctUntilChanged(),
-          takeUntil(this.dataSourceChanges),
-          takeWhile(this.isAlive()),
-          tap(data => this.scrollStrategy.dataLength = data.length),
-          switchMap(data =>
-            this.scrollStrategy
-              .renderedRangeStream
-              .pipe(
-                map(({ start, end }) => this.getPage(data, start, end))
-              )
+      this.dataSourceChanges.next();
+      if (dataSource instanceof TableVirtualScrollDataSource) {
+        dataSource
+          .dataToRender$
+          .pipe(
+            distinctUntilChanged(),
+            takeUntil(this.dataSourceChanges),
+            takeWhile(this.isAlive()),
+            tap(data => this.scrollStrategy.dataLength = data.length),
+            switchMap(data =>
+              this.scrollStrategy
+                .renderedRangeStream
+                .pipe(
+                   map(({ start, end }) => {
+                    // this.requestRendering.emit({from: start, to: end});
+                    return typeof start !== 'number' || typeof end !== 'number' ? data : data.slice(start, end);
+                   })                  
+                )
+            )
           )
-        )
-        .subscribe(data => {
-          this.zone.run(() => {
-            dataSource.dataOfRange$.next(data);
+          .subscribe(data => {
+            this.zone.run(() => {
+              dataSource.dataOfRange$.next(data);
+            });
           });
-        });
-    } else {
-      throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
-    }
+      } else {
+        throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
+      }    
   }
 
   ngOnChanges() {
@@ -142,15 +149,47 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
   }
 
 
+  // setSticky(offset) {
+  //   // fixed bug when sticky true for header and one column. column scroll front of header. becuse of z-index
+  //   let topOffset = -offset;
+  //   this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll('mat-header-row.mat-table-sticky')
+  //     .forEach((el: HTMLElement) => {
+  //       el.style.top = `${topOffset}px`;
+  //       topOffset += el.offsetHeight;
+  //       if (el.style.zIndex !== null ) {
+  //         el.style.zIndex = '1000';
+  //       }
+  //     });
+  // }
+
   setSticky(offset) {
-    // fixed bug when sticky true for header and one column. column scroll front of header. becuse of z-index
-    let topOffset = -offset;
-    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll('mat-header-row.mat-table-sticky')
+    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
       .forEach((el: HTMLElement) => {
-        el.style.top = `${topOffset}px`;
-        topOffset += el.offsetHeight;
-        if (el.style.zIndex !== null ) {
-          el.style.zIndex = '1000';
+        const parent = el.parentElement;
+        let baseOffset = 0;
+        if (this.stickyPositions.has(parent)) {
+          baseOffset = this.stickyPositions.get(parent);
+        }
+        el.style.top = `${baseOffset - offset}px`;
+      });
+    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyFooterSelector)
+      .forEach((el: HTMLElement) => {
+        const parent = el.parentElement;
+        let baseOffset = 0;
+        if (this.stickyPositions.has(parent)) {
+          baseOffset = this.stickyPositions.get(parent);
+        }
+        el.style.bottom = `${-baseOffset + offset}px`;
+      });
+  }
+
+  private initStickyPositions() {
+    this.stickyPositions = new Map<HTMLElement, number>();
+    this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
+      .forEach(el => {
+        const parent = el.parentElement;
+        if (!this.stickyPositions.has(parent)) {
+          this.stickyPositions.set(parent, parent.offsetTop);
         }
       });
   }

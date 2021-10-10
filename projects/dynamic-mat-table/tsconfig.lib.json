@@ -4,7 +4,7 @@
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
     "declaration": true,
-    "inlineSources": true,
+    "inlineSources": true,    
     "types": [],
     "lib": [
       "dom",
@@ -17,7 +17,7 @@
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableResourceInlining": true    
+    "enableResourceInlining": true,    
   },
   "exclude": [
     "src/test.ts",

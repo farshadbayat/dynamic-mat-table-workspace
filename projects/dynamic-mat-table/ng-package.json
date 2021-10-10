@@ -3,8 +3,6 @@
   "dest": "../../dist/dynamic-mat-table",
   "lib": {
     "entryFile": "src/public-api.ts",
-    "umdModuleIds": {
-    "util" : "src/lib/utilies"
-    }
+    "umdModuleIds": {}
   }
 }

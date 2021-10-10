@@ -1,25 +1,16 @@
-import {
-  AfterViewInit, ChangeDetectionStrategy, Component, HostBinding,
-  Output,
-  ViewChild,
-  Input,
-  EventEmitter,
-  OnInit,
-  ChangeDetectorRef,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostBinding, Output, ViewChild,
+         Input, EventEmitter, OnInit, ChangeDetectorRef, QueryList, ViewChildren, OnDestroy, ContentChildren } from '@angular/core';
 import { TableField } from './../../../models/table-field.model';
-import { LanguagePack } from './../../../models/language-pack.model';
 import { TableService } from '../../dynamic-mat-table.service';
 import { TextFilter } from './compare/text-filter';
 import { NumberFilter } from './compare/number-filter';
 import { AbstractFilter } from './compare/abstract-filter';
 import { transition, trigger, query, style, stagger, animate } from '@angular/animations';
-import { isNull } from '../../../utilies/utils';
 import { TableIntl } from '../../../international/table-Intl';
 import { MatInput } from '@angular/material/input';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { isNullorUndefined } from '../../../cores/type';
+import { Subscription } from 'rxjs';
 
 const listAnimation = trigger('listAnimation', [
   transition('* <=> *', [
@@ -38,17 +29,18 @@ const listAnimation = trigger('listAnimation', [
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [listAnimation]
 })
-export class HeaderFilterComponent implements OnInit, AfterViewInit {
+export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() field?: TableField<any>;
   @Output() filterChanged: EventEmitter<AbstractFilter[]> = new EventEmitter<AbstractFilter[]>();
 
-  @ViewChildren('filterInput') filterInputList: QueryList<MatInput>;
-  @ViewChild(MatMenuTrigger, { static: true }) menu: MatMenuTrigger;
+  @ContentChildren('filterInput') filterInputList !: QueryList<MatInput>;
+  @ViewChild(MatMenuTrigger, { static: true }) menu !: MatMenuTrigger;
 
   private filterList: AbstractFilter[] = [];
+  private eventsSubscription: Subscription;
   @Input()
   get filters(): AbstractFilter[] {
-    if ( isNull(this.filterList) === true || this.filterList.length === 0) {
+    if ( isNullorUndefined(this.filterList) === true || this.filterList.length === 0) {
       this.filterList = [];
       this.addNewFilter(this.field.type || 'text');
     }
@@ -60,20 +52,29 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   @HostBinding('class.has-value')
   get hasValue(): boolean {
-    return this.filters && this.filters.filter( f => f.hasValue() === true).length > 0;
+    return this.filterList && this.filterList.filter( f => f.hasValue() === true).length > 0;
   }
 
   @HostBinding('class.show-trigger')
   get showTrigger(): boolean {
-    return this.menu.menuOpen || this.hasValue;
+    if(this.menu === undefined) {
+      return false;
+    } else {
+      return this.menu.menuOpen || this.hasValue;
+    }
   }
-  
+
   constructor(public languagePack: TableIntl, public service: TableService, private cdr: ChangeDetectorRef) {
-    console.log(languagePack);
+  }
+
+  ngOnDestroy(): void {
+    if (this.eventsSubscription) {
+      this.eventsSubscription.unsubscribe();
+    }
   }
 
   ngOnInit(): void {
-    if (isNull(this.filters)) {
+    if (isNullorUndefined(this.filters)) {
       this.filters = [];
       this.addNewFilter(this.field.type);
     }
@@ -104,11 +105,13 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.menu.menuOpened.subscribe(() => this.focusToLastInput());
+    if (this.menu) {
+      this.eventsSubscription = this.menu.menuOpened.subscribe(() => this.focusToLastInput());
+    }
   }
 
   focusToLastInput() {
-    window.requestAnimationFrame(() => {
+    setTimeout(() => {
       if (this.filterInputList.length > 0) {
         this.filterInputList.last.focus();
       }
@@ -123,7 +126,7 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
         this.focusToLastInput();
       }
     } else if (action === 2 && this.filters.length > 1) { // delete
-      window.requestAnimationFrame(() => {
+      setTimeout(() => {
         this.filters.splice(index, 1);
         this.cdr.detectChanges();
         this.focusToLastInput();
@@ -138,6 +141,10 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit {
 
   applyFilter_OnClick() {
     this.filterChanged.emit(this.filterList);
+  }
+
+  test() {
+    console.log(this.field);
   }
 
 }

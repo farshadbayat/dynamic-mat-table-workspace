@@ -1,6 +1,10 @@
+
 /*
  * Public API Surface of dynamic-mat-table
  */
+export * from './lib/cores/type';
+export * from './lib/cores/dynamic-cell/IDynamicCell';
+export * from './lib/cores/dynamic-cell/dynamic-cell.directive';
 
 /*
 Table Component
@@ -14,7 +18,8 @@ export * from './lib/cores/table-data-source';
 Model Class
 */
 export * from './lib/models/language-pack.model';
-export * from './lib/international/table-Intl';
+// export * from './lib/international/table-Intl';
+export * from './lib/models/context-menu.model';
 export * from './lib/models/table-row.model';
 export * from './lib/models/table-field.model';
 export * from './lib/models/print-config.model';
@@ -26,4 +31,9 @@ Language International
 */
 
 export * from './lib/international/table-Intl';
+
+
+/* Toolbar*/
+export * from './lib/dynamic-mat-table/extensions/toolbar/toolbar.component';
+
 
