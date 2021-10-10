@@ -110,6 +110,11 @@ export class TableMenuComponent {
     this.menuActionChange.emit({ type: 'SelectSetting', data: setting.settingName });
   }
 
+  favorite_onClick(e, setting) {
+    e.stopPropagation();
+    this.menuActionChange.emit({ type: 'FavoriteSetting', data: setting.settingName });
+  }
+
   applySaveSetting_onClick(e) {
     e.stopPropagation();
     this.menuActionChange.emit({ type: 'SaveSetting', data: this.newSettingName });
@@ -128,6 +133,7 @@ export class TableMenuComponent {
     this.newSettingName ='';
     this.showNewSetting = false;
   }
+
 
 
 
@@ -154,6 +160,6 @@ export class TableMenuComponent {
 }
 
 export interface TableMenuActionChange {
-  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'DeleteSetting' | 'SelectSetting' | 'Print' | 'FullScreenMode';
+  type: 'FilterClear' | 'TableSetting' | 'Download' | 'SaveSetting' | 'DeleteSetting' | 'SelectSetting' | 'FavoriteSetting' | 'Print' | 'FullScreenMode';
   data?: any;
 }
