@@ -18,6 +18,21 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-size: 14px;
 }
 
+.dark {
+  background-color: black !important;
+  .mat-sort-header-container, .mat-menu-trigger {
+    color: white !important;
+    .mat-sort-header-arrow {
+      color: white !important;
+    }
+  }
+  header-filter {
+    .drag-indicator {
+      color: yellow !important;
+    }
+  }
+}
+
 
 /********* Table Style *********/
 dynamic-mat-table {

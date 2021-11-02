@@ -165,7 +165,7 @@ export class TableCoreDirective<T extends TableRow> {
       }
       const settingFields = (this.tableSetting.columnSetting || []).filter(s => s.name === f.name);
       const settingField = settingFields.length > 0 ? settingFields[0] : null;
-      // default value for fields
+      /* default value for fields */
       f.printable = f.printable || true;
       f.exportable = f.exportable || true;
       f.toExport = f.toExport || ((row, type) => typeof row === 'object' ? row[f.name] : '');
@@ -225,6 +225,7 @@ export class TableCoreDirective<T extends TableRow> {
   // Variables //
   progressColumn: string[] = [];
   displayedColumns: string[] = [];
+  displayedFooter: string[] = [];
   // private menus: TableMenu[] = [];
   public tableColumns: TableField<T>[];
   public tvsDataSource: TableVirtualScrollDataSource<T> = new TableVirtualScrollDataSource<T>([]);
@@ -297,6 +298,7 @@ export class TableCoreDirective<T extends TableRow> {
       if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
         this.displayedColumns.unshift('row-checkbox');
       }
+      this.displayedFooter = this.columns.filter( item => item.footer !== null && item.footer !== undefined ).map(item => item.name);
       //bugfixed because of double header show
       // if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
       //   this.displayedColumns.unshift('row-checkbox');

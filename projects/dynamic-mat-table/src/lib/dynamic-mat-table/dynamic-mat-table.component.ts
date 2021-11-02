@@ -253,6 +253,11 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     return -offset;
   }
 
+  headerClass(column: TableField<T>) {
+    console.log(column?.classNames);
+    return column?.classNames
+  }
+
   rowStyle(row) {
     let style: any =  row?.option?.style || {};
     if (this.setting.alternativeRowStyle && row.id % 2 === 0) {

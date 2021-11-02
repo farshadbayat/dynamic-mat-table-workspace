@@ -1,3 +1,4 @@
+import { FooterCell } from './table-footer.model';
 import { TableRow } from './table-row.model';
 
 export declare type AtRenderFunc<R extends TableRow> = (row: R) => string;
@@ -48,6 +49,8 @@ export interface AbstractField {
   exportable?: boolean;
   enableContextMenu?: boolean;
   rowSelectionable?: boolean;
+  /* Footer */
+  footer?: FooterCell[],
   /* For Ellipsis Text */
   cellEllipsisRow?: number;
   cellTooltipEnable?: boolean;

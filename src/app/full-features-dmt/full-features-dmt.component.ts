@@ -99,7 +99,7 @@ export class FullFeaturesDmtComponent implements OnInit {
       {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},
     ];
 
-    this.loadSetting();
+    // this.loadSetting();
   }
 
   loadSetting() {
@@ -512,7 +512,9 @@ export class FullFeaturesDmtComponent implements OnInit {
         // type: 'number',
          width: 300,
          cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'},
-         display: 'prevent-hidden'
+         display: 'prevent-hidden',
+         classNames: 'dark',
+
      },
      {
       name: 'FormlyColumn',
@@ -521,6 +523,9 @@ export class FullFeaturesDmtComponent implements OnInit {
       dynamicCellComponent: FormlyCellComponent,
       draggable: false,
       filterable: false,
+      footer: [{
+        aggregateText: 'Test1'
+      }]
       },
      {
        name: 'order',
