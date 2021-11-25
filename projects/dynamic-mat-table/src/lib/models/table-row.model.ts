@@ -9,7 +9,7 @@ export interface TableRow {
 }
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';
-export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'CellClick' | 'LabelClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
+export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'DoubleClick' | 'CellClick' | 'LabelClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
 
 export interface IRowEvent {
   event: RowEventType | any;

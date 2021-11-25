@@ -79,7 +79,6 @@ export class TableCoreDirective<T extends TableRow> {
   }
   set rowSelectionModel(value: SelectionModel<T>) {
     if (!isNullorUndefined(value)) {
-      console.log(value);
       if (this._rowSelectionMode && value && this._rowSelectionMode !== 'none') {
         this._rowSelectionMode = (value.isMultipleSelection() === true ? 'multi': 'single');
       }
@@ -299,21 +298,10 @@ export class TableCoreDirective<T extends TableRow> {
         this.displayedColumns.unshift('row-checkbox');
       }
       this.displayedFooter = this.columns.filter( item => item.footer !== null && item.footer !== undefined ).map(item => item.name);
-      //bugfixed because of double header show
-      // if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
-      //   this.displayedColumns.unshift('row-checkbox');
-      // }
-      // setTimeout( () => {
-      //   if ((this._rowSelectionMode === 'multi' || this._rowSelectionMode === 'single') && this.displayedColumns.indexOf('row-checkbox') === -1) {
-      //     this.displayedColumns.unshift('row-checkbox');
-      //   }
-      // }, 0);
-
       if (this.tableSetting.visibleTableMenu !== false) {
         this.displayedColumns.push('table-menu');
       }
     }
-    // this.updatePagination();
   }
 
   /************************************ Drag & Drop Column *******************************************/

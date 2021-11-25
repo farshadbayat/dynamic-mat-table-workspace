@@ -46,6 +46,7 @@
         <!-- FOOTER -->
         <mat-footer-cell *matFooterCellDef>ss</mat-footer-cell>
     </ng-container>
+
     <!-- Table Columns -->
     <ng-container *ngFor="let column of columns; let i = index; trackBy: trackColumn" [matColumnDef]="column.name"
       [sticky]="column.sticky === 'start' ? true : false" [stickyEnd]="column.sticky === 'end' ? true : false">
@@ -94,7 +95,15 @@
         </ng-container>
       </mat-cell>
       <!-- FOOTER -->
-      <mat-footer-cell *matFooterCellDef>ss</mat-footer-cell>
+      <mat-footer-cell *matFooterCellDef
+                        [style.maxWidth.px]="column.width"
+                        [style.minWidth.px]="column.width">
+        <div *ngFor="let footer of column?.footer" class="footer-column">
+          <div [style.height.px]="headerHeight" class="footer-row">
+            <span> {{footer.aggregateText}}</span>
+          </div>
+        </div>
+      </mat-footer-cell>
     </ng-container>
 
     <ng-container matColumnDef="progress" >
@@ -126,7 +135,6 @@
       <mat-cell *matCellDef="let row" class="table-menu">
         <row-menu *ngIf="rowContextMenuItems && rowContextMenuItems.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowContextMenuItems" [tableSetting]="tableSetting" (rowActionChange)="rowMenuActionChange($event, row)"></row-menu>
       </mat-cell>
-      <mat-footer-cell *matFooterCellDef>ss</mat-footer-cell>
     </ng-container>
     <!-- Row Table[Header, Data, Footer] -->
     <mat-row

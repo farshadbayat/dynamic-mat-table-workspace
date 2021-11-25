@@ -275,3 +275,19 @@ cdk-virtual-scroll-viewport {
   visibility: visible;
   white-space: pre;
 }
+::ng-deep .mat-footer-cell {
+  flex-direction: column !important;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  .footer-row {
+    display: flex;
+    flex-direction: row;
+    span{
+      display: inherit;
+      align-items: center;
+    }
+  }
+}

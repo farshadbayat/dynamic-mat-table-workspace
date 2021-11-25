@@ -254,7 +254,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   headerClass(column: TableField<T>) {
-    console.log(column?.classNames);
     return column?.classNames
   }
 
@@ -532,16 +531,16 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   onLabelClick(e, row, column: TableField<T>) {
     if (column.clickable !== false && (column.clickType === 'label')) {
-      this.onRowEvent.emit({ event: 'LabelClick', sender: {row: row, column: column} });
+      this.onRowEvent.emit({ event: 'LabelClick', sender: {row: row, column: column, e: e} });
     }
   }
 
   onRowDblClick(e, row) {
-    this.onRowEvent.emit({ event: e, sender: {row: row} });
+    this.onRowEvent.emit({ event: 'DoubleClick', sender: {row: row, e: e} });
   }
 
   onRowClick(e, row) {
-    this.onRowEvent.emit({ event: 'RowClick', sender: {row: row} });
+    this.onRowEvent.emit({ event: 'RowClick', sender: {row: row, e: e} });
   }
 
   /************************************ Drag & Drop Column *******************************************/

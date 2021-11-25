@@ -1,6 +1,6 @@
 {
   "name": "dynamic-mat-table",
-  "version": "1.4.17",
+  "version": "1.4.20",
   "description": "dynamic-mat-table is an Angular component for presenting large and complex data with a lightning fast performance (at least 10x faster) and excellent level of control over the presentation.",
   "peerDependencies": {
     "@angular/common": ">=8.0.0",
@@ -34,6 +34,6 @@
     "multi language"
   ],
   "author": "FB",
-  "homepage": "http://tavanasys.ir/site/portfolio",
+  "homepage": "https://github.com/farshadbayat",
   "license": "MIT"
 }

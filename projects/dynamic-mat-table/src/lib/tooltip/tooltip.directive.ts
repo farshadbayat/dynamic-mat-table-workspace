@@ -38,14 +38,11 @@ export class TooltipDirective implements OnDestroy {
 
   @HostListener('mouseenter')
   show() {
-    console.log(this.elementRef);
     const injector = Injector.create({
       providers: [ { provide: 'tooltipConfig', useValue: this.content }]
     });
     const tooptipRef: ComponentRef<TooltipComponent> = this.overlayRef.attach(new ComponentPortal(TooltipComponent, null, injector));
-    tooptipRef.onDestroy((x) => {
-      console.log(x);
-    });
+    // tooptipRef.onDestroy((x) => {});
   }
 
 

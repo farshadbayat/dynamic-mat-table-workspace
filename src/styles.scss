@@ -18,8 +18,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   font-size: 14px;
 }
 
-.dark {
-  background-color: black !important;
+.custom-header {
+  background: linear-gradient(0deg, rgb(214, 211, 10) 0%, #d6a609 50%, rgb(219, 223, 16) 100%) !important;
   .mat-sort-header-container, .mat-menu-trigger {
     color: white !important;
     .mat-sort-header-arrow {

@@ -143,9 +143,5 @@ export class HeaderFilterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filterChanged.emit(this.filterList);
   }
 
-  test() {
-    console.log(this.field);
-  }
-
 }
 

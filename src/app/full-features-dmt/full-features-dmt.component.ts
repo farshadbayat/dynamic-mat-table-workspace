@@ -13,6 +13,7 @@ import {
   ITableEvent,
   ToolbarItem
 } from 'dynamic-mat-table';
+import { FooterCell } from 'dynamic-mat-table/lib/models/table-footer.model';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
 import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
 import { BehaviorSubject, Observable, Observer, of } from 'rxjs';
@@ -505,7 +506,11 @@ export class FullFeaturesDmtComponent implements OnInit {
     }, 100);
   }
 
+  footerContent: FooterCell = {
+    aggregateText: 'New Footer Cell Content'
+  }
   initField() {
+
     this.fields = [
       {
          name: 'row',
@@ -513,8 +518,10 @@ export class FullFeaturesDmtComponent implements OnInit {
          width: 300,
          cellStyle: {'background-color': '#3f51b5', 'color':'#ffffff'},
          display: 'prevent-hidden',
-         classNames: 'dark',
-
+         classNames: 'custom-header',
+        //  footer: [{
+        //   aggregateText: 'Test1'
+        // }]
      },
      {
       name: 'FormlyColumn',
@@ -523,8 +530,8 @@ export class FullFeaturesDmtComponent implements OnInit {
       dynamicCellComponent: FormlyCellComponent,
       draggable: false,
       filterable: false,
-      footer: [{
-        aggregateText: 'Test1'
+      footer: [this.footerContent, {
+        aggregateText: 'Test22',
       }]
       },
      {
@@ -535,17 +542,40 @@ export class FullFeaturesDmtComponent implements OnInit {
        dynamicCellComponent: DynamicCellComponent,
        clickable: false,
        rowSelectionable: false,
+       footer: [{
+        aggregateText: 'Test3',
+       }],
        toExport: (v, type)=>{
           console.log(v);
         }
        },
-      { name: 'name', header: 'Element Name', sticky: 'start' },
-      { name: 'weight',
+      {
+        name: 'name',
+        header: 'Element Name',
+        footer: [{
+          aggregateText: 'Test4',
+         }],
+        sticky: 'start' },
+      {
+        name: 'weight',
         sort: 'server-side',
+        footer: [{
+          aggregateText: 'Test5',
+         }],
         clickType: 'label'
        },
-      { name: 'color' },
-      { name: 'brand' },
+      {
+        name: 'color',
+        footer: [{
+          aggregateText: 'Test6',
+         }],
+      },
+      {
+        name: 'brand',
+        footer: [{
+          aggregateText: 'Test7',
+         }],
+      },
       {
         name: 'setting',
         icon: 'chrome_reader_mode',
@@ -554,6 +584,9 @@ export class FullFeaturesDmtComponent implements OnInit {
         option: 2,
         clickable: false,
         rowSelectionable: false,
+        footer: [{
+          aggregateText: 'Test8',
+         }],
         toExport: (d, t) => {
           return 1;
         }
@@ -739,6 +772,11 @@ export class FullFeaturesDmtComponent implements OnInit {
     if(localStorage.getItem('tableConfig')) {
       this.setting = JSON.parse(localStorage.getItem('tableConfig'));
     }
+  }
+
+  changeFooter_onClick() {
+    this.footerContent.aggregateText = '121212';
+    this.table.refreshUI();
   }
 
   autoHeight_onClick() {
