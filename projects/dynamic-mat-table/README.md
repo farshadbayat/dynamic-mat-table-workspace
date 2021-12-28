@@ -4,9 +4,12 @@
 
 ## Online Demo
 Latest Version:
+
+https://stackblitz.com/edit/angular-ivy-wge9lp
+
+version (1.3.2):
+
 https://stackblitz.com/edit/angular-ivy-s4ne42
-version (1.2.14):
-https://stackblitz.com/edit/angular-ivy-nuglh9
 ## Getting Started
 
 A full demo can be found on the github repository.

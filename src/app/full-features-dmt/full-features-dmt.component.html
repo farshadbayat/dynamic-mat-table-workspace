@@ -5,7 +5,7 @@
 [direction]="direction"
 [expandComponent]="expandComponent"
 [rowHeight]="rowHeight"
-[columns]="fields"
+[columns]="fields$ | async"
 [pending]="pending"
 [setting]="setting"
 tableName="demo_table"
@@ -24,7 +24,6 @@ tableName="demo_table"
 [class.conditional-class]="conditinalClass"
 (settingChange)="table_onChangeSetting($event)"
 (rowSelectionChange)="table_onRowSelectionChange($event)">
-<dm-toolbar [itemList]="formulaActionList" (actionClick)="formula_onActionClick($event)" [direction]='direction'> </dm-toolbar>
 </dynamic-mat-table>
 
 <section class="section">

@@ -25,7 +25,6 @@ import { DynamicCellDirective } from '../cores/dynamic-cell/dynamic-cell.directi
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { ToolbarComponent } from './extensions/toolbar/toolbar.component';
 import { MatRippleModule } from '@angular/material/core';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -75,7 +74,7 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     ExtentionsModule,
     // NoopAnimationsModule
   ],
-  exports: [DynamicMatTableComponent, ToolbarComponent],
+  exports: [DynamicMatTableComponent],
   providers: [
     // bugfixed in library compiler not load and must create library
     {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
@@ -91,7 +90,6 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
   declarations: [
     DynamicMatTableComponent,
     PrintTableDialogComponent,
-    ToolbarComponent,
     TableCoreDirective,
     DynamicCellDirective,
     TooltipComponent,

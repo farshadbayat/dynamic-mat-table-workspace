@@ -5,7 +5,6 @@ import { TableService } from './dynamic-mat-table.service';
 import { TableRow } from '../models/table-row.model';
 import { TableField } from '../models/table-field.model';
 import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
-import { TablePagination } from '../models/table-pagination.model';
 import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
@@ -16,7 +15,7 @@ import { TableMenuActionChange } from './extensions/table-menu/table-menu.compon
 import { CdkDragDrop, CdkDragStart, moveItemInArray } from '@angular/cdk/drag-drop';
 import { isNullorUndefined } from '../cores/type';
 import { TableSetting } from '../models/table-setting.model';
-import { delay } from 'rxjs/operators';
+import { delay, filter } from 'rxjs/operators';
 import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
 import { Subscription } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -25,6 +24,7 @@ import { Overlay, OverlayContainer, OverlayPositionBuilder, OverlayRef } from '@
 import { requestFullscreen } from '../utilies/html.helper';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { PageEvent } from '@angular/material/paginator';
 
 export const tableAnimation = trigger('tableAnimation', [
   transition('void => *', [
@@ -93,7 +93,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   private eventsSubscription: Subscription;
   printing = true;
   printTemplate: TemplateRef<any> = null;
-  resizeColumn: ResizeColumn = new ResizeColumn();
+  public resizeColumn: ResizeColumn = new ResizeColumn();
   /* mouse resize */
   resizableMousemove: () => void;
   resizableMouseup: () => void;
@@ -115,7 +115,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       e.preventDefault(); return false;
     });
 
-    this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100)).subscribe((data) => {
+    this.eventsSubscription = this.resizeColumn.widthUpdate.pipe(delay(100), filter(data => data.i >= 0) /* Checkbox Column */).subscribe((data) => {
       this.columns[data.i].width = data.w;
       if (this.tableSetting.columnSetting[data.i]) {
         this.tableSetting.columnSetting[data.i].width = data.w;
@@ -403,10 +403,13 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     // this.rowActionMenuChange.emit({actionItem: contextMenuItem, rowItem: row });
   }
 
-  pagination_onChange(e: TablePagination) {
+  pagination_onChange(e: PageEvent) {
     this.pending = true;
-    this.tvsDataSource.refreshFilterPredicate(); // pagination Bugfixed
-    this.paginationChange.emit(e);
+    this.tvsDataSource.refreshFilterPredicate();
+    this.pagination.length = e.length;
+    this.pagination.pageIndex = e.pageIndex;
+    this.pagination.pageSize = e.pageSize;
+    this.paginationChange.emit(this.pagination);
   }
 
   autoHeight() {
@@ -423,11 +426,12 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
+    console.log(type);
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     if (this.resizeColumn.resizeHandler === 'right') {
       this.resizeColumn.startWidth = event.target.parentElement.clientWidth;
-      this.resizeColumn.currentResizeIndex = index;
+      this.resizeColumn.columnIndex = index;
     } else {
       if (event.target.parentElement.previousElementSibling === null) {
         // for first column not resize
@@ -435,7 +439,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       } else {
         this.resizeColumn.startWidth =
           event.target.parentElement.previousElementSibling.clientWidth;
-        this.resizeColumn.currentResizeIndex = index;
+        this.resizeColumn.columnIndex = index;
       }
     }
     event.preventDefault();
@@ -443,10 +447,8 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   mouseMove(index: number) {
-    this.resizableMousemove = this.renderer.listen(
-      'document',
-      'mousemove',
-      (event) => {
+    this.resizableMousemove = this.renderer.listen('document' ,'mousemove' , (event) => {
+        console.log('mm');
         if (this.resizeColumn.resizeHandler !== null && event.buttons) {
           const rtl = this.direction === 'rtl' ? -1 : 1;
           let width = 0;
@@ -457,7 +459,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
             const dx = this.resizeColumn.startX - event.pageX;
             width = this.resizeColumn.startWidth - rtl * dx;
           }
-          if ( this.resizeColumn.currentResizeIndex === index && width > this.minWidth ) {
+          if ( this.resizeColumn.columnIndex === index && width > this.minWidth ) {
             this.resizeColumn.widthUpdate.next({
               i: index - (this.resizeColumn.resizeHandler === 'left' ? 1 : 0),
               w: width,
@@ -466,13 +468,12 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
         }
       }
     );
-    this.resizableMouseup = this.renderer.listen(
-      'document',
-      'mouseup',
-      (event) => {
+    this.resizableMouseup = this.renderer.listen('document' ,'mouseup' , (event) => {
         if (this.resizeColumn.resizeHandler !== null) {
           this.resizeColumn.resizeHandler = null;
-          this.resizeColumn.currentResizeIndex = -1;
+          this.resizeColumn.columnIndex = -1;
+          /* Remove Event Listen */
+          this.resizableMousemove();
         }
       }
     );

@@ -10,8 +10,7 @@ import {
   DynamicMatTableComponent,
   TableVirtualScrollDataSource,
   IRowEvent,
-  ITableEvent,
-  ToolbarItem
+  ITableEvent
 } from 'dynamic-mat-table';
 import { FooterCell } from 'dynamic-mat-table/lib/models/table-footer.model';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
@@ -35,6 +34,8 @@ export class FullFeaturesDmtComponent implements OnInit {
   @ViewChild(DynamicMatTableComponent, { static: true }) table !: DynamicMatTableComponent<TestElement>;
   altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
+  fields$: BehaviorSubject<TableField<any>[]> = new BehaviorSubject<TableField<any>[]>([]);
+
   setting: TableSetting= null;
 
   scrollStrategyType: TableScrollStrategy = 'fixed-size';
@@ -63,7 +64,6 @@ export class FullFeaturesDmtComponent implements OnInit {
     title: 'Print All Test Data',
     showParameters: true,
   };
-  formulaActionList: ToolbarItem[] = [];
 
   constructor() {
     this.contextMenuItems.push(
@@ -91,15 +91,6 @@ export class FullFeaturesDmtComponent implements OnInit {
 
     this.initField();
     this.fetchData_onClick();
-    this.formulaActionList = [
-      {id: 0, name: 'load-list', tooltip: 'دریافت اطلاعات', matIcon: 'list', matIconColor: '#0980ab'},
-      {id: 1, name: 'refresh', tooltip: 'بروز رسانی', matIcon: 'refresh', matIconColor: '#0980ab', splitter: true},
-      {id: 2, name: 'new-record', tooltip: 'ردیف جدید', matIcon: 'add_box', matIconColor: '#478447'},
-      {id: 3, name: 'delete', tooltip: 'حذف ردیف', matIcon: 'delete_forever', matIconColor: 'red', float: true},
-      {id: 4, name: 'clear', tooltip: 'پاک کردن', matIcon: 'clear_all', matIconColor: '#0980ab'},
-      {id: 5, name: 'save', tooltip: 'ذخیره جدول', matIcon: 'save', matIconColor: '#3f51b5',splitter: true},
-    ];
-
     // this.loadSetting();
   }
 
@@ -530,9 +521,13 @@ export class FullFeaturesDmtComponent implements OnInit {
       dynamicCellComponent: FormlyCellComponent,
       draggable: false,
       filterable: false,
-      footer: [this.footerContent, {
-        aggregateText: 'Test22',
-      }]
+      footer: [
+        this.footerContent,
+        {
+          aggregateText: 'Test22',
+          footerStyle: [{ 'color': 'red'}]
+        }
+    ]
       },
      {
        name: 'order',
@@ -595,6 +590,13 @@ export class FullFeaturesDmtComponent implements OnInit {
         // sortable: false,
       }
     ];
+
+    this.fields$.next([...this.fields]);
+    setInterval(() =>{
+      this.fields$.next([...this.fields]);
+      console.log('ss');
+
+    }, 5000);
   }
 
   fetchData_onClick() {
@@ -765,9 +767,6 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.table.refreshUI();
   }
 
-  formula_onActionClick(item: ToolbarItem): void {
-
-  }
   loadSetting_onClick() {
     if(localStorage.getItem('tableConfig')) {
       this.setting = JSON.parse(localStorage.getItem('tableConfig'));

@@ -60,7 +60,7 @@
           [cdkDragData]="{name: column.name, columIndex: i}"
           [style.maxWidth.px]="column.width"
           [style.minWidth.px]="column.width"
-          [class.active-resize]="resizeColumn.currentResizeIndex===i" cdkDragBoundary="mat-header-row">
+          [class.active-resize]="resizeColumn.columnIndex===i" cdkDragBoundary="mat-header-row">
           <!-- class="left-resizer-handler" -->
           <div
             class="resizer-handler"
@@ -163,8 +163,8 @@
   [length]="pagination?.length"
   [pageSize]="pagination?.pageSize"
   [pageIndex]="pagination?.pageIndex"
-  (page)="pagination_onChange($event)"
-  [pageSizeOptions]="pagination?.pageSizeOptions">
+  [pageSizeOptions]="pagination?.pageSizeOptions"
+  (page)="pagination_onChange($event)">
 </mat-paginator>
 <!-- <ng-content></ng-content> -->
 <ng-container *ngIf="showNoData && init === true">

@@ -32,8 +32,4 @@ Language International
 
 export * from './lib/international/table-Intl';
 
-
-/* Toolbar*/
-export * from './lib/dynamic-mat-table/extensions/toolbar/toolbar.component';
-
-
+export * from './lib/utilies/html.helper'
