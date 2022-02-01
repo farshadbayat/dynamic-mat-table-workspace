@@ -25,6 +25,7 @@
   min-width: 200px;
   padding: 8px 0 8px 0;
   user-select: none;
+  max-height: 100vh;
 }
 
 .va-mat-table-dragable-container:dir(rtl) {
@@ -296,11 +297,22 @@
   }
 }
 
-::ng-depp .column-config{
- .mat-checkbox-layout .mat-checkbox-label {
-      width: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+::ng-deep .column-config{
+  .mat-checkbox-layout{
+    width: 100%;
   }
+ .mat-checkbox-layout .mat-checkbox-label {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.column-config-apply {
+  border-top: 1px solid rgb(231, 231, 231);
+  position: sticky;
+  bottom: 0px;
+  z-index: 2147483647;
+  background-color: white;
 }

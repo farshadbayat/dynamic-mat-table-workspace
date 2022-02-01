@@ -76,9 +76,9 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.saveSettingMode = value.saveSettingMode ||  this.tableSetting.saveSettingMode || 'simple';
       this.pagination.pageSize = value.pageSize || this.tableSetting.pageSize;
       /* Dynamic Cell must update when setting change */
-      value.columnSetting.forEach( column => {
+      value?.columnSetting?.forEach( column => {
         const orginalColumn = this.columns.find( c => c.name === column.name);
-        column.dynamicCellComponent = (orginalColumn !== null && orginalColumn.dynamicCellComponent !== null) ? orginalColumn.dynamicCellComponent : null;
+        column = {...orginalColumn, ...column};
       });
       this.tableSetting = value;
       this.setDisplayedColumns();
@@ -364,9 +364,18 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       const newSetting = Object.assign({}, this.setting.settingList.find(s => s.settingName === e.data));
       newSetting.settingList = this.setting.settingList;
       newSetting.currentSetting = e.data;
+      if(this.pagination.pageSize !== newSetting?.pageSize) {
+        this.pagination.pageSize = newSetting?.pageSize || this.pagination.pageSize;
+        this.paginationChange.emit(this.pagination);
+      }
+      /* Dynamic Cell must update when setting change */
+      newSetting.columnSetting?.forEach( column => {
+        const orginalColumn = this.columns.find( c => c.name === column.name);
+        column = {...orginalColumn, ...column};
+      });
       this.tableSetting = newSetting;
       this.settingChange.emit({setting: this.tableSetting});
-      this.refreshColumn(this.tableSetting.columnSetting);
+      // this.refreshColumn(this.tableSetting.columnSetting);
     } else if(e.type === 'FullScreenMode') {
       requestFullscreen(this.tbl.elementRef);
     } else if (e.type === 'Download') {
@@ -410,13 +419,15 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
 
   pagination_onChange(e: PageEvent) {
-    this.pending = true;
-    this.tvsDataSource.refreshFilterPredicate();
-    this.pagination.length = e.length;
-    this.pagination.pageIndex = e.pageIndex;
-    this.pagination.pageSize = e.pageSize;
-    this.setting.pageSize = e.pageSize; /* Save Page Size when need in setting config */
-    this.paginationChange.emit(this.pagination);
+    if(this.pagingMode !== 'none') {
+      this.pending = true;
+      this.tvsDataSource.refreshFilterPredicate();
+      this.pagination.length = e.length;
+      this.pagination.pageIndex = e.pageIndex;
+      this.pagination.pageSize = e.pageSize;
+      this.setting.pageSize = e.pageSize; /* Save Page Size when need in setting config */
+      this.paginationChange.emit(this.pagination);
+    }
   }
 
   autoHeight() {
@@ -433,7 +444,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   /////////////////////////////////////////////////////////////////
 
   onResizeColumn(event: any, index: number, type: 'left' | 'right') {
-    console.log(type);
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     if (this.resizeColumn.resizeHandler === 'right') {
@@ -455,7 +465,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
 
   mouseMove(index: number) {
     this.resizableMousemove = this.renderer.listen('document' ,'mousemove' , (event) => {
-        console.log('mm');
         if (this.resizeColumn.resizeHandler !== null && event.buttons) {
           const rtl = this.direction === 'rtl' ? -1 : 1;
           let width = 0;
