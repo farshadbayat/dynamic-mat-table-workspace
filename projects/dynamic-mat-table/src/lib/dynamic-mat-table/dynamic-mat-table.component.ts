@@ -74,6 +74,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
       value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
       value.saveSettingMode = value.saveSettingMode ||  this.tableSetting.saveSettingMode || 'simple';
+      this.pagination.pageSize = value.pageSize || this.tableSetting.pageSize;
       /* Dynamic Cell must update when setting change */
       value.columnSetting.forEach( column => {
         const orginalColumn = this.columns.find( c => c.name === column.name);
@@ -414,6 +415,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
     this.pagination.length = e.length;
     this.pagination.pageIndex = e.pageIndex;
     this.pagination.pageSize = e.pageSize;
+    this.setting.pageSize = e.pageSize; /* Save Page Size when need in setting config */
     this.paginationChange.emit(this.pagination);
   }
 

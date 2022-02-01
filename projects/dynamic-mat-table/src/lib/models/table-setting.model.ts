@@ -5,6 +5,7 @@ export type Direction = 'rtl' | 'ltr';
 export type DisplayMode = 'visible' | 'hiden' | 'none'  ;
 export interface TableSetting {
   // screenMode?: ScreenMode;
+  pageSize?: number;
   direction?: Direction;
   columnSetting?: AbstractField[];
   visibaleActionMenu?: VisibleActionMenu;
