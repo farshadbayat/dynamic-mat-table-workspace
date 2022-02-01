@@ -122,6 +122,7 @@
         (cdkDragDropped)="columnMenuDropped($event)">
         <mat-icon cdkDragHandle>drag_indicator</mat-icon>
         <mat-checkbox
+          class="column-config"
           [disabled]="column?.display === 'prevent-hidden'"
           [checked]="column?.display === 'visible' || column?.display === 'prevent-hidden'"
           (click)="$event.stopPropagation()"

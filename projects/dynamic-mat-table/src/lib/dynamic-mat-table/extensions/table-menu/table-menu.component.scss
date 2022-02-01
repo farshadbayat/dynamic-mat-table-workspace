@@ -33,7 +33,7 @@
 
 .dragable-row {
   mat-checkbox {
-    width: 100%;
+    width: calc( 100% - 54px );
     line-height: 28px;
     display: inline-flex;
   }
@@ -293,5 +293,14 @@
   }
   mat-icon {
     line-height: 48px !important;
+  }
+}
+
+::ng-depp .column-config{
+ .mat-checkbox-layout .mat-checkbox-label {
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
   }
 }

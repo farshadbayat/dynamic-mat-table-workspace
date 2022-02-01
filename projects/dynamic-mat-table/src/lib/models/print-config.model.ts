@@ -10,6 +10,7 @@ export interface PrintConfig {
   data?: any[];
   columns?: AbstractField[];
   direction?: Direction;
+  pregenerate?: (html: string) => string;
 }
 
 

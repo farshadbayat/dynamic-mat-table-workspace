@@ -15,7 +15,7 @@ import {
 import { FooterCell } from 'dynamic-mat-table/lib/models/table-footer.model';
 import { TableScrollStrategy } from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
 import { ContextMenuItem } from 'projects/dynamic-mat-table/src/public-api';
-import { BehaviorSubject, Observable, Observer, of } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { DynamicCellComponent } from '../dynamic-cell/dynamic-cell.component';
 import { DynamicExpandCellComponent } from '../dynamic-expand-cell/dynamic-expand-cell.component';
 import { FormlyCellComponent } from '../formly-cell/formly-cell.component';
@@ -35,8 +35,9 @@ export class FullFeaturesDmtComponent implements OnInit {
   altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
   fields$: BehaviorSubject<TableField<any>[]> = new BehaviorSubject<TableField<any>[]>([]);
-
-  setting: TableSetting= null;
+  setting: TableSetting = {
+    saveSettingMode: 'multi',
+  };
 
   scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
@@ -91,7 +92,7 @@ export class FullFeaturesDmtComponent implements OnInit {
 
     this.initField();
     this.fetchData_onClick();
-    // this.loadSetting();
+    this.loadSetting();
   }
 
   loadSetting() {
@@ -781,6 +782,11 @@ export class FullFeaturesDmtComponent implements OnInit {
   autoHeight_onClick() {
     this.setting.autoHeight = ! this.setting?.autoHeight;
     this.dataSource$.next(this.dataSource$.value);
+  }
+
+  clearField_onClick() {
+    this.fields$.next([...this.fields]);
+    this.table.refreshUI();
   }
 }
 

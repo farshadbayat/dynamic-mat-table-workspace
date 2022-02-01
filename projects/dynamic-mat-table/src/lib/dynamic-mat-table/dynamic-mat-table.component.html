@@ -124,6 +124,7 @@
         </div>
       </td>
     </ng-container>
+
     <!-- Table Menu[ Sort, Visible, Export] -->
     <ng-container matColumnDef="table-menu" [stickyEnd]="true" *ngIf="setting?.visibleTableMenu !== false">
       <mat-header-cell *matHeaderCellDef class="table-menu">
@@ -136,6 +137,7 @@
         <row-menu *ngIf="rowContextMenuItems && rowContextMenuItems.length > 0" [rowActionMenu]="row?.actionMenu" [actionMenus]="rowContextMenuItems" [tableSetting]="tableSetting" (rowActionChange)="rowMenuActionChange($event, row)"></row-menu>
       </mat-cell>
     </ng-container>
+
     <!-- Row Table[Header, Data, Footer] -->
     <mat-row
       *matRowDef="let row; columns: displayedColumns;"
@@ -149,9 +151,11 @@
       [class.row-selection]="rowSelectionModel ? rowSelectionModel.isSelected(row) : false"
       (contextmenu)="onContextMenu($event, null, row)">
     </mat-row>
+
     <ng-container *ngIf="expandColumn.length > 0">
       <tr mat-row *matRowDef="let expandRow; columns: expandColumn" class="detail-row"></tr>
     </ng-container>
+
     <mat-header-row class="header" [@tableAnimation] *matHeaderRowDef="displayedColumns; sticky: sticky" [style.top.px]="inverseOfTranslation"></mat-header-row >
     <mat-footer-row class="footer" [@tableAnimation] *matFooterRowDef="displayedFooter;"></mat-footer-row>
     <mat-header-row class="progress" *matHeaderRowDef="progressColumn; sticky: sticky" [style.top.px]="inverseOfTranslation + headerHeight - 5" ></mat-header-row>

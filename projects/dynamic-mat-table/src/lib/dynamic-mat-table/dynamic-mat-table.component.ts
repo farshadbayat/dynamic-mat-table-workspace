@@ -66,7 +66,6 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
   }
   set setting(value: TableSetting) {
     if ( !isNullorUndefined(value) ) {
-      value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
       value.alternativeRowStyle = value.alternativeRowStyle || this.tableSetting.alternativeRowStyle;
       value.columnSetting = value.columnSetting || this.tableSetting.columnSetting;
       value.direction = value.direction || this.tableSetting.direction;
@@ -75,6 +74,11 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       value.visibleTableMenu = value.visibleTableMenu || this.tableSetting.visibleTableMenu;
       value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
       value.saveSettingMode = value.saveSettingMode ||  this.tableSetting.saveSettingMode || 'simple';
+      /* Dynamic Cell must update when setting change */
+      value.columnSetting.forEach( column => {
+        const orginalColumn = this.columns.find( c => c.name === column.name);
+        column.dynamicCellComponent = (orginalColumn !== null && orginalColumn.dynamicCellComponent !== null) ? orginalColumn.dynamicCellComponent : null;
+      });
       this.tableSetting = value;
       this.setDisplayedColumns();
     }
@@ -385,6 +389,7 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.printConfig.direction = this.tableSetting.direction || 'ltr';
       this.printConfig.columns = this.tableColumns;
       this.printConfig.data = this.tvsDataSource.filteredData;
+      debugger
       const params = this.tvsDataSource.toTranslate();
       this.printConfig.tablePrintParameters = [];
       params.forEach((item) => {

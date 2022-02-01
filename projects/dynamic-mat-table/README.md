@@ -3,22 +3,24 @@
 ![Screen Shot](https://github.com/farshadbayat/images/blob/main/Dynamic-Mat-Table-Screenshot.png?raw=true)
 
 ## Online Demo
-Latest Version:
+
+You can view the table in stackblitz here:
 
 https://stackblitz.com/edit/angular-ivy-wge9lp
 
 version (1.3.2):
 
 https://stackblitz.com/edit/angular-ivy-s4ne42
-## Getting Started
 
 A full demo can be found on the github repository.
 
-Install with npm:
+## Getting Started
 
-`npm i dynamic-mat-table`
+### 1. First you need to install with npm:
 
-After installation include `DynamicMatTableModule` in your module imports:
+Write `npm i dynamic-mat-table` in your terminal to install the package
+
+### 2. After installation you need to include `DynamicMatTableModule` in your module imports:
 
 ```javascript
 import { DynamicMatTableModule } from 'dynamic-mat-table';
@@ -29,269 +31,333 @@ imports: [
 ...
 ```
 
-Column types are defined as follow:
+---
+### How Use The Table
+## Creating the table html element
 
+first you need to write the html element like so:
 
-```javascript
-export interface AbstractField {
-  index?: number;
-  name: string;           /* The key of the data */
-  type?: FieldType;       /* Type of data in the field */
-  width?: number;         /* width of column */
-  header?: string;        /* The title of the column */
-  isKey?: boolean;
-  inlineEdit?: boolean;
-  display?: FieldDisplay; /* Hide and visible this column */
-  sticky?: FieldSticky;   /* sticky this column to start or end */
-  filter?: FieldFilter;
-  sort?: FieldSort;
-  cellClass?: string;     /* Apply a class to a cell, class name must be in the global stylesheet */
-  cellStyle?: any;        /* Apply a style to a cell, style must be object ex: [...].cellStyle = {'color' : 'red'} */
-  icon?: string;          /* Set Icon in Column */
-  iconColor?: string;     /* Set Icon Color */
-  dynamicCellComponent?: any; /* Set Dynamic Component in Cell */
-  draggable?: boolean;
-  filterable?: boolean;
-  sortable?: boolean;
-  clickable?: boolean;
-  clickType?: 'cell' | 'label' | 'custom';
-  printable?: boolean;    /* disply in printing view by defualt is true */
-  exportable?: boolean;
-  enableContextMenu?: boolean;
-  rowSelectionable?: boolean;
-  /* For Ellipsis Text */
-  cellEllipsisRow?: number;
-  cellTooltipEnable?: boolean;
-  headerEllipsisRow?: number;
-  headerTooltipEnable?: boolean;
-  option?: any; // for store share data show in cell of column
-  categoryData?: any[];
-  toString?: (column: TableField<any>, row: TableRow) => string;
-  customSort?: (column: TableField<any>, row: any) => string;
-}
-```
-
-
-Source data must be an BehaviorSubject:
-
-```javascript
-let data = [
-  { "row": 1, "name": "Element #4", "weight": "65 KG", "color": "Magenta", "brand": "Zanjan Benz", "type": "Van" }, ...];
-
-public dataSource$: BehaviorSubject<any[]>;
-
-/* for load data */
-this.dataSource$.next(this.data);
-```
-
-Data row is extend from TableRow:
--can apply class or style to row with option field.
--can share data to all cell in the row.
--can defined expand state.
-
-```javascript
-export interface TableRow {
-    id?: number;
-    rowActionMenu?: {
-        [key: string]: RowActionMenu;
-    };
-    option?: RowOption;
-}
-
-export interface RowOption extends Dictionary<any> {
-    style?: any;
-    class?: any;
-    selected?: boolean;
-    expand?: boolean;
-}
-```
-
-
-In the HTML add the selector:
-
-Minimum Specification (Mandatory):
 ```html
-  <dynamic-mat-table tableName="demo_table"
-                     [columns]="fields"
-                     [dataSource]="dataSource">
-  </dynamic-mat-table> 
+<dynamic-mat-table
+  tableName="my-table"
+  [columns]="columns"
+  [setting]="setting"
+  [dataSource]="dataSource$"
+></dynamic-mat-table>
 ```
-
 Full Specification:
+
 ```html
-<dynamic-mat-table  tableName="demo_table"
-                    [scrollStrategyType]="scrollStrategyType"
-                    [contextMenuItems]="contextMenuItems"
-                    [showReload] = "showReloadData"
-                    [direction]="direction"
-                    [expandComponent]="expandComponent"
-                    [rowHeight]="rowHeight"
-                    [columns]="fields"
-                    [pending]="pending"
-                    [setting]="setting"
-                    [sticky]="stickyHeader"
-                    [dataSource]="dataSource$"
-                    [pagingMode]="paginationMode"
-                    [pagination]="pagination"
-                    [showNoData]="showNoData"
-                    [printConfig]="printConfig"
-                    [rowSelectionMode]="rowSelectionMode"
-                    [rowSelectionModel]="selectionModel"
-                    [showProgress]="showProgress"
-                    [rowContextMenuItems]="contextMenuItems"
-                    (onTableEvent)="tableEvent_onClick($event)"
-                    (onRowEvent)="rowEvent_onClick($event)"
-                    [class.conditional-class]="conditinalClass"
-                    (settingChange)="table_onChangeSetting($event)"
-                    (rowSelectionChange)="table_onRowSelectionChange($event)">
+<dynamic-mat-table
+  tableName="demo_table" 
+  [scrollStrategyType]="scrollStrategyType"
+  [contextMenuItems]="contextMenuItems"
+  [showReload]="showReloadData"
+  [direction]="direction"
+  [expandComponent]="expandComponent"
+  [rowHeight]="rowHeight"
+  [columns]="fields"
+  [pending]="pending"
+  [setting]="setting"
+  [sticky]="stickyHeader"
+  [dataSource]="dataSource$"
+  [pagingMode]="paginationMode"
+  [pagination]="pagination"
+  [showNoData]="showNoData"
+  [printConfig]="printConfig"
+  [rowSelectionMode]="rowSelectionMode"
+  [rowSelectionModel]="selectionModel"
+  [showProgress]="showProgress"
+  [rowContextMenuItems]="contextMenuItems"
+  (onTableEvent)="tableEvent_onClick($event)"
+  (onRowEvent)="rowEvent_onClick($event)"
+  [class.conditional-class]="conditinalClass"
+  (settingChange)="table_onChangeSetting($event)"
+  (rowSelectionChange)="table_onRowSelectionChange($event)"
+>
 </dynamic-mat-table>
 ```
 
-Inputs:
 
-```html
-  `columns` = Column definitions
-  `dataSource` = Table data in BehaviorSubject
-  `sticky` = Enable the sticky on header
-  `showNoData` = show custom text on center if there is not any record
-  `showProgress` = active progress on table
-  `pending` = pending progress on table
-  `selection` = active selection row ('single' | 'multi' | 'none')
-  `pagination` = configuration for pagination. eg: { pageIndex: 0, pageSize: 10, pageSizeOptions: [ 5, 10, 100, 1000], showFirstLastButtons: true }
-  `pagingMode` = paging mode ('none' | 'client' | 'server')
+by binding the properties you can set columns, set the table settings , set a datasource and more to the table
 
-  `class.conditional-class` = apply custom style. eg:
-  
-    /* Conditional Class & Overwrite Style */
-    :host ::ng-deep .conditional-class .mat-table .row-selection{
-      background-color:rgb(7, 140, 163) !important; /* for over write */
-      border-radius: 5px;
-      .mat-cell {
-        color: white !important;
-      }
-    }
+## Setting the columns 
 
-    /* Style Element Inside Table */
-    :host ::ng-deep dynamic-mat-table .mat-table mat-row{
-      cursor: pointer;
-    }  
+to set the columns you first need to import `TableField ` and creat a porpery that takes this type as an arry like so:
 
-  `setting` = can restore column setting(width, order, visible, ...) with this parameter.
-  `dir` = rtl/ltr.
-  `printConfig` = print configuration. eg: { title: 'Print All Test Data' , showParameters: true }
-  `actionMenu` = show action menu on each row and can change menu parameters: suppose  
-    this.actionMenu.push(
-      { name: 'Edit', text: 'Edit', color: 'primary', icon: 'edit', disabled: false, visible: true},
-      { name: 'Delete',text: 'Delete Record', color: 'warn', icon: 'delete', disabled: false, visible: true});
-    Customize for one record:
-    this.dataSource.allData[0].actionMenu = { Edit: { text: 'View', color: 'primary', icon: 'build_circle'}, Delete: {visible: false}};  
-  `settingChange` = Output all configuration of columns
-  `rowActionMenuChange` = Output for action menu that clicked
-  `rowClick` = Output for the click event on the row
+```typescript
+import { TableField } from 'dynamic-mat-table'
+...
+export class MyTable {
+  columns:TableField<any>[] = [];
+}
+``` 
+
+then you can set each column as an object of this arry
+
+```typescript
+...
+const colusmnsConfig:TableField<any>[] = [
+  {
+    name: 'column-one',  //this is a key for data
+    header: 'column-one', //this is the name displayed
+    type:'number', //type of the data
+  },
+  {
+    name:'column-two',
+    header:'column-two',
+    type:'number',
+  },
+  ...
+];
 ```
 
-Table Setting
-```javascript
-export interface TableSetting {  
-  direction?: Direction;
-  columnSetting?: AbstractField[];
-  visibaleActionMenu?: VisibleActionMenu;
-  visibleTableMenu?: boolean;
-  alternativeRowStyle?: any;
-  normalRowStyle?: any;
-  scrollStrategy?: TableScrollStrategy;
-  rowStyle?: any;
-  enableContextMenu?: boolean;
-  autoHeight?: boolean;
-  saveSettingMode?: 'simple' | 'multi' | 'none';
-  settingName?: string;
-  settingList?: TableSetting[];
-  currentSetting?: string;
+The full column type is defined as follow:
+
+```typescript
+export interface TableField<R extends TableRow> extends AbstractField {
+    classNames?: string;
+    rowClass?: string | AtClassFunc;
+    customSortFunction?: AtSortFunc<R>;
+    customFilterFunction?: AtSortFunc<R>;
+    toPrint?: ToPrint;
+    toExport?: ToExport;
+}
+export interface AbstractField {
+    index?: number;
+    name: string; //data  key
+    type?: FieldType; //data type
+    width?: number; //width of the column
+    header?: string; //displayed name of the column
+    isKey?: boolean; // turn column in to unqiue key column 
+    inlineEdit?: boolean; // allows column to have inline edit
+    display?: FieldDisplay; // allow column to be hiddin or visiable
+    sticky?: FieldSticky; // allow column to stick in horazental scrolling
+    filter?: FieldFilter; // sets data filtering mode
+    sort?: FieldSort; // set data sorting mode
+    cellClass?: string; // set a class for column cells
+    cellStyle?: any; //set a style for column cells
+    icon?: string; // displayes a mat-icon in column header
+    iconColor?: string; // set a color for column header icon
+    dynamicCellComponent?: any; // set the component used in column cells
+    draggable?: boolean; // allows column to be rearranged with drag and drop 
+    filterable?: boolean; // allows column to filter its data (shows filter button)
+    sortable?: boolean; // allows column to sort its data (shows sort button)
+    clickable?: boolean; // allows column to have a function when clicked
+    clickType?: 'cell' | 'label' | 'custom'; // sets the clickability regon
+    printable?: boolean; // allows column to print its data
+    exportable?: boolean; // allows column data to be exported
+    enableContextMenu?: boolean; // enables context menu in columns
+    rowSelectionable?: boolean; // Coming soon...
+    footer?: FooterCell[]; // creates footers for column
+    cellEllipsisRow?: number; // maxmum number of cells shown before ellipsed 
+    cellTooltipEnable?: boolean; // allows column cell to have a tooltip
+    headerEllipsisRow?: number;  // maximum number of rows shown in column before ellipsed
+    headerTooltipEnable?: boolean; // allows column header to have a tooltip
+    option?: any; // a spacial object for storing data state (like saving in inline edit)
+    categoryData?: any[]; // Coming soon...
+    toString?: (column: TableField<any>, row: TableRow) => string; // truns column data to a sring (used mostly for exporting data)
+    customSort?: (column: TableField<any>, row: any) => string; // allows you costumize data sorting in column
 }
 ```
 
-For more examples run the demo application.
+## Ceateing a data source
 
-## How to add international
-to support new language you must declare new class and implement LanguagePack for example this is persian language:
-```javascript
-import { MatPaginatorIntl } from '@angular/material/paginator';
-import { FilterLabels, LanguagePack, MenuLabels, TableLabels } from 'dynamic-mat-table';
-export class PersionLanguage implements LanguagePack {
+after setting the columns you need to set the data you want to use in your table.
 
-  constructor() {
+Your data source must be a `BehaviourSubject<any[]>`
+
+so in order to **creat a data source** you must do so like wise:
+
+```typescript
+import { BehaviourSubject } from 'rx-js';
+...
+type dataType = {...};
+
+const data:dataType[] = [
+  { "row": 1, "name": "Element #4", "weight": "65 KG", "color": "Magenta", "brand": "Zanjan Benz", "type": "Van" }, ...];
+...
+export class MyTable implements OnInit {
+
+  public dataSource$: BehaviorSubject<any[]>;
+
+  constructor(){}
+
+  ngOnInit(){
+    this.dataSource$.next(data);
   }
 
+}
+```
+
+## Configureing the table settings
+
+next thing is configuring the table settings.
+
+to do so we need to create a property that takes the `TableSetting` type like so:
+
+```typescript
+import { TableSetting } from 'dynamic-mat-table';
+...
+export class MyTable {
+  settings:TableSettings = {};
+}
+```
+
+then we can set the values of this **object** to customize our table.
+
+For Exmaple:
+```typescript
+const tableSettinsConfig:TableSetting = {
+  direction: 'ltr',
+  visibaleActionMenu: actionMenu,
+  rowStyle: {
+    'background-color': '#70e181',
+    color: 'ffffff',
+  },
+  alternativeRowStyle: {
+    'background-color': 'afafaf',
+    color: '55fab3',
+  },
+  autoHeight: true,
+}
+```
+
+the full interface is described below:
+
+```typescript
+export interface TableSetting {
+    direction?: Direction; // sets the directopn of the table
+    columnSetting?: AbstractField[]; // 
+    visibaleActionMenu?: VisibleActionMenu; // configures the actoin menu 
+    visibleTableMenu?: boolean; // controls the table men's visablity 
+    alternativeRowStyle?: any; // sets a style for the odd rows
+    normalRowStyle?: any; // sets a style for the even rows
+    scrollStrategy?: TableScrollStrategy; // sets a scroll strategy
+    rowStyle?: any; //
+    enableContextMenu?: boolean; // controls the context menu visablity
+    autoHeight?: boolean; // allows the table to automaticly controls its height
+    saveSettingMode?: 'simple' | 'multi' | 'none'; // controls the saving mode
+    settingName?: string; // name for the setting 
+    settingList?: TableSetting[]; //
+    currentSetting?: string; //
+}
+```
+
+## Adding a paginator
+
+adding a paginator is just like columns and setting.
+
+first we add the Property with the TablePagination type then we configure it like so:
+
+```typescript
+import { TablePagination } from 'dynamic-mat-table';
+...
+export class MyTable {
+  pagination:TablePagination = {};
+}
+```
+
+the full description for the TablePagination is as below:
+
+```typescript
+export interface TablePagination {
+    length?: number; // total number of data records 
+    pageIndex?: number; // initial page
+    pageSize?: number; // number of rows in each page
+    pageSizeOptions?: number[]; // page ination options
+    showFirstLastButtons?: boolean; // controls the first/last button display
+}
+```
+
+
+## How to add international
+
+to support new language you must declare new class and implement LanguagePack for example this is persian language:
+
+```javascript
+import { MatPaginatorIntl } from "@angular/material/paginator";
+import {
+  FilterLabels,
+  LanguagePack,
+  MenuLabels,
+  TableLabels,
+} from "dynamic-mat-table";
+export class PersionLanguage implements LanguagePack {
+  constructor() {}
+
   menuLabels: MenuLabels = {
-    saveData: 'ذخیره داده ها ',
-    columnSetting: 'تنظیمات ستون ها ',
-    saveTableSetting: 'ذخیره  تنظیمات جدول',
-    clearFilter: 'فیلتر را پاک کنید',
-    jsonFile: 'Json فایل',
-    csvFile: 'CSV فایل',
-    printTable: 'چاپ جدول',
-    filterMode: 'نوع فیلتر',
-    filterLocalMode: 'محلی',
-    filterServerMode: 'سرور',
-    sortMode: 'حالت مرتب سازی',
-    sortLocalMode: 'سمت کاربر',
-    sortServerMode: 'سمت سرور',
-    printMode: 'حالت چاپ',
-    printYesMode: 'بله',
-    printNoMode: 'خیر',
-    pinMode: 'حالت پین ',
-    pinNoneMode: 'هیچ کدام',
-    pinStartMode: 'شروع',
-    pinEndMode: 'پایان',
+    saveData: "ذخیره داده ها ",
+    columnSetting: "تنظیمات ستون ها ",
+    saveTableSetting: "ذخیره  تنظیمات جدول",
+    clearFilter: "فیلتر را پاک کنید",
+    jsonFile: "Json فایل",
+    csvFile: "CSV فایل",
+    printTable: "چاپ جدول",
+    filterMode: "نوع فیلتر",
+    filterLocalMode: "محلی",
+    filterServerMode: "سرور",
+    sortMode: "حالت مرتب سازی",
+    sortLocalMode: "سمت کاربر",
+    sortServerMode: "سمت سرور",
+    printMode: "حالت چاپ",
+    printYesMode: "بله",
+    printNoMode: "خیر",
+    pinMode: "حالت پین ",
+    pinNoneMode: "هیچ کدام",
+    pinStartMode: "شروع",
+    pinEndMode: "پایان",
   };
 
   paginatorLabels: MatPaginatorIntl = {
     changes: null,
-    itemsPerPageLabel: 'ایتم های هر صفحه:',
-    nextPageLabel: 'صفحه بعدی:',
-    previousPageLabel: 'صفحه قبلی:',
-    firstPageLabel: 'اولین صفحه:',
-    lastPageLabel: 'آخرین صفحه:',
-    getRangeLabel : (page: number, pageSize: number, length: number) => {      
-      if (length === 0 || pageSize === 0) { return `0 از ${length}`; }
+    itemsPerPageLabel: "ایتم های هر صفحه:",
+    nextPageLabel: "صفحه بعدی:",
+    previousPageLabel: "صفحه قبلی:",
+    firstPageLabel: "اولین صفحه:",
+    lastPageLabel: "آخرین صفحه:",
+    getRangeLabel: (page: number, pageSize: number, length: number) => {
+      if (length === 0 || pageSize === 0) {
+        return `0 از ${length}`;
+      }
       length = Math.max(length, 0);
       const startIndex = page * pageSize;
-      const endIndex = startIndex < length ?
-          Math.min(startIndex + pageSize, length) :
-          startIndex + pageSize;
+      const endIndex =
+        startIndex < length
+          ? Math.min(startIndex + pageSize, length)
+          : startIndex + pageSize;
       return `${startIndex + 1} - ${endIndex} از ${length}`;
-    }
+    },
   };
 
-  tableLabels: TableLabels =
-  {
-    NoData: 'هیچ رکوردی پیدا نشد'
+  tableLabels: TableLabels = {
+    NoData: "هیچ رکوردی پیدا نشد",
   };
 
   filterLabels: FilterLabels = {
-    Clear: 'پاک کردن',
-    Search: 'جستجو',
-    And: 'و',
-    Or: 'یا',
+    Clear: "پاک کردن",
+    Search: "جستجو",
+    And: "و",
+    Or: "یا",
     /* Text Compare */
-    Text: 'متن',
-    TextContains: 'دربرگرفتن',
-    TextEmpty: 'خالی بودن',
-    TextStartsWith: 'شروع شدن با',
-    TextEndsWith: ' پایان گرفتن با',
-    TextEquals: 'مساوی بودن',
-    TextNotEmpty: 'خالی نبودن',
+    Text: "متن",
+    TextContains: "دربرگرفتن",
+    TextEmpty: "خالی بودن",
+    TextStartsWith: "شروع شدن با",
+    TextEndsWith: " پایان گرفتن با",
+    TextEquals: "مساوی بودن",
+    TextNotEmpty: "خالی نبودن",
     /* Number Compare */
-    Number: 'تعداد',
-    NumberEquals: 'مساوی',
-    NumberNotEquals: 'مساوی نبودن',
-    NumberGreaterThan: ' بزرگ تر از',
-    NumberLessThan: 'کم تر از ',
-    NumberEmpty: 'خالی بودن',
-    NumberNotEmpty: 'خالی نبودن',
+    Number: "تعداد",
+    NumberEquals: "مساوی",
+    NumberNotEquals: "مساوی نبودن",
+    NumberGreaterThan: " بزرگ تر از",
+    NumberLessThan: "کم تر از ",
+    NumberEmpty: "خالی بودن",
+    NumberNotEmpty: "خالی نبودن",
     /* Category List Compare */
-    CategoryContains: 'در برگرفتن',
-    CategoryNotContains: 'در بر نگرفتن',
+    CategoryContains: "در برگرفتن",
+    CategoryNotContains: "در بر نگرفتن",
     /* Boolean Compare */
     /* Date Compare */
   };
@@ -301,11 +367,11 @@ export class PersionLanguage implements LanguagePack {
 and passed this class to grid so :
 
 ```javascript
- providers: [
-    { provide: TableIntl, useFactory: languageIntl}
-  ]
+providers: [{ provide: TableIntl, useFactory: languageIntl }];
 ```
+
 And
+
 ```javascript
 export function languageIntl() {
   return new PersionLanguage();

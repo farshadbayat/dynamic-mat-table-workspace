@@ -93,6 +93,10 @@ tableName="demo_table"
     <button mat-raised-button color="primary" (click)="autoHeight_onClick()">
       AutoHeight({{setting?.autoHeight}})
       </button>
+
+      <button mat-raised-button color="primary" (click)="clearField_onClick()">
+        Clear Field
+        </button>
     <mat-slider min="20" max="200" step="5" [(ngModel)]="rowHeight"></mat-slider>
 </section>
 
