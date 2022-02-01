@@ -77,8 +77,10 @@ export class DynamicMatTableComponent<T extends TableRow> extends TableCoreDirec
       this.pagination.pageSize = value.pageSize || this.tableSetting.pageSize;
       /* Dynamic Cell must update when setting change */
       value?.columnSetting?.forEach( column => {
-        const orginalColumn = this.columns.find( c => c.name === column.name);
-        column = {...orginalColumn, ...column};
+        const orginalColumn = this.columns?.find( c => c.name === column.name);
+        if(orginalColumn) {
+          column = {...orginalColumn, ...column};
+        }
       });
       this.tableSetting = value;
       this.setDisplayedColumns();
