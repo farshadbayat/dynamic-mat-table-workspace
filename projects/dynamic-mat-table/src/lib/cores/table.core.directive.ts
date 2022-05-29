@@ -435,7 +435,6 @@ export class TableCoreDirective<T extends TableRow> {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    debugger;
     const isAllSelected = this.isAllSelected();
     if (isAllSelected === false) {
       this.tvsDataSource.filteredData.forEach((row) =>
