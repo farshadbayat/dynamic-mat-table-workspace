@@ -51,6 +51,7 @@ mat-footer-cell:first-of-type {
   position: sticky;
   bottom: 0;
   display: flex;
+  flex-wrap: wrap;
   max-height: 48px;
   align-items: center;
   overflow: hidden;

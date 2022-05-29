@@ -11,7 +11,6 @@ import {
   Input,
   OnDestroy,
   ContentChildren,
-  ViewContainerRef,
   Injector,
   ComponentRef,
   HostBinding,
@@ -43,7 +42,7 @@ import {
   moveItemInArray,
 } from "@angular/cdk/drag-drop";
 import { isNullorUndefined } from "../cores/type";
-import { TableSetting } from "../models/table-setting.model";
+import { SettingItem, TableSetting } from "../models/table-setting.model";
 import { delay, filter } from "rxjs/operators";
 import { FixedSizeTableVirtualScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
 import { Subscription } from "rxjs";
@@ -178,13 +177,30 @@ export class DynamicMatTableComponent<T extends TableRow>
 
     this.eventsSubscription = this.resizeColumn.widthUpdate
       .pipe(
-        delay(100),
-        filter((data) => data.i >= 0) /* Checkbox Column */
+        delay(150),
+        filter((data) => data.e.columnIndex >= 0) /* Checkbox Column */
       )
       .subscribe((data) => {
-        this.columns[data.i].width = data.w;
-        if (this.tableSetting.columnSetting[data.i]) {
-          this.tableSetting.columnSetting[data.i].width = data.w;
+        let i = data.e.columnIndex;
+        if (data.e.resizeHandler === "left") {
+          const visibleColumns = this.columns.filter(
+            (c) => c.display !== "hiden" && c.index < data.e.columnIndex
+          );
+          i = visibleColumns[visibleColumns.length - 1].index;
+        }
+        this.columns[i].width = data.w;
+        const unit = this.columns[i].widthUnit || "px";
+        const style =
+          unit === "px" ? data.w + "px" : `calc(100% - ${data.w}px)`;
+        this.columns[i].style = {
+          ...this.columns[i].style,
+          "max-width": style,
+          "min-width": style,
+        };
+
+        /* store latest width in setting if exsis */
+        if (this.tableSetting.columnSetting[i]) {
+          this.tableSetting.columnSetting[i].width = data.w;
         }
         this.refreshGrid();
       });
@@ -367,11 +383,11 @@ export class DynamicMatTableComponent<T extends TableRow>
     if (option && column.name) {
       style = option[column.name] ? option[column.name].style : null;
     }
-
+    /* consider to column width resize */
     if (style === null) {
-      return column.cellStyle;
+      return { ...column.cellStyle, ...column.style };
     } else {
-      return { ...style, ...column.cellStyle };
+      return { ...style, ...column.cellStyle, ...column?.style };
     }
   }
 
@@ -432,10 +448,17 @@ export class DynamicMatTableComponent<T extends TableRow>
       // this.saveSetting(e.data, null, false);
       this.settingChange.emit({ setting: this.tableSetting });
       this.refreshColumn(this.tableSetting.columnSetting);
+    } else if (e.type === "DefaultSetting") {
+      (this.setting.settingList || []).forEach((setting) => {
+        if (setting.settingName === e.data) {
+          setting.isDefaultSetting = true;
+        } else {
+          setting.isDefaultSetting = false;
+        }
+      });
     } else if (e.type === "SaveSetting") {
       const newSetting = Object.assign({}, this.setting);
       delete newSetting.settingList;
-      delete newSetting.currentSetting;
       newSetting.settingName = e.data;
       const settingIndex = (this.setting.settingList || []).findIndex(
         (f) => f.settingName === e.data
@@ -455,23 +478,32 @@ export class DynamicMatTableComponent<T extends TableRow>
       );
       this.settingChange.emit({ setting: this.tableSetting });
     } else if (e.type === "SelectSetting") {
-      const newSetting = Object.assign(
-        {},
-        this.setting.settingList.find((s) => s.settingName === e.data)
-      );
-      newSetting.settingList = this.setting.settingList;
-      newSetting.currentSetting = e.data;
-      if (this.pagination.pageSize !== newSetting?.pageSize) {
+      let setting: SettingItem = null;
+      this.setting.settingList.forEach((s) => {
+        if (s.settingName === e.data) {
+          s.isCurrentSetting = true;
+          setting = Object.assign(
+            {},
+            this.setting.settingList.find((s) => s.settingName === e.data)
+          );
+        } else {
+          s.isCurrentSetting = false;
+        }
+      });
+      setting.settingList = this.setting.settingList;
+      delete setting.isCurrentSetting;
+      delete setting.isDefaultSetting;
+      if (this.pagination.pageSize !== setting?.pageSize) {
         this.pagination.pageSize =
-          newSetting?.pageSize || this.pagination.pageSize;
+          setting?.pageSize || this.pagination.pageSize;
         this.paginationChange.emit(this.pagination);
       }
       /* Dynamic Cell must update when setting change */
-      newSetting.columnSetting?.forEach((column) => {
+      setting.columnSetting?.forEach((column) => {
         const orginalColumn = this.columns.find((c) => c.name === column.name);
         column = { ...orginalColumn, ...column };
       });
-      this.tableSetting = newSetting;
+      this.tableSetting = setting;
       this.settingChange.emit({ setting: this.tableSetting });
       // this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === "FullScreenMode") {
@@ -546,19 +578,26 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   /////////////////////////////////////////////////////////////////
 
-  onResizeColumn(event: any, index: number, type: "left" | "right") {
+  onResizeColumn(event: MouseEvent, index: number, type: "left" | "right") {
+    console.log(type);
+
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     if (this.resizeColumn.resizeHandler === "right") {
-      this.resizeColumn.startWidth = event.target.parentElement.clientWidth;
+      this.resizeColumn.startWidth = (
+        event.target as Node
+      ).parentElement.clientWidth;
       this.resizeColumn.columnIndex = index;
     } else {
-      if (event.target.parentElement.previousElementSibling === null) {
-        // for first column not resize
+      if (
+        (event.target as Node).parentElement.previousElementSibling === null
+      ) {
+        /* for first column not resize */
         return;
       } else {
-        this.resizeColumn.startWidth =
-          event.target.parentElement.previousElementSibling.clientWidth;
+        this.resizeColumn.startWidth = (
+          event.target as Node
+        ).parentElement.previousElementSibling.clientWidth;
         this.resizeColumn.columnIndex = index;
       }
     }
@@ -585,8 +624,10 @@ export class DynamicMatTableComponent<T extends TableRow>
             this.resizeColumn.columnIndex === index &&
             width > this.minWidth
           ) {
+            // debugger
+            // this.resizeColumn.columnIndex = index;
             this.resizeColumn.widthUpdate.next({
-              i: index - (this.resizeColumn.resizeHandler === "left" ? 1 : 0),
+              e: this.resizeColumn,
               w: width,
             });
           }
@@ -600,6 +641,8 @@ export class DynamicMatTableComponent<T extends TableRow>
         if (this.resizeColumn.resizeHandler !== null) {
           this.resizeColumn.resizeHandler = null;
           this.resizeColumn.columnIndex = -1;
+          /* fix issue sticky column */
+          this.table.updateStickyColumnStyles();
           /* Remove Event Listen */
           this.resizableMousemove();
         }

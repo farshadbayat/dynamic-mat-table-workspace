@@ -74,9 +74,9 @@
     </div>
   </section>
   <mat-divider></mat-divider>
-  <section class="setting-item" [class.setting-item-active]="tableSetting?.currentSetting == setting.settingName" *ngFor="let setting of tableSetting?.settingList" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
-    <button mat-icon-button (click)="favorite_onClick($event, setting)">
-      <mat-icon style="color: #dcc48f;">{{ (tableSetting?.currentSetting == setting.settingName) ? 'star' : 'star_outline'}} </mat-icon>
+  <section *ngFor="let setting of tableSetting?.settingList" class="setting-item" [class.setting-item-active]="setting?.isCurrentSetting == true" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <button mat-icon-button (click)="default_onClick($event, setting)">
+      <mat-icon style="color: #dcc48f;">{{ (setting?.isDefaultSetting == true) ? 'star' : 'star_outline'}} </mat-icon>
     </button>
     <span (click)="selectSetting_onClick($event, setting)">{{setting.settingName}}</span>
     <mat-icon (click)="saveSetting_onClick($event, setting)">save</mat-icon>

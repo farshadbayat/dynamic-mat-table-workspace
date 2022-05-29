@@ -23,9 +23,10 @@
       background-color: #fafafa;
     }
 
-    // mat-cell {
-    //   background-color: white;
-    // }
+    mat-cell {
+      // background-color: white;
+      box-sizing: border-box;
+    }
   }
 }
 
@@ -54,7 +55,7 @@
   }
 }
 
-@mixin  no-records {
+@mixin no-records {
   .no-records {
     display: flex;
     align-items: center;
@@ -77,19 +78,25 @@
     min-width: 100%;
   }
 
-  ::ng-deep dynamic-mat-table cdk-virtual-scroll-viewport .cdk-virtual-scroll-content-wrapper .mat-table mat-row .mat-cell mat-form-field {
-     max-width: 100%;
+  ::ng-deep
+    dynamic-mat-table
+    cdk-virtual-scroll-viewport
+    .cdk-virtual-scroll-content-wrapper
+    .mat-table
+    mat-row
+    .mat-cell
+    mat-form-field {
+    max-width: 100%;
     .mat-form-field-wrapper {
-        padding-bottom: 0 !important;
+      padding-bottom: 0 !important;
     }
     ::ng-deep .mat-form-field-underline {
-        bottom: 0 !important;
+      bottom: 0 !important;
     }
   }
 }
 
 @mixin resize-column {
-
   mat-header-cell:hover {
     .left-resizer-handler {
       height: 100%;
@@ -196,6 +203,7 @@
   }
 }
 
-.disable-backdrop-click .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+.disable-backdrop-click
+  .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
   pointer-events: none;
 }

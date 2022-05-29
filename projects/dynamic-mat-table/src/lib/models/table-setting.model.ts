@@ -1,8 +1,8 @@
-import { TableScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
-import { AbstractField } from './table-field.model';
+import { TableScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
+import { AbstractField } from "./table-field.model";
 
-export type Direction = 'rtl' | 'ltr';
-export type DisplayMode = 'visible' | 'hiden' | 'none'  ;
+export type Direction = "rtl" | "ltr";
+export type DisplayMode = "visible" | "hiden" | "none";
 export interface TableSetting {
   // screenMode?: ScreenMode;
   pageSize?: number;
@@ -16,10 +16,14 @@ export interface TableSetting {
   rowStyle?: any;
   enableContextMenu?: boolean;
   autoHeight?: boolean;
-  saveSettingMode?: 'simple' | 'multi' | 'none';
+  saveSettingMode?: "simple" | "multi" | "none";
   settingName?: string;
-  settingList?: TableSetting[];
-  currentSetting?: string;
+  settingList?: SettingItem[];
+}
+
+export interface SettingItem extends TableSetting {
+  isCurrentSetting?: boolean;
+  isDefaultSetting?: boolean;
 }
 
 export interface VisibleActionMenu {

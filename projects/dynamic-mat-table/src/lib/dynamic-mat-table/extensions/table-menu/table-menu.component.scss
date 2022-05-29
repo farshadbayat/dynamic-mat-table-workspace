@@ -4,7 +4,7 @@
   justify-content: space-between;
 }
 
-.ltr-menu{
+.ltr-menu {
   span {
     float: left;
   }
@@ -34,7 +34,7 @@
 
 .dragable-row {
   mat-checkbox {
-    width: calc( 100% - 54px );
+    width: calc(100% - 54px);
     line-height: 28px;
     display: inline-flex;
   }
@@ -70,9 +70,10 @@
   // position: relative;
   display: flex;
   flex-wrap: nowrap;
-  width:100%;
-  .input-container{
-    width:64%
+  width: 100%;
+  .input-container {
+    width: 64%;
+    overflow: hidden;
   }
   input {
     line-height: 33px;
@@ -93,10 +94,11 @@
   flex-direction: row;
   align-items: center;
   width: 100%;
+  font-size: 14px;
   mat-icon {
-    width: 32px;
-    height: 32px;
-    line-height: 32px;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
     color: #0000008a;
     cursor: pointer;
     text-align: center;
@@ -116,7 +118,7 @@
 }
 
 .setting-item-active {
-  background-color: #e4e2de;
+  background-color: #fdd78a;
 }
 
 ::ng-deep .mat-menu-panel {
@@ -222,7 +224,7 @@
   display: inline-flex;
   text-align: center;
   height: 42px;
-  mat-icon{
+  mat-icon {
     line-height: 38px !important;
     opacity: 0.6;
     transition: opacity 0.5s;
@@ -231,7 +233,7 @@
     text-align: center;
     margin: 0;
   }
-  mat-icon:hover{
+  mat-icon:hover {
     opacity: 1;
   }
 }
@@ -239,12 +241,12 @@
 .column-setting {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   padding: 10px;
-  .radio{
+  .radio {
     width: 100%;
     display: flex;
     font-size: 12px;
     margin-top: -2px;
-    mat-radio-button{
+    mat-radio-button {
       padding: 5px;
       width: 50%;
     }
@@ -253,13 +255,13 @@
       margin-right: 10px;
     }
   }
-  .column-setting-header{
+  .column-setting-header {
     line-height: 30px;
     padding: 5px 5px 0px 5px;
     font-size: 14px;
     border-top: 1px solid #f3f3f3;
     margin-top: 5px;
-    mat-icon{
+    mat-icon {
       opacity: 0.7;
       font-size: 22px;
       line-height: 30px;
@@ -281,11 +283,10 @@
   text-align: left;
 }
 
-::ng-deep [dir=rtl] .mat-checkbox-inner-container {
+::ng-deep [dir="rtl"] .mat-checkbox-inner-container {
   margin-left: auto !important;
   margin-right: 5px !important;
 }
-
 
 .mat-menu-item {
   display: inline-flex;
@@ -297,11 +298,11 @@
   }
 }
 
-::ng-deep .column-config{
-  .mat-checkbox-layout{
+::ng-deep .column-config {
+  .mat-checkbox-layout {
     width: 100%;
   }
- .mat-checkbox-layout .mat-checkbox-label {
+  .mat-checkbox-layout .mat-checkbox-label {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
