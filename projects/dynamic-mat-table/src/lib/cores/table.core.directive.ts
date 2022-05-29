@@ -318,6 +318,12 @@ export class TableCoreDirective<T extends TableRow> {
     this.tvsDataSource.refreshFilterPredicate();
   }
 
+  public clearSelection() {
+    if (this._rowSelectionModel) {
+      this._rowSelectionModel.clear();
+    }
+  }
+
   public clear() {
     if (!isNullorUndefined(this.tvsDataSource)) {
       if (this.viewport) {
@@ -326,9 +332,7 @@ export class TableCoreDirective<T extends TableRow> {
       this.tvsDataSource.clearData();
       this.expandedElement = null;
     }
-    if (this._rowSelectionModel) {
-      this._rowSelectionModel.clear();
-    }
+    this.clearSelection();
     this.cdr.detectChanges();
   }
 
@@ -431,11 +435,15 @@ export class TableCoreDirective<T extends TableRow> {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected()
-      ? this._rowSelectionModel.clear()
-      : this.tvsDataSource.data.forEach((row) =>
-          this._rowSelectionModel.select(row)
-        );
+    debugger;
+    const isAllSelected = this.isAllSelected();
+    if (isAllSelected === false) {
+      this.tvsDataSource.filteredData.forEach((row) =>
+        this._rowSelectionModel.select(row)
+      );
+    } else {
+      this._rowSelectionModel.clear();
+    }
     this.onRowEvent.emit({
       event: "MasterSelectionChange",
       sender: this._rowSelectionModel,

@@ -402,6 +402,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   filter_onChanged(column: TableField<T>, filter: AbstractFilter[]) {
     this.pending = true;
     this.tvsDataSource.setFilter(column.name, filter).subscribe(() => {
+      this.clearSelection();
       this.pending = false;
     });
   }
