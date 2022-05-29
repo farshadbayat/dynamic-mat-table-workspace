@@ -429,7 +429,7 @@ export class TableCoreDirective<T extends TableRow> {
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this._rowSelectionModel.selected.length;
-    const numRows = this.tvsDataSource.data.length;
+    const numRows = this.tvsDataSource.filteredData.length;
     return numSelected === numRows;
   }
 
