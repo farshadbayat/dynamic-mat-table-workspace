@@ -59,6 +59,7 @@
           [ngClass]="headerClass(column)"
           [cdkDragData]="{name: column.name, columIndex: i}"
           [ngStyle]="column.style"
+          (click)="test(column)"
           [class.active-resize]="resizeColumn.columnIndex == i" cdkDragBoundary="mat-header-row">
           <!-- class="left-resizer-handler" -->
           <div

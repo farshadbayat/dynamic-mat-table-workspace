@@ -191,7 +191,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         this.columns[i].width = data.w;
         const unit = this.columns[i].widthUnit || "px";
         const style =
-          unit === "px" ? data.w + "px" : `calc(100% - ${data.w}px)`;
+          unit === "px" ? data.w + "px" : `calc( 100% + ${data.w}px)`;
         this.columns[i].style = {
           ...this.columns[i].style,
           "max-width": style,
@@ -625,7 +625,6 @@ export class DynamicMatTableComponent<T extends TableRow>
             this.resizeColumn.columnIndex === index &&
             width > this.minWidth
           ) {
-            // debugger
             // this.resizeColumn.columnIndex = index;
             this.resizeColumn.widthUpdate.next({
               e: this.resizeColumn,

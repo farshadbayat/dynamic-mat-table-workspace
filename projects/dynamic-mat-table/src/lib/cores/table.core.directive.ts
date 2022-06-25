@@ -217,6 +217,15 @@ export class TableCoreDirective<T extends TableRow> {
       f.sort = getObjectProp("sort", "client-side", settingField, f);
       f.sticky = getObjectProp("sticky", "none", settingField, f);
       f.width = getObjectProp("width", this.defaultWidth, settingField, f);
+      const unit = f.widthUnit || "px";
+      const style = unit === "px" ? f.width + "px" : `calc( ${f.width}% )`;
+      if (f.width) {
+        f.style = {
+          ...f.style,
+          "max-width": style,
+          "min-width": style,
+        };
+      }
     });
     this.tableColumns = fields;
     this.updateColumn();
