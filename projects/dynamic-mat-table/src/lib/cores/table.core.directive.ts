@@ -1,11 +1,13 @@
-import {
+import
+{
   IRowEvent,
   TableRow,
   TableSelectionMode,
   ITableEvent,
 } from "../models/table-row.model";
 import { TableVirtualScrollDataSource } from "./table-data-source";
-import {
+import
+{
   ViewChild,
   Input,
   Output,
@@ -14,12 +16,13 @@ import {
   ChangeDetectorRef,
 } from "@angular/core";
 import { TableField } from "../models/table-field.model";
-import { titleCase } from "../utilies/text.utils";
+import { titleCase } from "../utilizes/utilizes";
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { moveItemInArray } from "@angular/cdk/drag-drop";
 import { SelectionModel } from "@angular/cdk/collections";
 import { TableService } from "../dynamic-mat-table/dynamic-mat-table.service";
-import {
+import
+{
   TablePagination,
   TablePaginationMode,
 } from "../models/table-pagination.model";
@@ -45,43 +48,54 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() backgroundColor: string = null;
   @Input()
   @HostBinding("style.direction")
-  get direction(): Direction {
+  get direction(): Direction
+  {
     return this.tableSetting?.direction;
   }
-  set direction(value: Direction) {
+  set direction(value: Direction)
+  {
     this.tableSetting.direction = value;
   }
 
   @Input() contextMenuItems: ContextMenuItem[] = [];
   @Input()
-  get ScrollStrategyType() {
+  get ScrollStrategyType()
+  {
     return this.tableSetting.scrollStrategy;
   }
-  set ScrollStrategyType(value: TableScrollStrategy) {
+  set ScrollStrategyType(value: TableScrollStrategy)
+  {
     this.viewport["_scrollStrategy"].scrollStrategyMode = value;
     this.tableSetting.scrollStrategy = value;
   }
 
   @Input()
-  get pagingMode() {
+  get pagingMode()
+  {
     return this.tablePagingMode;
   }
-  set pagingMode(value: TablePaginationMode) {
+  set pagingMode(value: TablePaginationMode)
+  {
     this.tablePagingMode = value;
     this.updatePagination();
   }
 
   @Input()
-  get pagination() {
+  get pagination()
+  {
     return this._tablePagination;
   }
-  set pagination(value: TablePagination) {
-    if (value && value !== null) {
+  set pagination(value: TablePagination)
+  {
+    if (value && value !== null)
+    {
       this._tablePagination = value;
-      if (isNullorUndefined(this._tablePagination.pageSizeOptions)) {
+      if (isNullorUndefined(this._tablePagination.pageSizeOptions))
+      {
         this._tablePagination.pageSizeOptions = [5, 10, 25, 100];
       }
-      if (isNullorUndefined(this._tablePagination.pageSizeOptions)) {
+      if (isNullorUndefined(this._tablePagination.pageSizeOptions))
+      {
         this._tablePagination.pageSize =
           this._tablePagination.pageSizeOptions[0];
       }
@@ -90,16 +104,20 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input()
-  get rowSelectionModel() {
+  get rowSelectionModel()
+  {
     return this._rowSelectionModel;
   }
-  set rowSelectionModel(value: SelectionModel<T>) {
-    if (!isNullorUndefined(value)) {
+  set rowSelectionModel(value: SelectionModel<T>)
+  {
+    if (!isNullorUndefined(value))
+    {
       if (
         this._rowSelectionMode &&
         value &&
         this._rowSelectionMode !== "none"
-      ) {
+      )
+      {
         this._rowSelectionMode =
           value.isMultipleSelection() === true ? "multi" : "single";
       }
@@ -108,10 +126,12 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   @Input()
-  get rowSelectionMode() {
+  get rowSelectionMode()
+  {
     return this._rowSelectionMode;
   }
-  set rowSelectionMode(selection: TableSelectionMode) {
+  set rowSelectionMode(selection: TableSelectionMode)
+  {
     selection = selection || "none";
     const isSelectionColumn = selection === "single" || selection === "multi";
     if (
@@ -120,7 +140,8 @@ export class TableCoreDirective<T extends TableRow> {
         selection === "single") ||
       (this._rowSelectionModel.isMultipleSelection() === false &&
         selection === "multi")
-    ) {
+    )
+    {
       this._rowSelectionModel = new SelectionModel<T>(
         selection === "multi",
         []
@@ -130,40 +151,50 @@ export class TableCoreDirective<T extends TableRow> {
       this.displayedColumns?.length > 0 &&
       !isSelectionColumn &&
       this.displayedColumns[0] === "row-checkbox"
-    ) {
+    )
+    {
       this.displayedColumns.shift();
     } else if (
       this.displayedColumns?.length > 0 &&
       isSelectionColumn &&
       this.displayedColumns[0] !== "row-checkbox"
-    ) {
+    )
+    {
       this.displayedColumns.unshift("row-checkbox");
     }
     this._rowSelectionMode = selection;
   }
 
   @Input()
-  get tableName() {
+  get tableName()
+  {
     return this.tableService.tableName;
   }
-  set tableName(value: string) {
+  set tableName(value: string)
+  {
     this.tableService.tableName = value;
   }
 
   @Input()
-  get showProgress() {
+  get showProgress()
+  {
     return this.progressColumn.length > 0;
   }
-  set showProgress(value: boolean) {
+  set showProgress(value: boolean)
+  {
     this.progressColumn = [];
-    if (value === true) {
+    if (value === true)
+    {
       this.progressColumn.push("progress");
     }
   }
 
-  protected initSystemField(data: any[]) {
-    if (data) {
-      data = data.map((item, index) => {
+  protected initSystemField(data: any[])
+  {
+    if (data)
+    {
+      data = data.map((item, index) =>
+      {
         item.id = index;
         item.option = item.option || {};
         return item;
@@ -174,14 +205,18 @@ export class TableCoreDirective<T extends TableRow> {
   public expandColumn = [];
   private _expandComponent: any;
   @Input()
-  get expandComponent(): any {
+  get expandComponent(): any
+  {
     return this._expandComponent;
   }
-  set expandComponent(value: any) {
+  set expandComponent(value: any)
+  {
     this._expandComponent = value;
-    if (this._expandComponent !== null && this._expandComponent !== undefined) {
+    if (this._expandComponent !== null && this._expandComponent !== undefined)
+    {
       this.expandColumn = ["expandedDetail"];
-    } else {
+    } else
+    {
       this.expandColumn = [];
     }
   }
@@ -190,13 +225,17 @@ export class TableCoreDirective<T extends TableRow> {
   @Input() defaultWidth: number = null;
   @Input() minWidth = 120;
   @Input()
-  get columns() {
+  get columns()
+  {
     return this.tableColumns;
   }
-  set columns(fields: TableField<T>[]) {
-    (fields || []).forEach((f, i) => {
+  set columns(fields: TableField<T>[])
+  {
+    (fields || []).forEach((f, i) =>
+    {
       // key name error //
-      if (f.name.toLowerCase() === "id") {
+      if (f.name.toLowerCase() === "id")
+      {
         throw 'Field name is reserved.["id"]';
       }
       const settingFields = (this.tableSetting.columnSetting || []).filter(
@@ -219,7 +258,8 @@ export class TableCoreDirective<T extends TableRow> {
       f.width = getObjectProp("width", this.defaultWidth, settingField, f);
       const unit = f.widthUnit || "px";
       const style = unit === "px" ? f.width + "px" : `calc( ${f.width}% )`;
-      if (f.width) {
+      if (f.width)
+      {
         f.style = {
           ...f.style,
           "max-width": style,
@@ -228,11 +268,14 @@ export class TableCoreDirective<T extends TableRow> {
       }
     });
     this.tableColumns = fields;
+
     this.updateColumn();
   }
 
-  public updateColumn() {
-    if (this.tableColumns) {
+  public updateColumn()
+  {
+    if (this.tableColumns)
+    {
       // isNullorUndefined(this.tableSetting.columnSetting)
       this.tableSetting.columnSetting = clone(this.tableColumns);
     }
@@ -267,12 +310,13 @@ export class TableCoreDirective<T extends TableRow> {
   constructor(
     public tableService: TableService,
     public cdr: ChangeDetectorRef
-  ) {
+  )
+  {
     this.showProgress = true;
     this.tableSetting = {
       direction: "ltr",
       columnSetting: null,
-      visibaleActionMenu: null,
+      visibleActionMenu: null,
     };
   }
 
@@ -299,43 +343,55 @@ export class TableCoreDirective<T extends TableRow> {
   viewport!: CdkVirtualScrollViewport;
   /**************************************** Methods **********************************************/
 
-  updatePagination() {
-    if (isNullorUndefined(this.tvsDataSource)) {
+  updatePagination()
+  {
+    if (isNullorUndefined(this.tvsDataSource))
+    {
       return;
     }
     if (
       this.tablePagingMode === "client-side" ||
       this.tablePagingMode === "server-side"
-    ) {
+    )
+    {
       this.viewportClass = "viewport-with-pagination";
-      if (!isNullorUndefined(this.tvsDataSource.paginator)) {
+      if (!isNullorUndefined(this.tvsDataSource.paginator))
+      {
         let dataLen = this.tvsDataSource.paginator.length;
         if (
           !isNullorUndefined(this._tablePagination.length) &&
           this._tablePagination.length > dataLen
-        ) {
+        )
+        {
           dataLen = this._tablePagination.length;
         }
         this.tvsDataSource.paginator.length = dataLen;
       }
-    } else {
+    } else
+    {
       this.viewportClass = "viewport";
-      if ((this.tvsDataSource as any)._paginator !== undefined) {
+      if ((this.tvsDataSource as any)._paginator !== undefined)
+      {
         delete (this.tvsDataSource as any)._paginator;
       }
     }
     this.tvsDataSource.refreshFilterPredicate();
   }
 
-  public clearSelection() {
-    if (this._rowSelectionModel) {
+  public clearSelection()
+  {
+    if (this._rowSelectionModel)
+    {
       this._rowSelectionModel.clear();
     }
   }
 
-  public clear() {
-    if (!isNullorUndefined(this.tvsDataSource)) {
-      if (this.viewport) {
+  public clear()
+  {
+    if (!isNullorUndefined(this.tvsDataSource))
+    {
+      if (this.viewport)
+      {
         this.viewport.scrollTo({ top: 0, behavior: "auto" });
       }
       this.tvsDataSource.clearData();
@@ -345,57 +401,60 @@ export class TableCoreDirective<T extends TableRow> {
     this.cdr.detectChanges();
   }
 
-  swap(list: any[], x: number, y: number) {
-    var b = this[x];
-    this[x] = this[y];
-    this[y] = b;
-    return this;
-  }
 
-  setDisplayedColumns() {
-    if (this.columns) {
+  setDisplayedColumns()
+  {
+    if (this.columns)
+    {
       this.displayedColumns.splice(0, this.displayedColumns.length);
-      this.columns.forEach((colunm, index) => {
-        colunm.index = index;
+      this.columns.forEach((column, index) =>
+      {
+        column.index = index;
         if (
-          colunm.display === undefined ||
-          colunm.display === "visible" ||
-          colunm.display === "prevent-hidden"
-        ) {
-          this.displayedColumns.push(colunm.name);
+          column.display === undefined ||
+          column.display === "visible" ||
+          column.display === "prevent-hidden"
+        )
+        {
+          this.displayedColumns.push(column.name);
         }
       });
       if (
         (this._rowSelectionMode === "multi" ||
           this._rowSelectionMode === "single") &&
         this.displayedColumns.indexOf("row-checkbox") === -1
-      ) {
+      )
+      {
         this.displayedColumns.unshift("row-checkbox");
       }
       this.displayedFooter = this.columns
         .filter((item) => item.footer !== null && item.footer !== undefined)
         .map((item) => item.name);
-      if (this.tableSetting.visibleTableMenu !== false) {
+      if (this.tableSetting.visibleTableMenu !== false)
+      {
         this.displayedColumns.push("table-menu");
       }
     }
   }
 
   /************************************ Drag & Drop Column *******************************************/
-  public refreshGrid() {
+  public refreshGrid()
+  {
     this.cdr.detectChanges();
     this.refreshColumn(this.tableColumns);
     this.table.renderRows();
     this.viewport.checkViewportSize();
   }
 
-  public moveRow(from: number, to: number) {
+  public moveRow(from: number, to: number)
+  {
     if (
       from >= 0 &&
       from < this.tvsDataSource.data.length &&
       to >= 0 &&
       to < this.tvsDataSource.data.length
-    ) {
+    )
+    {
       this.tvsDataSource.data[from].id = to;
       this.tvsDataSource.data[to].id = from;
       moveItemInArray(this.tvsDataSource.data, from, to);
@@ -403,15 +462,19 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  moveColumn(from: number, to: number) {
-    setTimeout(() => {
+  moveColumn(from: number, to: number)
+  {
+    setTimeout(() =>
+    {
       moveItemInArray(this.columns, from, to);
       this.refreshColumn(this.columns);
     });
   }
 
-  refreshColumn(columns: TableField<T>[]) {
-    if (this.viewport) {
+  refreshColumn(columns: TableField<T>[])
+  {
+    if (this.viewport)
+    {
       const currentOffset = this.viewport.measureScrollOffset();
       this.columns = columns;
       // this.setDisplayedColumns();
@@ -422,34 +485,28 @@ export class TableCoreDirective<T extends TableRow> {
     }
   }
 
-  // saveSetting(tableSetting: TableSetting, settingName: string, raiseEvent: boolean = false) {
-  //   this.settingChange.emit({setting: this.tableSetting, settingName: settingName});
-  //   // if (tableSetting !== null) {
-  //   //   this.tableSetting = tableSetting;
-  //   //   this.refreshColumn(tableSetting.columnSetting);
-  //   // }
-  //   // if (raiseEvent === true) {
-  //   //   this.settingChange.emit({setting: this.tableSetting, settingName: settingName});
-  //   // }
-  // }
 
   /************************************ Selection Table Row *******************************************/
 
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
+  isAllSelected()
+  {
     const numSelected = this._rowSelectionModel.selected.length;
     const numRows = this.tvsDataSource.filteredData.length;
     return numSelected === numRows;
   }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
+  masterToggle()
+  {
     const isAllSelected = this.isAllSelected();
-    if (isAllSelected === false) {
+    if (isAllSelected === false)
+    {
       this.tvsDataSource.filteredData.forEach((row) =>
         this._rowSelectionModel.select(row)
       );
-    } else {
+    } else
+    {
       this._rowSelectionModel.clear();
     }
     this.onRowEvent.emit({
@@ -458,8 +515,10 @@ export class TableCoreDirective<T extends TableRow> {
     });
   }
 
-  onRowSelectionChange(e: any, row: T) {
-    if (e) {
+  onRowSelectionChange(e: any, row: T)
+  {
+    if (e)
+    {
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({
         event: "RowSelectionChange",
@@ -467,12 +526,4 @@ export class TableCoreDirective<T extends TableRow> {
       });
     }
   }
-
-  /** The label for the checkbox on the passed row */
-  // checkboxLabel(row?: T): string {
-  //   if (!row) {
-  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-  //   }
-  //   return `${this._rowSelectionModel.isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
-  // }
 }

@@ -33,7 +33,7 @@ export interface AbstractField {
   print?: boolean; // disply in printing view by defualt is true
   isKey?: boolean;
   inlineEdit?: boolean;
-  display?: 'visible' | 'hiden' | 'prevent-hidden'; // Hide and visible this column
+  display?: 'visible' | 'hidden' | 'prevent-hidden'; // Hide and visible this column
   sticky?: 'start' | 'end' | 'none'; // sticky this column to start or end
   filter?: 'client-side' | 'server-side' | 'none';
   sort?: 'client-side' | 'server-side' | 'none';

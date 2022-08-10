@@ -1,8 +1,9 @@
-import { Dictionary } from '../cores/type';
+import { HashMap } from '../cores/type';
 import { ContextMenuItem } from './context-menu.model';
 
 // this fields are for each row data
-export interface TableRow {
+export interface TableRow
+{
   id?: number;
   rowActionMenu?: { [key: string]: ContextMenuItem; };
   option?: RowOption;
@@ -11,22 +12,26 @@ export interface TableRow {
 export type TableSelectionMode = 'single' | 'multi' | 'none';
 export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'DoubleClick' | 'CellClick' | 'LabelClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
 
-export interface IRowEvent {
+export interface IRowEvent
+{
   event: RowEventType | any;
   sender: any;
 }
 
-export interface ITableEvent {
+export interface ITableEvent
+{
   event: 'ReloadData' | 'SortChanged' | any;
   sender: any | undefined;
 }
 
-export interface IRowActionMenuEvent<T> {
+export interface IRowActionMenuEvent<T>
+{
   actionItem: ContextMenuItem;
   rowItem: T;
 }
 
-export interface RowOption extends Dictionary<any> {
+export interface RowOption extends HashMap<any>
+{
   style?: any;
   class?: any;
   selected?: boolean;

@@ -2,13 +2,14 @@ import { TableScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-st
 import { AbstractField } from "./table-field.model";
 
 export type Direction = "rtl" | "ltr";
-export type DisplayMode = "visible" | "hiden" | "none";
-export interface TableSetting {
+export type DisplayMode = "visible" | "hidden" | "none";
+export interface TableSetting
+{
   // screenMode?: ScreenMode;
   pageSize?: number;
   direction?: Direction;
   columnSetting?: AbstractField[];
-  visibaleActionMenu?: VisibleActionMenu;
+  visibleActionMenu?: VisibleActionMenu;
   visibleTableMenu?: boolean;
   alternativeRowStyle?: any;
   normalRowStyle?: any;
@@ -21,12 +22,14 @@ export interface TableSetting {
   settingList?: SettingItem[];
 }
 
-export interface SettingItem extends TableSetting {
+export interface SettingItem extends TableSetting
+{
   isCurrentSetting?: boolean;
   isDefaultSetting?: boolean;
 }
 
-export interface VisibleActionMenu {
+export interface VisibleActionMenu
+{
   json?: boolean;
   csv?: boolean;
   print?: boolean;

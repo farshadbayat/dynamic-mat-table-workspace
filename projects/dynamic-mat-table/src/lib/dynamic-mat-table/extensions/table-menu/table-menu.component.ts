@@ -1,12 +1,13 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Output,
-  Input,
-  EventEmitter,
-  ViewChild,
-  ElementRef,
-} from "@angular/core";
+import
+  {
+    ChangeDetectionStrategy,
+    Component,
+    Output,
+    Input,
+    EventEmitter,
+    ViewChild,
+    ElementRef,
+  } from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
 import { TableService } from "../../dynamic-mat-table.service";
 import { TableSetting } from "../../../models/table-setting.model";
@@ -21,14 +22,17 @@ import { AbstractField } from "../../../models/table-field.model";
   styleUrls: ["./table-menu.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TableMenuComponent {
+export class TableMenuComponent
+{
   @Output() menuActionChange: EventEmitter<TableMenuActionChange> =
     new EventEmitter<TableMenuActionChange>();
   @Input()
-  get tableSetting(): TableSetting {
+  get tableSetting(): TableSetting
+  {
     return this.currentTableSetting;
   }
-  set tableSetting(value: TableSetting) {
+  set tableSetting(value: TableSetting)
+  {
     value.settingList =
       value.settingList === undefined ? [] : value.settingList;
     this.originalTableSetting = value;
@@ -50,9 +54,10 @@ export class TableMenuComponent {
   constructor(
     public languagePack: TableIntl,
     public tableService: TableService
-  ) {}
+  ) { }
 
-  screenMode_onClick() {
+  screenMode_onClick()
+  {
     this.menuActionChange.emit({
       type: "FullScreenMode",
       data: this.currentTableSetting,
@@ -60,7 +65,8 @@ export class TableMenuComponent {
   }
 
   /***** Column Setting ******/
-  columnMenuDropped(event: CdkDragDrop<any>): void {
+  columnMenuDropped(event: CdkDragDrop<any>): void
+  {
     moveItemInArray(
       this.currentTableSetting.columnSetting,
       event.item.data.columnIndex,
@@ -68,12 +74,14 @@ export class TableMenuComponent {
     );
   }
 
-  toggleSelectedColumn(column: AbstractField) {
+  toggleSelectedColumn(column: AbstractField)
+  {
     // const colFound = this.currentTableSetting.columnSetting.find(c => c === column);
-    column.display = column.display === "visible" ? "hiden" : "visible";
+    column.display = column.display === "visible" ? "hidden" : "visible";
   }
 
-  apply_onClick(e) {
+  apply_onClick(e)
+  {
     e.stopPropagation();
     e.preventDefault();
     this.menuActionChange.emit({
@@ -90,20 +98,24 @@ export class TableMenuComponent {
     // });
   }
 
-  setting_onClick(i) {
+  setting_onClick(i)
+  {
     this.currentColumn = i;
   }
 
-  cancel_onClick() {
+  cancel_onClick()
+  {
     this.currentTableSetting = deepClone(this.originalTableSetting);
   }
 
-  isVisible(visible: boolean) {
+  isVisible(visible: boolean)
+  {
     return isNullorUndefined(visible) ? true : visible;
   }
 
   /*****  Save ********/
-  saveSetting_onClick(e, setting) {
+  saveSetting_onClick(e, setting)
+  {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: "SaveSetting",
@@ -111,16 +123,19 @@ export class TableMenuComponent {
     });
   }
 
-  newSetting_onClick(e) {
+  newSetting_onClick(e)
+  {
     this.showNewSetting = true;
     this.newSettingName = "";
-    window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() =>
+    {
       this.newSettingElement.nativeElement.focus();
     });
     e.stopPropagation();
   }
 
-  selectSetting_onClick(e, setting: TableSetting) {
+  selectSetting_onClick(e, setting: TableSetting)
+  {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: "SelectSetting",
@@ -128,7 +143,8 @@ export class TableMenuComponent {
     });
   }
 
-  default_onClick(e, setting) {
+  default_onClick(e, setting)
+  {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: "DefaultSetting",
@@ -136,7 +152,8 @@ export class TableMenuComponent {
     });
   }
 
-  applySaveSetting_onClick(e) {
+  applySaveSetting_onClick(e)
+  {
     e.stopPropagation();
     this.menuActionChange.emit({
       type: "SaveSetting",
@@ -145,13 +162,15 @@ export class TableMenuComponent {
     this.showNewSetting = false;
   }
 
-  cancleSaveSetting_onClick(e) {
+  cancleSaveSetting_onClick(e)
+  {
     e.stopPropagation();
     this.newSettingName = "";
     this.showNewSetting = false;
   }
 
-  deleteSetting_onClick(e, setting) {
+  deleteSetting_onClick(e, setting)
+  {
     e.stopPropagation();
     this.menuActionChange.emit({ type: "DeleteSetting", data: setting });
     this.newSettingName = "";
@@ -159,37 +178,44 @@ export class TableMenuComponent {
   }
 
   /*****  Filter ********/
-  clearFilter_onClick() {
-    setTimeout(() => {
+  clearFilter_onClick()
+  {
+    setTimeout(() =>
+    {
       this.menuActionChange.emit({ type: "FilterClear" });
     });
   }
 
   /******* Save File ***********/
-  download_onClick(type: string) {
-    setTimeout(() => {
+  download_onClick(type: string)
+  {
+    setTimeout(() =>
+    {
       this.menuActionChange.emit({ type: "Download", data: type });
     });
   }
 
-  print_onClick(menu) {
+  print_onClick(menu)
+  {
     menu._overlayRef._host.parentElement.click();
-    setTimeout(() => {
+    setTimeout(() =>
+    {
       this.menuActionChange.emit({ type: "Print", data: null });
     });
   }
 }
 
-export interface TableMenuActionChange {
+export interface TableMenuActionChange
+{
   type:
-    | "FilterClear"
-    | "TableSetting"
-    | "Download"
-    | "SaveSetting"
-    | "DeleteSetting"
-    | "SelectSetting"
-    | "DefaultSetting"
-    | "Print"
-    | "FullScreenMode";
+  | "FilterClear"
+  | "TableSetting"
+  | "Download"
+  | "SaveSetting"
+  | "DeleteSetting"
+  | "SelectSetting"
+  | "DefaultSetting"
+  | "Print"
+  | "FullScreenMode";
   data?: any;
 }

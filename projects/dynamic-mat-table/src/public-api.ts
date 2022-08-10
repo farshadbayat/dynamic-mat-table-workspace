@@ -32,4 +32,4 @@ Language International
 
 export * from './lib/international/table-Intl';
 
-export * from './lib/utilies/html.helper'
+export * from './lib/utilizes/html.helper'

@@ -1,6 +1,7 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component, OnInit, ViewChild } from "@angular/core";
-import {
+import
+{
   TableRow,
   TableField,
   PrintConfig,
@@ -27,7 +28,8 @@ const DATA = getData(5);
   templateUrl: "./full-features-dmt.component.html",
   styleUrls: ["./full-features-dmt.component.scss"],
 })
-export class FullFeaturesDmtComponent implements OnInit {
+export class FullFeaturesDmtComponent implements OnInit
+{
   eventLog = [];
   title = "dynamic-mat-table";
   private data: any[] = [];
@@ -70,7 +72,8 @@ export class FullFeaturesDmtComponent implements OnInit {
     showParameters: true,
   };
 
-  constructor() {
+  constructor()
+  {
     this.contextMenuItems.push(
       {
         name: "Edit",
@@ -91,16 +94,19 @@ export class FullFeaturesDmtComponent implements OnInit {
     );
     //this.fetchData_onClick();
   }
-  ngOnInit(): void {
+  ngOnInit(): void
+  {
     this.dataSource$ = new BehaviorSubject<any[]>(this.data);
 
     this.initField();
     this.fetchData_onClick();
   }
 
-  loadSetting() {
+  loadSetting()
+  {
     this.setting = TABLE_SETTING as TableSetting;
-    setTimeout(() => {
+    setTimeout(() =>
+    {
       this.table.refreshUI();
     }, 100);
   }
@@ -108,13 +114,15 @@ export class FullFeaturesDmtComponent implements OnInit {
   footerContent: FooterCell = {
     aggregateText: "New Footer Cell Content",
   };
-  initField() {
+  initField()
+  {
     this.fields = [
       {
         name: "row",
         // type: 'number',
-        width: 30,
+        width: 20,
         widthUnit: "%",
+        widthPercentage: 20,
         cellStyle: { "background-color": "#3f51b5", color: "#ffffff" },
         display: "prevent-hidden",
         classNames: "custom-header",
@@ -130,7 +138,7 @@ export class FullFeaturesDmtComponent implements OnInit {
         option: null,
         dynamicCellComponent: FormlyCellComponent,
         draggable: false,
-        filterable: false,
+        filter: 'none',
         footer: [
           this.footerContent,
           {
@@ -146,13 +154,14 @@ export class FullFeaturesDmtComponent implements OnInit {
         option: 1,
         dynamicCellComponent: DynamicCellComponent,
         clickable: false,
-        rowSelectionable: false,
+        rowSelectable: false,
         footer: [
           {
             aggregateText: "Test3",
           },
         ],
-        toExport: (v, type) => {
+        toExport: (v, type) =>
+        {
           console.log(v);
         },
       },
@@ -200,37 +209,33 @@ export class FullFeaturesDmtComponent implements OnInit {
         dynamicCellComponent: DynamicCellComponent,
         option: 2,
         clickable: false,
-        rowSelectionable: false,
+        rowSelectable: false,
         footer: [
           {
             aggregateText: "Test8",
           },
         ],
-        toExport: (d, t) => {
+        toExport: (d, t) =>
+        {
           return 1;
         },
-        // filterable: false,
-        // draggable: false,
-        // sortable: false,
       },
     ];
-
     this.fields$.next([...this.fields]);
-    setInterval(() => {
-      // this.fields$.next([...this.fields]);
-      console.log("ss");
-    }, 5000);
   }
 
-  fetchData_onClick() {
-    this.data = DATA.map((item) => {
+  fetchData_onClick()
+  {
+    this.data = DATA.map((item) =>
+    {
       return { ...item, option: { expandCallback: null, style: null } };
     });
     this.data[1].option.style = { "background-color": "red" };
     this.dataSource$.next(this.data);
   }
 
-  table_onChangeSetting(setting) {
+  table_onChangeSetting(setting)
+  {
     console.log(setting);
     localStorage.setItem("tableConfig", JSON.stringify(setting));
     // if(setting && setting?.settingName !== '') {
@@ -238,32 +243,41 @@ export class FullFeaturesDmtComponent implements OnInit {
     // }
   }
 
-  tableonRowActionChange(e) {
+  tableonRowActionChange(e)
+  {
     this.eventLog.push(e);
   }
 
-  columnSticky_onClick(columnSticky, type) {
+  columnSticky_onClick(columnSticky, type)
+  {
     // console.log(this.fields);
 
-    if (this.fields[columnSticky].sticky === type) {
+    if (this.fields[columnSticky].sticky === type)
+    {
       this.fields[columnSticky].sticky = "none";
-    } else {
+    } else
+    {
       this.fields[columnSticky].sticky = type;
     }
     // console.log(this.fields);
   }
 
-  tableSelection_onClick() {
-    if (this.rowSelectionMode === "multi") {
+  tableSelection_onClick()
+  {
+    if (this.rowSelectionMode === "multi")
+    {
       this.rowSelectionMode = "single";
-    } else if (this.rowSelectionMode === "single") {
+    } else if (this.rowSelectionMode === "single")
+    {
       this.rowSelectionMode = "none";
-    } else {
+    } else
+    {
       this.rowSelectionMode = "multi";
     }
   }
 
-  selectToggle_onClick() {
+  selectToggle_onClick()
+  {
     // const selection: SelectionModel<TestElement> = new SelectionModel(true);
     // for(let i=0 ; i< 10 ; i++) {
     //   selection.select(this.dataSource$.value[i]);
@@ -271,15 +285,18 @@ export class FullFeaturesDmtComponent implements OnInit {
     // this.selectionModel = selection;
   }
 
-  tableVST_onClick() {
+  tableVST_onClick()
+  {
     this.scrollStrategyType;
   }
 
-  table_onRowSelectionChange(e) {
+  table_onRowSelectionChange(e)
+  {
     // console.log(e);
   }
 
-  addNewColumn_onClick() {
+  addNewColumn_onClick()
+  {
     this.fields.push({
       name: "type",
       header: "Car Type",
@@ -288,7 +305,8 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.fields = cloned;
   }
 
-  addNewLongColumn_onClick() {
+  addNewLongColumn_onClick()
+  {
     this.fields.push({
       name: "longText",
       header: "Long Text Header",
@@ -301,64 +319,82 @@ export class FullFeaturesDmtComponent implements OnInit {
     this.fields = cloned;
   }
 
-  paginationMode_onClick() {
-    if (this.paginationMode === "client") {
+  paginationMode_onClick()
+  {
+    if (this.paginationMode === "client")
+    {
       this.paginationMode = "server";
-    } else if (this.paginationMode === "server") {
+    } else if (this.paginationMode === "server")
+    {
       this.paginationMode = "none";
-    } else if (this.paginationMode === "none") {
+    } else if (this.paginationMode === "none")
+    {
       this.paginationMode = "client";
     }
     //this.fetchData_onClick();
   }
 
-  direction_onClick() {
+  direction_onClick()
+  {
     this.direction === "ltr"
       ? (this.direction = "rtl")
       : (this.direction = "ltr");
   }
 
   expandIndex = 0;
-  expandToggle_onClick() {
+  expandToggle_onClick()
+  {
     this.table.expandRow(this.expandIndex);
     this.expandIndex++;
   }
 
-  tableEvent_onClick(e: ITableEvent) {
+  tableEvent_onClick(e: ITableEvent)
+  {
     console.log(e);
-    if (e.event === "ReloadData") {
+    if (e.event === "ReloadData")
+    {
       this.fetchData_onClick();
-    } else if (e.event === "SortChanged") {
+    } else if (e.event === "SortChanged")
+    {
       console.log(e.sender);
     }
   }
 
-  rowEvent_onClick(e: IRowEvent) {
+  rowEvent_onClick(e: IRowEvent)
+  {
     // console.log(this.table.dataSource.allData);
     console.log(e);
     // console.log(e.event);
-    if (e.event === "RowSelectionChange") {
+    if (e.event === "RowSelectionChange")
+    {
       // console.log('Row Selection Change',e.sender);
-    } else if (e.event === "RowClick" && e.sender.row) {
+    } else if (e.event === "RowClick" && e.sender.row)
+    {
       // change style
-      if (!e.sender.row.option) {
+      if (!e.sender.row.option)
+      {
         e.sender.row.option = {};
       }
       // if option not defined
-      if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {
+      if (e.sender.column && !e.sender.row.option[e.sender.column.name])
+      {
         e.sender.row.option[e.sender.column.name] = {};
       }
-    } else if (e.event === "CellClick" && e.sender.column) {
-      if (e.sender.row.option[e.sender.column.name] === undefined) {
+    } else if (e.event === "CellClick" && e.sender.column)
+    {
+      if (e.sender.row.option[e.sender.column.name] === undefined)
+      {
         e.sender.row.option[e.sender.column.name] = {};
       }
       e.sender.row.option[e.sender.column.name].style = {
         "background-color": "#ff4081",
         color: "white",
       };
-    } else if (e.event.type === "dblclick" && e.sender.row) {
+    } else if (e.event.type === "dblclick" && e.sender.row)
+    {
       // change style
-      if (!e.sender.row.option) {
+      if (!e.sender.row.option)
+      {
         e.sender.row.option = {};
       }
       // if option not defined
@@ -369,14 +405,16 @@ export class FullFeaturesDmtComponent implements OnInit {
     }
   }
 
-  visible_onChange(e) {
+  visible_onChange(e)
+  {
     const setting = Object.assign({}, this.setting);
     setting.visibleTableMenu = e.checked;
     this.setting = setting;
     // console.log(e.checked);
   }
 
-  addNew_onClick() {
+  addNew_onClick()
+  {
     //console.log(this.dataSource.allData);
     // this.dataSource$.value.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
     // this.dataSource.refreshFilterPredicate();
@@ -384,43 +422,51 @@ export class FullFeaturesDmtComponent implements OnInit {
     //this.table.refreshTableSetting();
   }
 
-  changeCell_onClick() {
+  changeCell_onClick()
+  {
     // this.dataSource$.value[0].name = new Date().toString();
   }
 
-  clearSelection_onClick() {
+  clearSelection_onClick()
+  {
     this.table.rowSelectionModel.clear();
   }
 
-  refresh_onClick() {
+  refresh_onClick()
+  {
     this.loadSetting();
     this.table.refreshUI();
   }
 
-  loadSetting_onClick() {
+  loadSetting_onClick()
+  {
     this.loadSetting();
     // if (localStorage.getItem("tableConfig")) {
     //   this.setting = JSON.parse(localStorage.getItem("tableConfig"));
     // }
   }
 
-  changeFooter_onClick() {
+  changeFooter_onClick()
+  {
     this.footerContent.aggregateText = "121212";
     this.table.refreshUI();
   }
 
-  autoHeight_onClick() {
+  autoHeight_onClick()
+  {
     this.setting.autoHeight = !this.setting?.autoHeight;
     this.dataSource$.next(this.dataSource$.value);
   }
 
-  clearField_onClick() {
+  clearField_onClick()
+  {
     this.fields$.next([...this.fields]);
     this.table.refreshUI();
   }
 }
 
-export interface TestElement extends TableRow {
+export interface TestElement extends TableRow
+{
   row: number;
   name: string;
   weight: string;
@@ -428,7 +474,8 @@ export interface TestElement extends TableRow {
   brand: string;
 }
 
-export function getData(n = 1000): TestElement[] {
+export function getData(n = 1000): TestElement[]
+{
   return Array.from({ length: n }, (v, i) => ({
     row: i + 1,
     FormlyColumn: "allah",
@@ -489,12 +536,11 @@ const TABLE_SETTING = {
       header: "Formly Column",
       option: null,
       draggable: false,
-      filterable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hiden",
-      filter: "client-side",
+      display: "hidden",
+      filter: "none",
       sort: "client-side",
       sticky: "none",
       width: null,
@@ -506,11 +552,11 @@ const TABLE_SETTING = {
       sticky: "start",
       option: 1,
       clickable: false,
-      rowSelectionable: false,
+      rowSelectable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hiden",
+      display: "hidden",
       filter: "client-side",
       sort: "client-side",
       width: null,
@@ -523,7 +569,7 @@ const TABLE_SETTING = {
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hiden",
+      display: "hidden",
       filter: "client-side",
       sort: "client-side",
       width: null,
@@ -537,7 +583,7 @@ const TABLE_SETTING = {
       exportable: true,
       enableContextMenu: true,
       header: "Weight",
-      display: "hiden",
+      display: "hidden",
       filter: "client-side",
       sticky: "none",
       width: null,
@@ -549,7 +595,7 @@ const TABLE_SETTING = {
       exportable: true,
       enableContextMenu: true,
       header: "Color",
-      display: "hiden",
+      display: "hidden",
       filter: "client-side",
       sort: "client-side",
       sticky: "none",
@@ -562,7 +608,7 @@ const TABLE_SETTING = {
       exportable: true,
       enableContextMenu: true,
       header: "Brand",
-      display: "hiden",
+      display: "hidden",
       filter: "client-side",
       sort: "client-side",
       sticky: "none",
@@ -575,7 +621,7 @@ const TABLE_SETTING = {
       iconColor: "blue",
       option: 2,
       clickable: false,
-      rowSelectionable: false,
+      rowSelectable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
@@ -589,7 +635,7 @@ const TABLE_SETTING = {
     },
   ],
   direction: "rtl",
-  visibaleActionMenu: null,
+  visibleActionMenu: null,
   settingName: "T2",
   settingList: [
     {
@@ -622,12 +668,11 @@ const TABLE_SETTING = {
           header: "Formly Column",
           option: null,
           draggable: false,
-          filterable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
           display: "visible",
-          filter: "client-side",
+          filter: "none",
           sort: "client-side",
           sticky: "none",
           width: null,
@@ -638,7 +683,7 @@ const TABLE_SETTING = {
           sticky: "start",
           option: 1,
           clickable: false,
-          rowSelectionable: false,
+          rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
@@ -702,7 +747,7 @@ const TABLE_SETTING = {
           iconColor: "blue",
           option: 2,
           clickable: false,
-          rowSelectionable: false,
+          rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
@@ -715,7 +760,7 @@ const TABLE_SETTING = {
         },
       ],
       direction: "rtl",
-      visibaleActionMenu: null,
+      visibleActionMenu: null,
       settingName: "T1",
       isCurrentSetting: true,
     },
@@ -750,12 +795,11 @@ const TABLE_SETTING = {
           header: "Formly Column",
           option: null,
           draggable: false,
-          filterable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hiden",
-          filter: "client-side",
+          display: "hidden",
+          filter: "none",
           sort: "client-side",
           sticky: "none",
           width: null,
@@ -767,11 +811,11 @@ const TABLE_SETTING = {
           sticky: "start",
           option: 1,
           clickable: false,
-          rowSelectionable: false,
+          rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hiden",
+          display: "hidden",
           filter: "client-side",
           sort: "client-side",
           width: null,
@@ -784,7 +828,7 @@ const TABLE_SETTING = {
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hiden",
+          display: "hidden",
           filter: "client-side",
           sort: "client-side",
           width: null,
@@ -798,7 +842,7 @@ const TABLE_SETTING = {
           exportable: true,
           enableContextMenu: true,
           header: "Weight",
-          display: "hiden",
+          display: "hidden",
           filter: "client-side",
           sticky: "none",
           width: null,
@@ -810,7 +854,7 @@ const TABLE_SETTING = {
           exportable: true,
           enableContextMenu: true,
           header: "Color",
-          display: "hiden",
+          display: "hidden",
           filter: "client-side",
           sort: "client-side",
           sticky: "none",
@@ -823,7 +867,7 @@ const TABLE_SETTING = {
           exportable: true,
           enableContextMenu: true,
           header: "Brand",
-          display: "hiden",
+          display: "hidden",
           filter: "client-side",
           sort: "client-side",
           sticky: "none",
@@ -836,7 +880,7 @@ const TABLE_SETTING = {
           iconColor: "blue",
           option: 2,
           clickable: false,
-          rowSelectionable: false,
+          rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
@@ -850,7 +894,7 @@ const TABLE_SETTING = {
         },
       ],
       direction: "rtl",
-      visibaleActionMenu: null,
+      visibleActionMenu: null,
       settingName: "T2",
       isDefaultSetting: true,
     },

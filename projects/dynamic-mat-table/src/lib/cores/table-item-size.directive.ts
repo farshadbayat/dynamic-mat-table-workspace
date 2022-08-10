@@ -1,5 +1,8 @@
-import { AfterContentInit, ContentChild, Directive, forwardRef,
-         Input, NgZone, OnChanges, OnDestroy, Output, EventEmitter } from '@angular/core';
+import
+{
+  AfterContentInit, ContentChild, Directive, forwardRef,
+  Input, NgZone, OnChanges, OnDestroy, Output, EventEmitter
+} from '@angular/core';
 import { VIRTUAL_SCROLL_STRATEGY } from '@angular/cdk/scrolling';
 import { distinctUntilChanged, filter, map, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
 import { TableVirtualScrollDataSource } from './table-data-source';
@@ -9,7 +12,8 @@ import { CdkHeaderRowDef } from '@angular/cdk/table';
 import { Subject } from 'rxjs';
 
 
-export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemSizeDirective) {
+export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemSizeDirective)
+{
   return tableDir.scrollStrategy;
 }
 
@@ -34,7 +38,8 @@ const defaults = {
     deps: [forwardRef(() => TableItemSizeDirective)]
   }]
 })
-export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDestroy {
+export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDestroy
+{
   private alive = true;
 
   // tslint:disable-next-line:no-input-rename
@@ -65,27 +70,33 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
   dataSourceChanges = new Subject<void>();
   private stickyPositions: Map<HTMLElement, number>;
 
-  constructor(private zone: NgZone) {
+  constructor(private zone: NgZone)
+  {
   }
 
-  ngOnDestroy() {
+  ngOnDestroy()
+  {
     this.alive = false;
     this.dataSourceChanges.complete();
   }
 
-  private isAlive() {
+  private isAlive()
+  {
     return () => this.alive;
   }
 
-  private isStickyEnabled(): boolean {
+  private isStickyEnabled(): boolean
+  {
     return !!this.scrollStrategy.viewport && ((this.table as any)._headerRowDefs as CdkHeaderRowDef[])
       .map(def => def.sticky)
       .reduce((prevState, state) => prevState && state, true);
   }
 
-  ngAfterContentInit() {
+  ngAfterContentInit()
+  {
     const switchDataSourceOrigin = (this.table as any)._switchDataSource;
-    (this.table as any)._switchDataSource = (dataSource: any) => {
+    (this.table as any)._switchDataSource = (dataSource: any) =>
+    {
       switchDataSourceOrigin.call(this.table, dataSource);
       this.connectDataSource(dataSource);
     };
@@ -95,50 +106,60 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     this.scrollStrategy.stickyChange
       .pipe(
         filter(() => this.isStickyEnabled()),
-        tap(() => {
-          if (!this.stickyPositions) {
+        tap(() =>
+        {
+          if (!this.stickyPositions)
+          {
             this.initStickyPositions();
           }
         }),
         takeWhile(this.isAlive())
       )
-      .subscribe((stickyOffset) => {
+      .subscribe((stickyOffset) =>
+      {
         this.setSticky(stickyOffset);
       });
   }
 
-  connectDataSource(dataSource: any) {
-      this.dataSourceChanges.next();
-      if (dataSource instanceof TableVirtualScrollDataSource) {
-        dataSource
-          .dataToRender$
-          .pipe(
-            distinctUntilChanged(),
-            takeUntil(this.dataSourceChanges),
-            takeWhile(this.isAlive()),
-            tap(data => this.scrollStrategy.dataLength = data.length),
-            switchMap(data =>
-              this.scrollStrategy
-                .renderedRangeStream
-                .pipe(
-                   map(({ start, end }) => {
-                    // this.requestRendering.emit({from: start, to: end});
-                    return typeof start !== 'number' || typeof end !== 'number' ? data : data.slice(start, end);
-                   })                  
-                )
-            )
+  connectDataSource(dataSource: any)
+  {
+    this.dataSourceChanges.next();
+    if (dataSource instanceof TableVirtualScrollDataSource)
+    {
+      dataSource
+        .dataToRender$
+        .pipe(
+          distinctUntilChanged(),
+          takeUntil(this.dataSourceChanges),
+          takeWhile(this.isAlive()),
+          tap(data => this.scrollStrategy.dataLength = data?.length),
+          switchMap(data =>
+            this.scrollStrategy
+              .renderedRangeStream
+              .pipe(
+                map(({ start, end }) =>
+                {
+                  // this.requestRendering.emit({from: start, to: end});
+                  return typeof start !== 'number' || typeof end !== 'number' ? data : data.slice(start, end);
+                })
+              )
           )
-          .subscribe(data => {
-            this.zone.run(() => {
-              dataSource.dataOfRange$.next(data);
-            });
+        )
+        .subscribe(data =>
+        {
+          this.zone.run(() =>
+          {
+            dataSource.dataOfRange$.next(data);
           });
-      } else {
-        throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
-      }    
+        });
+    } else
+    {
+      throw new Error('[tvsItemSize] requires TableVirtualScrollDataSource be set as [dataSource] of [mat-table]');
+    }
   }
 
-  ngOnChanges() {
+  ngOnChanges()
+  {
     const config = {
       rowHeight: +this.rowHeight || defaults.rowHeight,
       headerHeight: this.headerEnabled ? +this.headerHeight || defaults.headerHeight : 0,
@@ -148,47 +169,41 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     this.scrollStrategy.setConfig(config);
   }
 
-
-  // setSticky(offset) {
-  //   // fixed bug when sticky true for header and one column. column scroll front of header. becuse of z-index
-  //   let topOffset = -offset;
-  //   this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll('mat-header-row.mat-table-sticky')
-  //     .forEach((el: HTMLElement) => {
-  //       el.style.top = `${topOffset}px`;
-  //       topOffset += el.offsetHeight;
-  //       if (el.style.zIndex !== null ) {
-  //         el.style.zIndex = '1000';
-  //       }
-  //     });
-  // }
-
-  setSticky(offset) {
+  setSticky(offset)
+  {
     this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
-      .forEach((el: HTMLElement) => {
+      .forEach((el: HTMLElement) =>
+      {
         const parent = el.parentElement;
         let baseOffset = 0;
-        if (this.stickyPositions.has(parent)) {
+        if (this.stickyPositions.has(parent))
+        {
           baseOffset = this.stickyPositions.get(parent);
         }
         el.style.top = `${baseOffset - offset}px`;
       });
     this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyFooterSelector)
-      .forEach((el: HTMLElement) => {
+      .forEach((el: HTMLElement) =>
+      {
         const parent = el.parentElement;
         let baseOffset = 0;
-        if (this.stickyPositions.has(parent)) {
+        if (this.stickyPositions.has(parent))
+        {
           baseOffset = this.stickyPositions.get(parent);
         }
         el.style.bottom = `${-baseOffset + offset}px`;
       });
   }
 
-  private initStickyPositions() {
+  private initStickyPositions()
+  {
     this.stickyPositions = new Map<HTMLElement, number>();
     this.scrollStrategy.viewport.elementRef.nativeElement.querySelectorAll(stickyHeaderSelector)
-      .forEach(el => {
+      .forEach(el =>
+      {
         const parent = el.parentElement;
-        if (!this.stickyPositions.has(parent)) {
+        if (!this.stickyPositions.has(parent))
+        {
           this.stickyPositions.set(parent, parent.offsetTop);
         }
       });

@@ -4,13 +4,15 @@ import { SelectionModel } from '@angular/cdk/collections';
 @Injectable({
   providedIn: "root",
 })
-export class TableService {
+export class TableService
+{
   public tableName: string;
 
-  constructor() {}
+  constructor() { }
 
   /************************************* Local Export *****************************************/
-  static getFormattedTime() {
+  static getFormattedTime()
+  {
     const today = new Date();
     const y = today.getFullYear();
     const m = today.getMonth() + 1;
@@ -43,13 +45,17 @@ export class TableService {
   //   }
   // }
 
-  private downloadBlob(blob: Blob | any, filename: string) {
-    if ((navigator as any).msSaveBlob) {
+  private downloadBlob(blob: Blob | any, filename: string)
+  {
+    if ((navigator as any).msSaveBlob)
+    {
       // IE 10+
       (navigator as any).msSaveBlob(blob, filename);
-    } else {
+    } else
+    {
       const link = document.createElement("a");
-      if (link.download !== undefined) {
+      if (link.download !== undefined)
+      {
         // Browsers that support HTML5 download attribute
         const url = URL.createObjectURL(blob);
         link.setAttribute("href", url);
@@ -62,36 +68,42 @@ export class TableService {
     }
   }
 
-  public exportToCsv<T>( columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "") {
+  public exportToCsv<T>(columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "")
+  {
     filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
-    if (!rows || !rows.length) {
+    if (!rows || !rows.length)
+    {
       return;
     }
-    const fields = columns.filter((c) => c.exportable !== false && c.display !== 'hiden');
+    const fields = columns.filter((c) => c.exportable !== false && c.display !== 'hidden');
     const separator = ",";
     const CR_LF = "\n"; //'\u0D0A';
-    const keys = fields.map( f => f.name);
-    const headers = fields.map( f => f.header);
+    const keys = fields.map(f => f.name);
+    const headers = fields.map(f => f.header);
     const csvContent = headers.join(separator) + CR_LF +
       rows
-        .map((row) => {
-          return fields.map((f) => {
-              let cell = f.toExport(row, "csv") || "";
-              cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
-              if (cell.search(/("|,|\n)/g) >= 0) {
-                cell = `"${cell}"`;
-              }
-              return cell;
-            }).join(separator);
+        .map((row) =>
+        {
+          return fields.map((f) =>
+          {
+            let cell = f.toExport(row, "csv") || "";
+            cell = cell instanceof Date ? cell.toLocaleString() : cell.toString().replace(/"/g, '""');
+            if (cell.search(/("|,|\n)/g) >= 0)
+            {
+              cell = `"${cell}"`;
+            }
+            return cell;
+          }).join(separator);
         }).join(CR_LF);
 
     const blob = new Blob([
       new Uint8Array([0xEF, 0xBB, 0xBF]), /* UTF-8 BOM */
-      csvContent], {type : 'text/csv;charset=utf-8'});
+      csvContent], { type: 'text/csv;charset=utf-8' });
     this.downloadBlob(blob, filename);
   }
 
-  public exportToJson(rows: object[], filename: string = "") {
+  public exportToJson(rows: object[], filename: string = "")
+  {
     filename =
       filename === ""
         ? this.tableName + TableService.getFormattedTime() + ".json"
@@ -106,16 +118,20 @@ export class TableService {
   public loadSavedColumnInfo(
     columnInfo: TableField<any>[],
     saveName?: string
-  ): TableField<any>[] {
+  ): TableField<any>[]
+  {
     // Only load if a save name is passed in
-    if (saveName) {
-      if (!localStorage) {
+    if (saveName)
+    {
+      if (!localStorage)
+      {
         return;
       }
 
       const loadedInfo = localStorage.getItem(`${saveName}-columns`);
 
-      if (loadedInfo) {
+      if (loadedInfo)
+      {
         return JSON.parse(loadedInfo);
       }
       this.saveColumnInfo(columnInfo);
@@ -123,9 +139,12 @@ export class TableService {
     }
   }
 
-  public saveColumnInfo( columnInfo: TableField<any>[], saveName: string = this.tableName): void {
-    if (saveName) {
-      if (!localStorage) {
+  public saveColumnInfo(columnInfo: TableField<any>[], saveName: string = this.tableName): void
+  {
+    if (saveName)
+    {
+      if (!localStorage)
+      {
         return;
       }
 

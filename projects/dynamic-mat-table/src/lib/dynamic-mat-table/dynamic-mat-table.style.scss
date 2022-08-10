@@ -40,6 +40,7 @@
     background-color: transparent !important;
     border-top: transparent !important;
     background: transparent !important;
+
     .mat-header-cell {
       border: 0;
       padding: 0;
@@ -47,6 +48,7 @@
 
     mat-progress-bar {
       transition: height 0.3s, opacity 0.25s linear;
+
       &:not(.show) {
         height: 0;
         opacity: 0;
@@ -66,6 +68,7 @@
     position: absolute;
     z-index: 1;
     pointer-events: none;
+
     button {
       pointer-events: initial;
     }
@@ -73,23 +76,19 @@
 }
 
 @mixin dmf-class {
+
   // remove botton padding
   ::ng-deep .dmf {
     min-width: 100%;
   }
 
-  ::ng-deep
-    dynamic-mat-table
-    cdk-virtual-scroll-viewport
-    .cdk-virtual-scroll-content-wrapper
-    .mat-table
-    mat-row
-    .mat-cell
-    mat-form-field {
+  ::ng-deep dynamic-mat-table cdk-virtual-scroll-viewport .cdk-virtual-scroll-content-wrapper .mat-table mat-row .mat-cell mat-form-field {
     max-width: 100%;
+
     .mat-form-field-wrapper {
       padding-bottom: 0 !important;
     }
+
     ::ng-deep .mat-form-field-underline {
       bottom: 0 !important;
     }
@@ -98,18 +97,18 @@
 
 @mixin resize-column {
   mat-header-cell:hover {
-    .left-resizer-handler {
+    .left-resize-handler {
       height: 100%;
       transition: height 0.4s ease-out;
     }
 
-    .right-resizer-handler {
+    .right-resize-handler {
       height: 100%;
       transition: height 0.4s ease-out;
     }
   }
 
-  .resizer-handler {
+  .resize-handler {
     display: inline-block;
     min-width: 1px;
     height: 0;
@@ -119,14 +118,14 @@
     z-index: 10;
   }
 
-  .left-resizer-handler {
+  .left-resize-handler {
     left: 0;
     padding-right: 10px;
     margin-right: -10px;
     border-left: solid 2px #8b8b8b;
   }
 
-  .right-resizer-handler {
+  .right-resize-handler {
     right: 0px;
     padding-left: 10px;
     margin-left: -10px;
@@ -154,6 +153,7 @@
   .button-menu {
     width: 100%;
     line-height: 48px;
+
     &::ng-deep .mat-button-wrapper {
       display: flex;
 
@@ -162,6 +162,7 @@
         width: 100%;
         text-align: left;
       }
+
       mat-icon {
         line-height: 48px;
         height: 48px;
@@ -188,7 +189,7 @@
 }
 
 @media print {
-  .printpreview {
+  .print-preview {
     background-color: white;
     position: fixed;
     width: 100%;
@@ -203,7 +204,6 @@
   }
 }
 
-.disable-backdrop-click
-  .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+.disable-backdrop-click .cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
   pointer-events: none;
 }

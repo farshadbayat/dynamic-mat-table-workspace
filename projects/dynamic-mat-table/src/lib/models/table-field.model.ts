@@ -15,12 +15,13 @@ export declare type AtFilterFunc<R extends TableRow> = (
 export declare type ToPrint = (row: any) => any;
 export declare type ToExport = (row: any, type: any) => any;
 export declare type FieldType = "text" | "number" | "date" | "category";
-export declare type FieldDisplay = "visible" | "hiden" | "prevent-hidden";
+export declare type FieldDisplay = "visible" | "hidden" | "prevent-hidden";
 export declare type FieldSticky = "start" | "end" | "none";
 export declare type FieldFilter = "client-side" | "server-side" | "none";
 export declare type FieldSort = "client-side" | "server-side" | "none";
 
-export interface TableField<R extends TableRow> extends AbstractField {
+export interface TableField<R extends TableRow> extends AbstractField
+{
   // renderer?: AtRenderFunc<R>;
   classNames?: string;
   rowClass?: string | AtClassFunc;
@@ -30,12 +31,14 @@ export interface TableField<R extends TableRow> extends AbstractField {
   toExport?: ToExport;
 }
 
-export interface AbstractField {
+export interface AbstractField
+{
   index?: number;
   name: string /* The key of the data */;
   type?: FieldType /* Type of data in the field */;
   minWidth?: number /* min width of column */;
   width?: number /* width of column */;
+  widthPercentage?: number;
   widthUnit?: "px" | "%" /* width unit */;
   style?: any /* private property used only in html */;
   header?: string /* The title of the column */;
@@ -51,14 +54,12 @@ export interface AbstractField {
   iconColor?: string /* Set Icon Color */;
   dynamicCellComponent?: any /* Set Dynamic Component in Cell */;
   draggable?: boolean;
-  filterable?: boolean;
-  sortable?: boolean;
   clickable?: boolean;
   clickType?: "cell" | "label" | "custom";
-  printable?: boolean /* disply in printing view by defualt is true */;
+  printable?: boolean /* display in printing view by default is true */;
   exportable?: boolean;
   enableContextMenu?: boolean;
-  rowSelectionable?: boolean;
+  rowSelectable?: boolean;
   /* Footer */
   footer?: FooterCell[];
   /* For Ellipsis Text */

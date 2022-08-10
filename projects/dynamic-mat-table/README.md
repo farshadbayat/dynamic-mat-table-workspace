@@ -129,35 +129,34 @@ export interface AbstractField {
     type?: FieldType; //data type
     width?: number; //width of the column
     header?: string; //displayed name of the column
-    isKey?: boolean; // turn column in to unqiue key column 
+    isKey?: boolean; // turn column in to unique key column 
     inlineEdit?: boolean; // allows column to have inline edit
-    display?: FieldDisplay; // allow column to be hiddin or visiable
-    sticky?: FieldSticky; // allow column to stick in horazental scrolling
-    filter?: FieldFilter; // sets data filtering mode
-    sort?: FieldSort; // set data sorting mode
+    display?: FieldDisplay; // allow column to be hidden or visible
+    sticky?: FieldSticky; // allow column to stick in horizontal scrolling
+    filter?: FieldFilter; // sets data filtering mode(none: hidden filter button)
+    sort?: FieldSort; // set data sorting mode( none: hidden sort button)
     cellClass?: string; // set a class for column cells
     cellStyle?: any; //set a style for column cells
-    icon?: string; // displayes a mat-icon in column header
+    icon?: string; // displays a mat-icon in column header
     iconColor?: string; // set a color for column header icon
     dynamicCellComponent?: any; // set the component used in column cells
     draggable?: boolean; // allows column to be rearranged with drag and drop 
-    filterable?: boolean; // allows column to filter its data (shows filter button)
-    sortable?: boolean; // allows column to sort its data (shows sort button)
+    // filterable?: boolean; // allows column to filter its data (shows filter button)
     clickable?: boolean; // allows column to have a function when clicked
-    clickType?: 'cell' | 'label' | 'custom'; // sets the clickability regon
+    clickType?: 'cell' | 'label' | 'custom'; // sets the click ability region
     printable?: boolean; // allows column to print its data
     exportable?: boolean; // allows column data to be exported
     enableContextMenu?: boolean; // enables context menu in columns
-    rowSelectionable?: boolean; // Coming soon...
+    rowSelectable?: boolean; // Coming soon...
     footer?: FooterCell[]; // creates footers for column
-    cellEllipsisRow?: number; // maxmum number of cells shown before ellipsed 
+    cellEllipsisRow?: number; // maximum number of cells shown before ellipses 
     cellTooltipEnable?: boolean; // allows column cell to have a tooltip
-    headerEllipsisRow?: number;  // maximum number of rows shown in column before ellipsed
+    headerEllipsisRow?: number;  // maximum number of rows shown in column before ellipses
     headerTooltipEnable?: boolean; // allows column header to have a tooltip
     option?: any; // a spacial object for storing data state (like saving in inline edit)
     categoryData?: any[]; // Coming soon...
-    toString?: (column: TableField<any>, row: TableRow) => string; // truns column data to a sring (used mostly for exporting data)
-    customSort?: (column: TableField<any>, row: any) => string; // allows you costumize data sorting in column
+    toString?: (column: TableField<any>, row: TableRow) => string; // turns column data to a string (used mostly for exporting data)
+    customSort?: (column: TableField<any>, row: any) => string; // allows you customize data sorting in column
 }
 ```
 
@@ -210,7 +209,7 @@ For Exmaple:
 ```typescript
 const tableSettinsConfig:TableSetting = {
   direction: 'ltr',
-  visibaleActionMenu: actionMenu,
+  visibleActionMenu: actionMenu,
   rowStyle: {
     'background-color': '#70e181',
     color: 'ffffff',
@@ -229,7 +228,7 @@ the full interface is described below:
 export interface TableSetting {
     direction?: Direction; // sets the directopn of the table
     columnSetting?: AbstractField[]; // 
-    visibaleActionMenu?: VisibleActionMenu; // configures the actoin menu 
+    visibleActionMenu?: VisibleActionMenu; // configures the actoin menu 
     visibleTableMenu?: boolean; // controls the table men's visablity 
     alternativeRowStyle?: any; // sets a style for the odd rows
     normalRowStyle?: any; // sets a style for the even rows
