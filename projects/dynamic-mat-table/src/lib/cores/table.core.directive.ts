@@ -257,7 +257,8 @@ export class TableCoreDirective<T extends TableRow> {
       f.sticky = getObjectProp("sticky", "none", settingField, f);
       f.width = getObjectProp("width", this.defaultWidth, settingField, f);
       const unit = f.widthUnit || "px";
-      const style = unit === "px" ? f.width + "px" : `calc( ${f.width}% )`;
+      const style = unit === "px" ? f.width + "px" : `calc( ${f.widthPercentage}% )`;
+      console.log(f.width);
       if (f.width)
       {
         f.style = {
