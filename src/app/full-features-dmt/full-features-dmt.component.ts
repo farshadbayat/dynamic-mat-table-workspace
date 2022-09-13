@@ -334,6 +334,16 @@ export class FullFeaturesDmtComponent implements OnInit
     //this.fetchData_onClick();
   }
 
+  paginationConfigChange_onClock()
+  {
+    // this.pagination.pageSize = 20;
+    this.pagination = {
+      ...this.pagination,
+      pageIndex: 0,
+      pageSize: 20,
+    } as TablePagination;
+  }
+
   direction_onClick()
   {
     this.direction === "ltr"

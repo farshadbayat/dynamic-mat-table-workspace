@@ -523,7 +523,10 @@ export class TableCoreDirective<T extends TableRow> {
       this._rowSelectionModel.toggle(row);
       this.onRowEvent.emit({
         event: "RowSelectionChange",
-        sender: this._rowSelectionModel,
+        sender: {
+          SelectionModel: this._rowSelectionModel,
+          Row: row
+        },
       });
     }
   }
