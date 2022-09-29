@@ -258,7 +258,6 @@ export class TableCoreDirective<T extends TableRow> {
       f.width = getObjectProp("width", this.defaultWidth, settingField, f);
       const unit = f.widthUnit || "px";
       const style = unit === "px" ? f.width + "px" : `calc( ${f.widthPercentage}% )`;
-      console.log(f.width);
       if (f.width)
       {
         f.style = {

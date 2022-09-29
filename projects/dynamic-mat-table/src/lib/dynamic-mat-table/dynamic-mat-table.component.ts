@@ -193,8 +193,6 @@ export class DynamicMatTableComponent<T extends TableRow>
       )
       .subscribe((data) =>
       {
-        console.log(data);
-
         let i = data.e.columnIndex;
         if (data.e.resizeHandler === "left")
         {
@@ -217,7 +215,6 @@ export class DynamicMatTableComponent<T extends TableRow>
         {
           const widthChanges = (this.tableSetting.columnSetting[i].width ?? 0) - data.w;
           console.log(this.tableSetting.columnSetting[i].width, data.w, widthChanges);
-          console.log(widthChanges);
           style = `calc( ${this.columns[i].widthPercentage}% + ${widthChanges}px)`;
 
         }
@@ -226,7 +223,6 @@ export class DynamicMatTableComponent<T extends TableRow>
           "max-width": style,
           "min-width": style,
         };
-        console.log(this.columns[i].style);
         /* store latest width in setting if exists */
         if (this.tableSetting.columnSetting[i])
         {
@@ -621,12 +617,11 @@ export class DynamicMatTableComponent<T extends TableRow>
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === "Print")
     {
-      this.printConfig.displayedFields = this.columns
-        .filter((c) => isNullorUndefined(c.printable) || c.printable === true)
-        .map((o) => o.name);
       this.printConfig.title = this.printConfig.title || this.tableName;
       this.printConfig.direction = this.tableSetting.direction || "ltr";
-      this.printConfig.columns = this.tableColumns;
+      debugger
+      this.printConfig.columns = this.tableColumns.filter(t => t.display !== 'hidden' && t.printable !== false);
+      this.printConfig.displayedFields = this.printConfig.columns.map((o) => o.name);
       this.printConfig.data = this.tvsDataSource.filteredData;
       const params = this.tvsDataSource.toTranslate();
       this.printConfig.tablePrintParameters = [];
@@ -684,8 +679,6 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   onResizeColumn(event: MouseEvent, index: number, type: "left" | "right")
   {
-    console.log(type);
-
     this.resizeColumn.resizeHandler = type;
     this.resizeColumn.startX = event.pageX;
     if (this.resizeColumn.resizeHandler === "right")

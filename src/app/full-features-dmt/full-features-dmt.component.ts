@@ -360,13 +360,11 @@ export class FullFeaturesDmtComponent implements OnInit
 
   tableEvent_onClick(e: ITableEvent)
   {
-    console.log(e);
     if (e.event === "ReloadData")
     {
       this.fetchData_onClick();
     } else if (e.event === "SortChanged")
     {
-      console.log(e.sender);
     }
   }
 

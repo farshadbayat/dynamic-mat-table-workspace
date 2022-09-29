@@ -5,16 +5,19 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit
+{
 
-  constructor() {   
+  constructor()
+  {
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void
+  {
   }
 
-  onTabChanged(e) {
-    console.log(e);    
+  onTabChanged(e)
+  {
   }
 
 
