@@ -94,7 +94,7 @@ export class TableCoreDirective<T extends TableRow> {
       {
         this._tablePagination.pageSizeOptions = [5, 10, 25, 100];
       }
-      if (isNullorUndefined(this._tablePagination.pageSizeOptions))
+      if (isNullorUndefined(this._tablePagination.pageSize))
       {
         this._tablePagination.pageSize =
           this._tablePagination.pageSizeOptions[0];
@@ -296,7 +296,7 @@ export class TableCoreDirective<T extends TableRow> {
   // tslint:disable-next-line: no-output-on-prefix
   @Output() onTableEvent: EventEmitter<ITableEvent> = new EventEmitter();
   @Output() onRowEvent: EventEmitter<IRowEvent> = new EventEmitter();
-  @Output() settingChange: EventEmitter<any> = new EventEmitter();
+  @Output() settingChange: EventEmitter<{ type: 'create' | 'save' | 'apply' | 'delete' | 'default' | 'select' | 'error', setting: TableSetting }> = new EventEmitter();
   @Output() paginationChange: EventEmitter<TablePagination> =
     new EventEmitter();
   public noData: boolean = true;

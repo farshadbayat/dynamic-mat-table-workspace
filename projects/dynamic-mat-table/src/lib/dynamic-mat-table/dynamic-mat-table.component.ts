@@ -521,8 +521,7 @@ export class DynamicMatTableComponent<T extends TableRow>
   {
     if (e.type === "TableSetting")
     {
-      // this.saveSetting(e.data, null, false);
-      this.settingChange.emit({ setting: this.tableSetting });
+      this.settingChange.emit({ type: 'apply', setting: this.tableSetting });
       this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === "DefaultSetting")
     {
@@ -536,6 +535,7 @@ export class DynamicMatTableComponent<T extends TableRow>
           setting.isDefaultSetting = false;
         }
       });
+      this.settingChange.emit({ type: 'default', setting: this.tableSetting });
     } else if (e.type === "SaveSetting")
     {
       const newSetting = Object.assign({}, this.setting);
@@ -547,20 +547,22 @@ export class DynamicMatTableComponent<T extends TableRow>
       if (settingIndex === -1)
       {
         this.setting.settingList.push(JSON.parse(JSON.stringify(newSetting)));
-        this.settingChange.emit({ setting: this.tableSetting });
+        this.settingChange.emit({ type: 'create', setting: this.tableSetting });
       } else
       {
         this.setting.settingList[settingIndex] = JSON.parse(
           JSON.stringify(newSetting)
         );
-        this.settingChange.emit({ setting: this.tableSetting });
+        this.settingChange.emit({ type: 'save', setting: this.tableSetting });
       }
     } else if (e.type === "DeleteSetting")
     {
       this.setting.settingList = this.setting.settingList.filter(
         (s) => s.settingName !== e.data.settingName
       );
-      this.settingChange.emit({ setting: this.tableSetting });
+      this.setting.columnSetting.filter(f => f.display === 'hidden').forEach(f => f.display = 'visible');
+      this.refreshColumn(this.setting.columnSetting);
+      this.settingChange.emit({ type: 'delete', setting: this.tableSetting });
     } else if (e.type === "SelectSetting")
     {
       let setting: SettingItem = null;
@@ -594,7 +596,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         column = { ...originalColumn, ...column };
       });
       this.tableSetting = setting;
-      this.settingChange.emit({ setting: this.tableSetting });
+      this.settingChange.emit({ type: 'select', setting: this.tableSetting });
     } else if (e.type === "FullScreenMode")
     {
       requestFullscreen(this.tbl.elementRef);
