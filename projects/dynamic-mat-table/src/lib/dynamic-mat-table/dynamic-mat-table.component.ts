@@ -502,7 +502,7 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.contextMenu.menuData = this.currentContextMenuSender;
     this.contextMenu.menu.focusFirstItem("mouse");
     this.onRowEvent.emit({
-      event: "BeforContextMenuOpen",
+      event: "BeforeContextMenuOpen",
       sender: { row: row, column: column, contextMenu: this.contextMenuItems },
     });
     this.contextMenu.openMenu();
@@ -583,7 +583,7 @@ export class DynamicMatTableComponent<T extends TableRow>
       setting.settingList = this.setting.settingList;
       delete setting.isCurrentSetting;
       delete setting.isDefaultSetting;
-      if (this.pagination.pageSize !== setting?.pageSize)
+      if (this.pagingMode !== 'none' && this.pagination.pageSize != setting?.pageSize)
       {
         this.pagination.pageSize =
           setting?.pageSize || this.pagination.pageSize;
@@ -596,6 +596,7 @@ export class DynamicMatTableComponent<T extends TableRow>
         column = { ...originalColumn, ...column };
       });
       this.tableSetting = setting;
+      this.refreshColumn(this.setting.columnSetting);
       this.settingChange.emit({ type: 'select', setting: this.tableSetting });
     } else if (e.type === "FullScreenMode")
     {
