@@ -130,14 +130,14 @@ export class DynamicMatTableComponent<T extends TableRow>
       value.autoHeight = value.autoHeight || this.tableSetting.autoHeight;
       value.saveSettingMode =
         value.saveSettingMode || this.tableSetting.saveSettingMode || "simple";
-      this.pagination.pageSize = value.pageSize || this.tableSetting.pageSize;
+      this.pagination.pageSize = value.pageSize || this.tableSetting.pageSize || this.pagination.pageSize;
       /* Dynamic Cell must update when setting change */
       value?.columnSetting?.forEach((column) =>
       {
-        const orginalColumn = this.columns?.find((c) => c.name === column.name);
-        if (orginalColumn)
+        const originalColumn = this.columns?.find((c) => c.name === column.name);
+        if (originalColumn)
         {
-          column = { ...orginalColumn, ...column };
+          column = { ...originalColumn, ...column };
         }
       });
       this.tableSetting = value;
@@ -285,16 +285,23 @@ export class DynamicMatTableComponent<T extends TableRow>
           ]);
 
         this.overlayRef = this.overlay.create({ positionStrategy });
-        const injector = Injector.create([
-          {
+
+        const option = {
+          providers: [{
             provide: "tooltipConfig",
             useValue: row[column.name],
-          },
-        ]);
-        const tooptipRef: ComponentRef<TooltipComponent> =
+          }],
+        };
+
+        const injector = Injector.create(option);
+        const tooltipRef: ComponentRef<TooltipComponent> =
           this.overlayRef.attach(
             new ComponentPortal(TooltipComponent, null, injector)
           );
+        setTimeout(() =>
+        {
+          tooltipRef.destroy();
+        }, 5000);
       } else if (show === false && this.overlayRef !== null)
       {
         this.closeTooltip();
