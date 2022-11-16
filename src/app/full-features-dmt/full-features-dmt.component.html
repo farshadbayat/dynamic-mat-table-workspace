@@ -4,8 +4,9 @@
   [dataSource]="dataSource$" [pagingMode]="paginationMode" [pagination]="pagination" [showNoData]="showNoData"
   [printConfig]="printConfig" [rowSelectionMode]="rowSelectionMode" [rowSelectionModel]="selectionModel"
   [showProgress]="showProgress" [rowContextMenuItems]="contextMenuItems" (onTableEvent)="tableEvent_onClick($event)"
-  (onRowEvent)="rowEvent_onClick($event)" [class.conditional-class]="conditinalClass"
-  (settingChange)="table_onChangeSetting($event)" (rowSelectionChange)="table_onRowSelectionChange($event)">
+  (onRowEvent)="rowEvent_onClick($event)" [class.conditional-class]="conditionalClass"
+  (paginationChange)="table_onPaginationChange($event)" (settingChange)="table_onChangeSetting($event)"
+  (rowSelectionChange)="table_onRowSelectionChange($event)">
 </dynamic-mat-table>
 
 <section class="section">
@@ -36,8 +37,8 @@
   <button mat-raised-button color="primary" (click)="selectToggle_onClick()">
     Select 10 Row
   </button>
-  <button mat-raised-button color="primary" (click)="conditinalClass = !conditinalClass">
-    Conditional Class ({{ conditinalClass }})
+  <button mat-raised-button color="primary" (click)="conditionalClass = !conditionalClass">
+    Conditional Class ({{ conditionalClass }})
   </button>
   <button mat-raised-button color="primary" (click)="table.clear()">
     Clear Data

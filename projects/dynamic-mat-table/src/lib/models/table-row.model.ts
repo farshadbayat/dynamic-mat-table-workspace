@@ -1,5 +1,7 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { HashMap } from '../cores/type';
 import { ContextMenuItem } from './context-menu.model';
+import { TableField } from './table-field.model';
 
 // this fields are for each row data
 export interface TableRow
@@ -10,12 +12,17 @@ export interface TableRow
 }
 
 export type TableSelectionMode = 'single' | 'multi' | 'none';
-export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'DoubleClick' | 'CellClick' | 'LabelClick' | 'BeforContextMenuOpen' | 'ContextMenuClick';
+export type RowEventType = 'MasterSelectionChange' | 'RowSelectionChange' | 'RowActionMenu' | 'RowClick' | 'DoubleClick' | 'CellClick' | 'LabelClick' | 'BeforeContextMenuOpen' | 'ContextMenuClick';
 
 export interface IRowEvent
 {
   event: RowEventType | any;
-  sender: any;
+  sender: {
+    row?: any,
+    column?: TableField<any>,
+    selectionModel?: SelectionModel<any>,
+    [t: string]: any
+  };
 }
 
 export interface ITableEvent

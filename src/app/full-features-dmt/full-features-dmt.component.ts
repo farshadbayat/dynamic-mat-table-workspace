@@ -52,7 +52,7 @@ export class FullFeaturesDmtComponent implements OnInit
   stickyHeader = true;
   showProgress = true;
   visibleMenu = true;
-  conditinalClass = false;
+  conditionalClass = false;
   paginationMode: string = "none";
   direction: "rtl" | "ltr" = "rtl";
   contextMenuItems: ContextMenuItem[] = [];
@@ -126,6 +126,7 @@ export class FullFeaturesDmtComponent implements OnInit
         cellStyle: { "background-color": "#3f51b5", color: "#ffffff" },
         display: "prevent-hidden",
         classNames: "custom-header",
+        cellTooltipEnable: true,
         //  footer: [{
         //   aggregateText: 'Test1'
         // }]
@@ -411,6 +412,12 @@ export class FullFeaturesDmtComponent implements OnInit
         color: "white",
       };
     }
+  }
+
+  table_onPaginationChange(e)
+  {
+    console.log(e);
+
   }
 
   visible_onChange(e)

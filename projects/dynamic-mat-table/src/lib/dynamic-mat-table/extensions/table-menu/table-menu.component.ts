@@ -1,18 +1,18 @@
 import
-  {
-    ChangeDetectionStrategy,
-    Component,
-    Output,
-    Input,
-    EventEmitter,
-    ViewChild,
-    ElementRef,
-  } from "@angular/core";
+{
+  ChangeDetectionStrategy,
+  Component,
+  Output,
+  Input,
+  EventEmitter,
+  ViewChild,
+  ElementRef,
+} from "@angular/core";
 import { moveItemInArray, CdkDragDrop } from "@angular/cdk/drag-drop";
 import { TableService } from "../../dynamic-mat-table.service";
 import { TableSetting } from "../../../models/table-setting.model";
 import { TableIntl } from "../../../international/table-Intl";
-import { clone, deepClone, isNullorUndefined } from "../../../cores/type";
+import { deepClone, isNullorUndefined } from "../../../cores/type";
 import { AbstractField } from "../../../models/table-field.model";
 
 @Component({

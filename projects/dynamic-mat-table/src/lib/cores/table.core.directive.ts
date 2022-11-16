@@ -511,7 +511,7 @@ export class TableCoreDirective<T extends TableRow> {
     }
     this.onRowEvent.emit({
       event: "MasterSelectionChange",
-      sender: this._rowSelectionModel,
+      sender: { selectionModel: this._rowSelectionModel },
     });
   }
 
@@ -523,8 +523,8 @@ export class TableCoreDirective<T extends TableRow> {
       this.onRowEvent.emit({
         event: "RowSelectionChange",
         sender: {
-          SelectionModel: this._rowSelectionModel,
-          Row: row
+          selectionModel: this._rowSelectionModel,
+          row: row
         },
       });
     }
