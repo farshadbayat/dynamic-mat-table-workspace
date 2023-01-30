@@ -11,7 +11,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
 import { TableIntl } from '../international/table-Intl';
 import { TableCoreDirective } from '../cores/table.core.directive';
@@ -31,12 +31,15 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../tooltip/tooltip.directive';
 import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
 import { FormsModule } from '@angular/forms';
+import { PaginationModule } from '../modules/pagination/pagination.module';
 
-export function createCompiler(compilerFactory: CompilerFactory): Compiler {
+export function createCompiler(compilerFactory: CompilerFactory): Compiler
+{
   return compilerFactory.createCompiler();
 }
 
-export function paginatorLabels(tableIntl: TableIntl) {
+export function paginatorLabels(tableIntl: TableIntl)
+{
   const paginatorIntl = new MatPaginatorIntl();
   paginatorIntl.firstPageLabel = tableIntl?.paginatorLabels?.firstPageLabel;
   paginatorIntl.getRangeLabel = tableIntl?.paginatorLabels?.getRangeLabel;
@@ -47,7 +50,7 @@ export function paginatorLabels(tableIntl: TableIntl) {
   return paginatorIntl || null;
 }
 
-const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
+const ExtensionsModule = [HeaderFilterModule, RowMenuModule, PaginationModule];
 @NgModule({
   imports: [
     CommonModule,
@@ -71,15 +74,15 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     MatTooltipModule,
     MatRippleModule,
     OverlayModule,
-    ExtentionsModule,
+    ExtensionsModule,
     // NoopAnimationsModule
   ],
   exports: [DynamicMatTableComponent],
   providers: [
-    // bugfixed in library compiler not load and must create library
-    {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
-    {provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
-    {provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory]},
+    // bugfixes in library compiler not load and must create library
+    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
+    { provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS] },
+    { provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory] },
     TableIntl,
     {
       provide: MatPaginatorIntl,
@@ -98,4 +101,4 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
   ],
   entryComponents: [PrintTableDialogComponent, TooltipComponent],
 })
-export class DynamicMatTableModule {}
+export class DynamicMatTableModule { }

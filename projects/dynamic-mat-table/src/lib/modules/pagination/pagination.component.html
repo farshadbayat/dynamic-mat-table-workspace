@@ -1,0 +1,31 @@
+<div class="paginator-root" [dir]="_config.dir">
+  <div class="paginator-root-arrowBox">
+    <button [dir]="_config.dir" class="paginator-root-goFirst" [tooltip]="_config.firstLabel" (click)="goFirst()"
+      [disabled]="_config.pageIndex<=1" [class.disable]="_config.pageIndex<=1">
+    </button>
+    <button [dir]="_config.dir" class="paginator-root-previous" [tooltip]="_config.previousLabel" (click)="previous()"
+      [disabled]="_config.pageIndex<=1" [class.disable]="_config.pageIndex<=1">
+    </button>
+
+    <div class="paginator-root-activePage">
+      <input [ngModel]="_config.pageIndex" type="number" (change)="goToPage($event)" min="1" [max]="pageCount">
+      &nbsp;&nbsp;<span>/</span>&nbsp;&nbsp;
+      <span>{{pageCount}}</span>
+    </div>
+
+    <button class="paginator-root-next" [dir]="_config.dir" [tooltip]="_config.nextLabel" (click)="next()"
+      [disabled]="_config.pageIndex>=pageCount" [class.disable]="_config.pageIndex>=pageCount">
+    </button>
+
+    <button class="paginator-root-goLast" [dir]="_config.dir" [tooltip]="_config.lastLabel" (click)="goLast()"
+      [disabled]="_config.pageIndex>=pageCount" [class.disable]="_config.pageIndex>=pageCount">
+    </button>
+  </div>
+  <div class="paginator-root-pageSize" [dir]="_config.dir" *ngIf="_config.pageSizeOptions.length>0">
+    <select [(ngModel)]="_config.pageSize" (ngModelChange)="reset($event)">
+      <ng-container *ngFor="let item of _config.pageSizeOptions">
+        <option [value]="item">{{item}}</option>
+      </ng-container>
+    </select>
+  </div>
+</div>

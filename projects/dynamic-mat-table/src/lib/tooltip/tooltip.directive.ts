@@ -6,7 +6,8 @@ import { TooltipComponent } from './tooltip.component';
 @Directive({
   selector: '[appTooltip]:not([click-to-open])'
 })
-export class TooltipDirective implements OnDestroy {
+export class TooltipDirective implements OnDestroy
+{
   @Input('appTooltip') content: string | TemplateRef<any>;
   private overlayRef: OverlayRef;
 
@@ -14,14 +15,17 @@ export class TooltipDirective implements OnDestroy {
     private overlay: Overlay,
     private overlayPositionBuilder: OverlayPositionBuilder,
     private elementRef: ElementRef
-  ) {
+  )
+  {
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy(): void
+  {
     this.hide();
   }
 
-  ngOnInit() {
+  ngOnInit()
+  {
 
     const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef)
       .withPositions([{
@@ -37,17 +41,19 @@ export class TooltipDirective implements OnDestroy {
   }
 
   @HostListener('mouseenter')
-  show() {
+  show()
+  {
     const injector = Injector.create({
-      providers: [ { provide: 'tooltipConfig', useValue: this.content }]
+      providers: [{ provide: 'tooltipConfig', useValue: this.content }]
     });
-    const tooptipRef: ComponentRef<TooltipComponent> = this.overlayRef.attach(new ComponentPortal(TooltipComponent, null, injector));
-    // tooptipRef.onDestroy((x) => {});
+    const tooltipRef: ComponentRef<TooltipComponent> = this.overlayRef.attach(new ComponentPortal(TooltipComponent, null, injector));
+    // tooltipRef.onDestroy((x) => {});
   }
 
 
   @HostListener('mouseleave')
-  hide() {
+  hide()
+  {
     this.overlayRef.detach();
   }
 
