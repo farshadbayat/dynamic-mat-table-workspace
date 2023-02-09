@@ -10,6 +10,8 @@ export class PaginationComponent implements OnInit
 {
   @Input('config') set config(data: PageConfigModel)
   {
+    console.log(data);
+
     if (data.pageIndex)
     {
       this._config.pageIndex = data.pageIndex;
@@ -67,7 +69,7 @@ export class PaginationComponent implements OnInit
 
   @Output('page') pageChange: EventEmitter<PageConfigModel> = new EventEmitter<PageConfigModel>();
 
-  _config: PageConfigModel = new PageConfigModel(0);
+  _config: PageConfigModel = new PageConfigModel();
 
   id = new Date().getTime();
 

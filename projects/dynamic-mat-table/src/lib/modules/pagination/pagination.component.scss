@@ -24,6 +24,7 @@
   }
 
   &-goFirst {
+    cursor: pointer;
     background: transparent;
     border-color: transparent;
     display: flex;
@@ -63,6 +64,7 @@
 
 
   &-previous {
+    cursor: pointer;
     background: transparent;
     border-color: transparent;
     display: flex;
@@ -104,6 +106,7 @@
     height: 2rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
+    outline: 1px solid transparent;
 
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -114,9 +117,12 @@
     }
 
     input[type=number] {
-      -moz-appearance: textfield;
       /* Firefox */
+      appearance: textfield;
       text-align: center;
+      height: 26px;
+      padding: 0 !important;
+      box-sizing: border-box;
 
       &:hover {
         //outline: 1px solid #1890ff !important;
@@ -126,7 +132,7 @@
 
       &:focus {
         outline: 1px solid #1890ff;
-        border: 1px solid #1890ff;
+        border-color: #1890ff;
         border-radius: 0.2rem;
       }
     }
@@ -141,6 +147,7 @@
   }
 
   &-next {
+    cursor: pointer;
     background: transparent;
     border-color: transparent;
     display: flex;
@@ -175,6 +182,7 @@
 
 
   &-goLast {
+    cursor: pointer;
     background: transparent;
     border-color: transparent;
     display: flex;
@@ -211,6 +219,7 @@
 
 
   &-pageSize {
+
     &[dir=rtl] {
       margin-right: 1.5rem;
 
@@ -227,7 +236,8 @@
       }
     }
 
-
+    display: flex;
+    align-items: center;
     height: 2rem;
 
     select {
@@ -246,7 +256,7 @@
       padding-right: 10px;
       padding-left: 10px;
       border-radius: 0.2rem;
-      height: 100%;
+      height: 26px;
     }
 
     @include respond(sm) {

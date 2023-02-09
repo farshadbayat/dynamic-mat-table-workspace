@@ -11,6 +11,7 @@ import
   DynamicMatTableComponent,
   IRowEvent,
   ITableEvent,
+  TablePaginationMode,
 } from "dynamic-mat-table";
 import { FooterCell } from "dynamic-mat-table/lib/models/table-footer.model";
 
@@ -53,7 +54,7 @@ export class FullFeaturesDmtComponent implements OnInit
   showProgress = true;
   visibleMenu = true;
   conditionalClass = false;
-  paginationMode: string = "none";
+  paginationMode: TablePaginationMode = "server-side";
   direction: "rtl" | "ltr" = "rtl";
   contextMenuItems: ContextMenuItem[] = [];
   rowSelectionMode: TableSelectionMode = "multi";
@@ -322,15 +323,15 @@ export class FullFeaturesDmtComponent implements OnInit
 
   paginationMode_onClick()
   {
-    if (this.paginationMode === "client")
+    if (this.paginationMode === 'client-side')
     {
-      this.paginationMode = "server";
-    } else if (this.paginationMode === "server")
+      this.paginationMode = "server-side";
+    } else if (this.paginationMode === "server-side")
     {
       this.paginationMode = "none";
     } else if (this.paginationMode === "none")
     {
-      this.paginationMode = "client";
+      this.paginationMode = "client-side";
     }
     //this.fetchData_onClick();
   }

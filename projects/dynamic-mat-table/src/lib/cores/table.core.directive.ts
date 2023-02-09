@@ -83,10 +83,14 @@ export class TableCoreDirective<T extends TableRow> {
   @Input()
   get pagination()
   {
+    console.log(this._tablePagination);
+
     return this._tablePagination;
   }
   set pagination(value: TablePagination)
   {
+    console.log(value);
+
     if (value && value !== null)
     {
       this._tablePagination = value;
@@ -99,6 +103,10 @@ export class TableCoreDirective<T extends TableRow> {
         this._tablePagination.pageSize =
           this._tablePagination.pageSizeOptions[0];
       }
+      // if(isNullorUndefined(this._tablePagination.length)) {
+      //   this._tablePagination.length = this.dataSource.value.length;
+      // }
+
       this.updatePagination();
     }
   }

@@ -238,11 +238,14 @@ export class DynamicMatTableComponent<T extends TableRow>
     this.tvsDataSource.sort = this.sort;
     this.dataSource.subscribe((x) =>
     {
+      console.log(x);
+
       x = x || [];
       this.rowSelectionModel.clear();
       this.tvsDataSource.data = [];
       this.initSystemField(x);
       this.tvsDataSource.data = x;
+      this.pagination.length = x?.length;
       // this.cdr.detectChanges();
       this.refreshUI();
       // window.requestAnimationFrame(() => {
