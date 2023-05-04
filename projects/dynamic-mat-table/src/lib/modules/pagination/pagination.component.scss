@@ -1,5 +1,9 @@
 @import "mixins";
 
+:host {
+  display: flex;
+}
+
 .paginator-root {
   display: flex;
   flex-direction: row;
@@ -283,7 +287,7 @@
 
 .disable {
   cursor: not-allowed;
-
+  opacity: 0.3;
   * {
     border-color: rgba(0, 0, 0, .54) !important;
   }

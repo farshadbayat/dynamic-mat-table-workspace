@@ -23,7 +23,7 @@ import { DynamicExpandCellComponent } from "../dynamic-expand-cell/dynamic-expan
 import { FormlyCellComponent } from "../formly-cell/formly-cell.component";
 import { UpperCasePipe } from "../utilit/upper-case.pipe";
 
-const DATA = getData(5);
+const DATA = getData(500);
 @Component({
   selector: "app-full-features-dmt",
   templateUrl: "./full-features-dmt.component.html",
@@ -43,7 +43,7 @@ export class FullFeaturesDmtComponent implements OnInit
     TableField<any>[]
   >([]);
   setting: TableSetting = {
-    saveSettingMode: "multi",
+    saveSettingMode: "multi"
   };
 
   scrollStrategyType: TableScrollStrategy = "fixed-size";
@@ -141,13 +141,13 @@ export class FullFeaturesDmtComponent implements OnInit
         dynamicCellComponent: FormlyCellComponent,
         draggable: false,
         filter: 'none',
-        footer: [
-          this.footerContent,
-          {
-            aggregateText: "Test22",
-            footerStyle: [{ color: "red" }],
-          },
-        ],
+        // footer: [
+        //   this.footerContent,
+        //   {
+        //     aggregateText: "Test22",
+        //     footerStyle: [{ color: "red" }],
+        //   },
+        // ],
       },
       {
         name: "order",
@@ -157,11 +157,11 @@ export class FullFeaturesDmtComponent implements OnInit
         dynamicCellComponent: DynamicCellComponent,
         clickable: false,
         rowSelectable: false,
-        footer: [
-          {
-            aggregateText: "Test3",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test3",
+        //   },
+        // ],
         toExport: (v, type) =>
         {
           console.log(v);
@@ -171,38 +171,38 @@ export class FullFeaturesDmtComponent implements OnInit
         name: "name",
         header: "Element Name",
         pipes: [{ token: UpperCasePipe, data: ["arg1"] }],
-        footer: [
-          {
-            aggregateText: "Test4",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test4",
+        //   },
+        // ],
         sticky: "start",
       },
       {
         name: "weight",
         sort: "server-side",
-        footer: [
-          {
-            aggregateText: "Test5",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test5",
+        //   },
+        // ],
         clickType: "label",
       },
       {
         name: "color",
-        footer: [
-          {
-            aggregateText: "Test6",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test6",
+        //   },
+        // ],
       },
       {
         name: "brand",
-        footer: [
-          {
-            aggregateText: "Test7",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test7",
+        //   },
+        // ],
       },
       {
         name: "setting",
@@ -212,11 +212,11 @@ export class FullFeaturesDmtComponent implements OnInit
         option: 2,
         clickable: false,
         rowSelectable: false,
-        footer: [
-          {
-            aggregateText: "Test8",
-          },
-        ],
+        // footer: [
+        //   {
+        //     aggregateText: "Test8",
+        //   },
+        // ],
         toExport: (d, t) =>
         {
           return 1;

@@ -7,8 +7,10 @@ import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/a
 import { titleCase } from '../utilizes/utilizes';
 import { HashMap } from './type';
 import { TableField } from '../models/table-field.model';
+import { TablePagination } from '../models/table-pagination.model';
 
 export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> {
+  public pagination: TablePagination;
   public dataToRender$: Subject<T[]>;
   public dataOfRange$: Subject<T[]>;
   private streamsReady: boolean;
@@ -109,14 +111,21 @@ export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> {
   // When client paging active use for retrieve paging data
   pagingData(data)
   {
-    const p: MatPaginator = (this as any)._paginator;
-    if (p && p !== null)
-    {
-      const end = (p.pageIndex + 1) * p.pageSize;
-      const start = p.pageIndex * p.pageSize;
+    // const p: MatPaginator = (this as any)._paginator;
+    // if (p && p !== null)
+    // {
+    //   const end = (p.pageIndex + 1) * p.pageSize;
+    //   const start = p.pageIndex * p.pageSize;
+    //   return data.slice(start, end);
+    // }
+
+    if(this.pagination) {
+      const end = (this.pagination.pageIndex + 1) * this.pagination.pageSize;
+      const start = this.pagination.pageIndex * this.pagination.pageSize;
       return data.slice(start, end);
+    } else {
+      return data;
     }
-    return data;
   }
 
   _updateChangeSubscription()

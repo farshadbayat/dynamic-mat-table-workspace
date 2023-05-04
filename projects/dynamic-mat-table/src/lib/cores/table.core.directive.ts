@@ -72,19 +72,17 @@ export class TableCoreDirective<T extends TableRow> {
   @Input()
   get pagingMode()
   {
-    return this.tablePagingMode;
+    return this.tableSetting.tablePagingMode;
   }
   set pagingMode(value: TablePaginationMode)
   {
-    this.tablePagingMode = value;
+    this.tableSetting.tablePagingMode = value;
     this.updatePagination();
   }
 
   @Input()
   get pagination()
   {
-    console.log(this._tablePagination);
-
     return this._tablePagination;
   }
   set pagination(value: TablePagination)
@@ -322,6 +320,7 @@ export class TableCoreDirective<T extends TableRow> {
   {
     this.showProgress = true;
     this.tableSetting = {
+      tablePagingMode: 'none',
       direction: "ltr",
       columnSetting: null,
       visibleActionMenu: null,
@@ -340,12 +339,12 @@ export class TableCoreDirective<T extends TableRow> {
   protected _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
   private _tablePagination: TablePagination = {};
-  public tablePagingMode: TablePaginationMode = "none";
+  //public tablePagingMode: TablePaginationMode = "none";
   public viewportClass: "viewport" | "viewport-with-pagination" =
     "viewport-with-pagination";
   tableSetting: TableSetting;
 
-  /**************************************** Refrence Variables ***************************************/
+  /**************************************** Reference Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true })
   viewport!: CdkVirtualScrollViewport;
@@ -353,28 +352,32 @@ export class TableCoreDirective<T extends TableRow> {
 
   updatePagination()
   {
+    console.log('sssss');
     if (isNullorUndefined(this.tvsDataSource))
     {
       return;
     }
     if (
-      this.tablePagingMode === "client-side" ||
-      this.tablePagingMode === "server-side"
+      this.tableSetting.tablePagingMode === "client-side" ||
+      this.tableSetting.tablePagingMode === "server-side"
     )
-    {
+    { 
       this.viewportClass = "viewport-with-pagination";
-      if (!isNullorUndefined(this.tvsDataSource.paginator))
-      {
-        let dataLen = this.tvsDataSource.paginator.length;
-        if (
-          !isNullorUndefined(this._tablePagination.length) &&
-          this._tablePagination.length > dataLen
-        )
-        {
-          dataLen = this._tablePagination.length;
-        }
-        this.tvsDataSource.paginator.length = dataLen;
-      }
+      // if (!isNullorUndefined(this.tvsDataSource.paginator))
+      // {
+      //   let dataLen = this.tvsDataSource.paginator.length;
+      //   if (
+      //     !isNullorUndefined(this._tablePagination.length) &&
+      //     this._tablePagination.length > dataLen
+      //   )
+      //   {
+      //     dataLen = this._tablePagination.length;
+      //   }
+      //   this.tvsDataSource.paginator.length = dataLen;
+      // }
+      this.pagination.length = this.tvsDataSource.data.length ?? this.pagination.length;
+      this.tvsDataSource.pagination = this.pagination;
+      
     } else
     {
       this.viewportClass = "viewport";

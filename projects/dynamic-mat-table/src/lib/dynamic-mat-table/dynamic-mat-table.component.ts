@@ -360,6 +360,7 @@ export class DynamicMatTableComponent<T extends TableRow>
 
   public refreshUI()
   {
+    this.updatePagination();
     if (this.tableSetting.autoHeight === true)
     {
       this.height = this.autoHeight();

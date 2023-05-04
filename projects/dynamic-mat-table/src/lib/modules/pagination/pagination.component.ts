@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PageConfigModel } from "./page-config.model";
+import { PaginationConfig } from "./page-config.model";
 
 @Component({
   selector: 'pagination[config]',
@@ -8,9 +8,9 @@ import { PageConfigModel } from "./page-config.model";
 })
 export class PaginationComponent implements OnInit
 {
-  @Input('config') set config(data: PageConfigModel)
+  @Input('config') set config(data: PaginationConfig)
   {
-    console.log(data);
+    console.log('',data);
 
     if (data.pageIndex)
     {
@@ -67,11 +67,11 @@ export class PaginationComponent implements OnInit
   };
 
 
-  @Output('page') pageChange: EventEmitter<PageConfigModel> = new EventEmitter<PageConfigModel>();
+  @Output('page') pageChange: EventEmitter<PaginationConfig> = new EventEmitter<PaginationConfig>();
 
-  _config: PageConfigModel = new PageConfigModel();
+  _config: PaginationConfig = new PaginationConfig();
 
-  id = new Date().getTime();
+  
 
   constructor()
   {
@@ -79,6 +79,9 @@ export class PaginationComponent implements OnInit
 
   ngOnInit(): void
   {
+    this._config.update.subscribe( resp =>{
+      this.config = resp;
+    });
   }
 
   goFirst()
@@ -113,6 +116,7 @@ export class PaginationComponent implements OnInit
 
   goToPage(event: any)
   {
+    debugger
     if (event.target.value > 0 && event.target.value <= Math.ceil(this._config.length / this._config.pageSize))
     {
       this._config.pageIndex = event.target.value;

@@ -1,8 +1,11 @@
-export class PageConfigModel
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+
+export class PaginationConfig
 {
   pageSize: number = 10;
   length: number = 0;
   pageIndex: number = 1;
+
 
   previousPageIndex: number | null = null;
 
@@ -14,8 +17,5 @@ export class PageConfigModel
   lastLabel: string = 'Go Last';
   previousLabel: string = 'Previous';
   firstLabel: string = 'Go first';
-
-  constructor()
-  {
-  }
+  update: Subject<PaginationConfig>;
 }
