@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from "./app.component";
 import { PersianLanguage } from "./utilit/persian.language";
 /* import { DynamicMatTableModule } from 'dynamic-mat-table'; */
-import { DynamicMatTableModule, TableIntl } from "dynamic-mat-table";
+import { DynamicMatTableModule, TableIntl, TableSetting } from "dynamic-mat-table";
 import { DynamicCellComponent } from "./dynamic-cell/dynamic-cell.component";
 import { MatSliderModule } from "@angular/material/slider";
 import { OrderTableComponent } from "./order-table/order-table.component";
@@ -58,7 +58,9 @@ export function languageIntl() {
     FormsModule,
     ReactiveFormsModule,
     MatExpansionModule,
-    DynamicMatTableModule,
+    DynamicMatTableModule.forRoot({
+      //visibleActionMenu: { csv: false, json: false, print: false }
+    }),
     MatSliderModule,
     DragDropModule,
     MatTableModule,

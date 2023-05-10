@@ -4,12 +4,12 @@
 </button>
 
 <mat-menu #menu="matMenu" [overlapTrigger]="false" [dir]="reverseDirection">
-  <button mat-menu-item type="button" (click)="screenMode_onClick()"
+  <button mat-menu-item type="button" *ngIf="tableSetting?.visibleActionMenu?.fullscreen!= false" (click)="screenMode_onClick()"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>fullscreen</mat-icon>
     <span>{{ languagePack.menuLabels.fullScreen }}</span>
   </button>
-  <button mat-menu-item type="button" color="primary" [matMenuTriggerFor]="convertMenu"
+  <button mat-menu-item type="button" color="primary" [matMenuTriggerFor]="convertMenu" *ngIf="isSaveDataActive"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <mat-icon>save</mat-icon>
     <span>{{ languagePack.menuLabels.saveData }}</span>
@@ -51,7 +51,7 @@
         [(ngModel)]="newSettingName" (keydown.enter)="applySaveSetting_onClick($event)">
     </div>
     <div class="save-table-setting">
-      <mat-icon (click)="cancleSaveSetting_onClick($event)">close</mat-icon>
+      <mat-icon (click)="cancelSaveSetting_onClick($event)">close</mat-icon>
       <mat-icon (click)="applySaveSetting_onClick($event)">done</mat-icon>
     </div>
   </section>
@@ -75,15 +75,15 @@
 <!-- Convert Sub Menu -->
 
 <mat-menu #convertMenu="matMenu">
-  <button mat-menu-item type="button" (click)="download_onClick('JSON')"
+  <button  mat-menu-item type="button" *ngIf="tableSetting?.visibleActionMenu?.json != false" (click)="download_onClick('JSON')"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.jsonFile }}</span>
   </button>
-  <button mat-menu-item type="button" (click)="download_onClick('CSV')"
+  <button mat-menu-item type="button" *ngIf="tableSetting?.visibleActionMenu?.csv != false" (click)="download_onClick('CSV')"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.csvFile }}</span>
   </button>
-  <button mat-menu-item type="button" (click)="print_onClick(menuTrigger)"
+  <button mat-menu-item type="button" *ngIf="tableSetting?.visibleActionMenu?.print != false" (click)="print_onClick(menuTrigger)"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
     <span>{{ languagePack.menuLabels.printTable }}</span>
   </button>
