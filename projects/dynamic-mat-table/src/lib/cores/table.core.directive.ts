@@ -301,7 +301,7 @@ export class TableCoreDirective<T extends TableRow> {
     new EventEmitter();
   public noData: boolean = true;
 
-  //**this event is deperact and move to onRowEvent */
+  //**this event is deprecate and move to onRowEvent */
   // @Output() rowActionMenuChange: EventEmitter<IRowActionMenuEvent<any>> = new EventEmitter();
 
   /*************************************** Expand Row *********************************/
@@ -309,7 +309,8 @@ export class TableCoreDirective<T extends TableRow> {
 
   constructor(
     public tableService: TableService,
-    public cdr: ChangeDetectorRef
+    public cdr: ChangeDetectorRef,
+    public readonly config: TableSetting
   )
   {
     this.showProgress = true;
@@ -318,6 +319,9 @@ export class TableCoreDirective<T extends TableRow> {
       columnSetting: null,
       visibleActionMenu: null,
     };
+    if(this.config) {
+      this.tableSetting = {...this.tableSetting, ...this.config};
+    }
   }
 
   // Variables //
@@ -337,7 +341,7 @@ export class TableCoreDirective<T extends TableRow> {
     "viewport-with-pagination";
   tableSetting: TableSetting;
 
-  /**************************************** Refrence Variables ***************************************/
+  /**************************************** Reference Variables ***************************************/
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   @ViewChild(CdkVirtualScrollViewport, { static: true })
   viewport!: CdkVirtualScrollViewport;

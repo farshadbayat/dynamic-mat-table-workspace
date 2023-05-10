@@ -40,6 +40,10 @@ export class TableMenuComponent
     this.currentTableSetting = value;
   }
 
+  get isSaveDataActive(): boolean {
+    return (this.tableSetting.visibleActionMenu.csv != false) || (this.tableSetting.visibleActionMenu.json != false) || (this.tableSetting.visibleActionMenu.print != false);
+  }
+
   @Output() tableSettingChange = new EventEmitter<TableSetting>();
   @ViewChild("newSetting", { static: false }) newSettingElement: ElementRef;
 
@@ -162,7 +166,7 @@ export class TableMenuComponent
     this.showNewSetting = false;
   }
 
-  cancleSaveSetting_onClick(e)
+  cancelSaveSetting_onClick(e)
   {
     e.stopPropagation();
     this.newSettingName = "";
@@ -186,7 +190,7 @@ export class TableMenuComponent
     });
   }
 
-  /******* Save File ***********/
+  /******* Save File (JSON, CSV, Print)***********/
   download_onClick(type: string)
   {
     setTimeout(() =>

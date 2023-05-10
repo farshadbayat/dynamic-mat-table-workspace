@@ -102,8 +102,8 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicMatTableComponent<T extends TableRow>
-  extends TableCoreDirective<T>
+export class DynamicMatTableComponent<T>
+extends TableCoreDirective<T>
   implements OnInit, AfterViewInit, OnDestroy
 {
   @ViewChild("tbl", { static: true }) tbl;
@@ -174,10 +174,11 @@ export class DynamicMatTableComponent<T extends TableRow>
     public cdr: ChangeDetectorRef,
     public overlay: Overlay,
     private overlayContainer: OverlayContainer,
-    private overlayPositionBuilder: OverlayPositionBuilder
+    private overlayPositionBuilder: OverlayPositionBuilder,
+    public readonly config: TableSetting
   )
   {
-    super(tableService, cdr);
+    super(tableService, cdr, config);
     this.overlayContainer
       .getContainerElement()
       .addEventListener("contextmenu", (e) =>
@@ -610,40 +611,48 @@ export class DynamicMatTableComponent<T extends TableRow>
       requestFullscreen(this.tbl.elementRef);
     } else if (e.type === "Download")
     {
-      if (e.data === "CSV")
-      {
-        this.tableService.exportToCsv<T>(
-          this.columns,
-          this.tvsDataSource.filteredData,
-          this.rowSelectionModel
-        );
-      } else if (e.data === "JSON")
-      {
-        this.tableService.exportToJson(this.tvsDataSource.filteredData);
-      }
+      this.onTableEvent.emit({ 
+        event: 'ExportData',
+        sender: { type: e.data, columns: this.columns, data: this.tvsDataSource.filteredData, dataSelection: this.rowSelectionModel}
+      });
+      // if (e.data === "CSV")
+      // {
+      //   this.tableService.exportToCsv<T>(
+      //     this.columns,
+      //     this.tvsDataSource.filteredData,
+      //     this.rowSelectionModel
+      //   );
+      // } else if (e.data === "JSON")
+      // {
+      //   this.tableService.exportToJson(this.tvsDataSource.filteredData);
+      // }
     } else if (e.type === "FilterClear")
     {
       this.tvsDataSource.clearFilter();
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === "Print")
     {
-      this.printConfig.title = this.printConfig.title || this.tableName;
-      this.printConfig.direction = this.tableSetting.direction || "ltr";
-      debugger
-      this.printConfig.columns = this.tableColumns.filter(t => t.display !== 'hidden' && t.printable !== false);
-      this.printConfig.displayedFields = this.printConfig.columns.map((o) => o.name);
-      this.printConfig.data = this.tvsDataSource.filteredData;
-      const params = this.tvsDataSource.toTranslate();
-      this.printConfig.tablePrintParameters = [];
-      params.forEach((item) =>
-      {
-        this.printConfig.tablePrintParameters.push(item);
+      this.onTableEvent.emit({ 
+        event: 'ExportData',
+        sender: { type: 'Print', columns: this.columns, data: this.tvsDataSource.filteredData, dataSelection: this.rowSelectionModel}
       });
+      // this.printConfig.title = this.printConfig.title || this.tableName;
+      // this.printConfig.direction = this.tableSetting.direction || "ltr";
+      // debugger
+      // this.printConfig.columns = this.tableColumns.filter(t => t.display !== 'hidden' && t.printable !== false);
+      // this.printConfig.displayedFields = this.printConfig.columns.map((o) => o.name);
+      // this.printConfig.data = this.tvsDataSource.filteredData;
+      // const params = this.tvsDataSource.toTranslate();
+      // this.printConfig.tablePrintParameters = [];
+      // params.forEach((item) =>
+      // {
+      //   this.printConfig.tablePrintParameters.push(item);
+      // });
 
-      this.dialog.open(PrintTableDialogComponent, {
-        width: "90vw",
-        data: this.printConfig,
-      });
+      // this.dialog.open(PrintTableDialogComponent, {
+      //   width: "90vw",
+      //   data: this.printConfig,
+      // });
     }
   }
 

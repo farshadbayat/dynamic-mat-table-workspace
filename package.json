@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "release": "ng build dynamic-mat-table --configuration production",
+    "release": "ng build dynamic-mat-table --configuration production && cd dist/dynamic-mat-table && npm login && npm publish",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -27,7 +27,7 @@ export interface IRowEvent
 
 export interface ITableEvent
 {
-  event: 'ReloadData' | 'SortChanged' | any;
+  event: 'ReloadData' | 'SortChanged' | 'ExportData' | any;
   sender: any | undefined;
 }
 
