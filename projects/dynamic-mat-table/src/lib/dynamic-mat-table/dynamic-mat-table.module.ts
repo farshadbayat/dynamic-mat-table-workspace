@@ -49,53 +49,52 @@ export function paginatorLabels(tableIntl: TableIntl) {
 
 const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatTableModule,
-    ScrollingModule,
-    TableVirtualScrollModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSortModule,
-    MatProgressBarModule,
-    MatIconModule,
-    DragDropModule,
-    TableMenuModule,
-    MatPaginatorModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatDividerModule,
-    MatTooltipModule,
-    MatRippleModule,
-    OverlayModule,
-    ExtentionsModule,
-    // NoopAnimationsModule
-  ],
-  exports: [DynamicMatTableComponent],
-  providers: [
-    // bugfixed in library compiler not load and must create library
-    {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
-    {provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
-    {provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory]},
-    TableIntl,
-    {
-      provide: MatPaginatorIntl,
-      useFactory: paginatorLabels,
-      deps: [TableIntl],
-    },
-  ],
-  declarations: [
-    DynamicMatTableComponent,
-    PrintTableDialogComponent,
-    TableCoreDirective,
-    DynamicCellDirective,
-    TooltipComponent,
-    TooltipDirective,
-    TemplateOrStringDirective
-  ],
-  entryComponents: [PrintTableDialogComponent, TooltipComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatTableModule,
+        ScrollingModule,
+        TableVirtualScrollModule,
+        MatCheckboxModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSortModule,
+        MatProgressBarModule,
+        MatIconModule,
+        DragDropModule,
+        TableMenuModule,
+        MatPaginatorModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatDividerModule,
+        MatTooltipModule,
+        MatRippleModule,
+        OverlayModule,
+        ExtentionsModule,
+        // NoopAnimationsModule
+    ],
+    exports: [DynamicMatTableComponent],
+    providers: [
+        // bugfixed in library compiler not load and must create library
+        { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
+        { provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS] },
+        { provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory] },
+        TableIntl,
+        {
+            provide: MatPaginatorIntl,
+            useFactory: paginatorLabels,
+            deps: [TableIntl],
+        },
+    ],
+    declarations: [
+        DynamicMatTableComponent,
+        PrintTableDialogComponent,
+        TableCoreDirective,
+        DynamicCellDirective,
+        TooltipComponent,
+        TooltipDirective,
+        TemplateOrStringDirective
+    ]
 })
 export class DynamicMatTableModule {}
