@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl } from "@angular/forms";
 import { FieldType } from "@ngx-formly/material";
 
 @Component({
@@ -8,13 +8,13 @@ import { FieldType } from "@ngx-formly/material";
   styleUrls: ["./time-picker.component.css"],
 })
 export class TimePickerComponent extends FieldType implements OnInit {
-  myGroup: FormGroup = null;
+  myGroup: UntypedFormGroup = null;
   timePicker;
   selectedDate:Date = new Date();
   constructor() {
     super();
-    this.myGroup = new FormGroup({
-      fo: new FormControl(),
+    this.myGroup = new UntypedFormGroup({
+      fo: new UntypedFormControl(),
     });
   }
 

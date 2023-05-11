@@ -1,5 +1,5 @@
 import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { FormlyFieldConfig, FormlyFormOptions } from '@ngx-formly/core';
 import { DynamicMatTableComponent, IDynamicCell, IRowEvent, TableField, TableRow } from 'projects/dynamic-mat-table/src/public-api';
 
@@ -34,7 +34,7 @@ export class FormlyCellComponent implements OnInit, IDynamicCell, AfterContentIn
   @Input() onRowEvent?: EventEmitter<IRowEvent>;
 
   /****************/
-  form = new FormGroup({});
+  form = new UntypedFormGroup({});
   model :any = {};
   options: FormlyFormOptions = {};  
   fields: FormlyFieldConfig[] = [];
