@@ -3,7 +3,6 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
     "declarationMap": false,
-    "target": "es2015",
     "declaration": true,
     "inlineSources": true,
     "types": [],
@@ -14,12 +13,12 @@
   },
   "angularCompilerOptions": {
     "annotateForClosureCompiler": true,
+    "compilationMode": "partial",
     "skipTemplateCodegen": true,
     "strictMetadataEmit": true,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "enableResourceInlining": true,
-    "enableIvy": false
+    "enableResourceInlining": true
   },
   "exclude": [
     "src/test.ts",

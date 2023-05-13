@@ -104,19 +104,6 @@
             "scripts": []
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "tsconfig.app.json",
-              "tsconfig.spec.json",
-              "e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
@@ -156,23 +143,10 @@
             "tsConfig": "projects/dynamic-mat-table/tsconfig.spec.json",
             "karmaConfig": "projects/dynamic-mat-table/karma.conf.js"
           }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/dynamic-mat-table/tsconfig.lib.json",
-              "projects/dynamic-mat-table/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
         }
       }
     }
   },
-  "defaultProject": "dynamic-mat-table-demo",
   "cli": {
     "analytics": "9a44fd71-e4fe-44a7-9d1d-17f5c208cce2"
   }

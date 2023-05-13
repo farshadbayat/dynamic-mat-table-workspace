@@ -26,8 +26,6 @@ import { FormlyCellComponent } from "./formly-cell/formly-cell.component";
 import { FormlyMaterialModule } from "@ngx-formly/material";
 import { FormlyModule } from "@ngx-formly/core";
 import { TimePickerComponent } from "./formly-cell/time-picker/time-picker.component";
-import { FlatpickrModule } from "angularx-flatpickr";
-import "flatpickr/dist/flatpickr.css";
 import { UpperCasePipe } from "./utilit/upper-case.pipe";
 
 export function languageIntl() {
@@ -37,44 +35,39 @@ export function languageIntl() {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DynamicCellComponent,
-    OrderTableComponent,
-    DynamicExpandCellComponent,
-    TabComponentComponent,
-    FullFeaturesDmtComponent,
-    FormlyCellComponent,
-    TimePickerComponent,
-    UpperCasePipe,
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    MatButtonModule,
-    MatCheckboxModule,
-    MatCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatExpansionModule,
-    DynamicMatTableModule,
-    MatSliderModule,
-    DragDropModule,
-    MatTableModule,
-    MatIconModule,
-    MatBadgeModule,
-    MatTabsModule,
-    FormlyModule.forRoot(),
-    FormlyMaterialModule,
-    FlatpickrModule.forRoot(),
-  ],
-  entryComponents: [
-    DynamicCellComponent,
-    DynamicExpandCellComponent,
-    FormlyCellComponent,
-  ],
-  providers: [{ provide: TableIntl, useFactory: languageIntl }],
-  bootstrap: [AppComponent],
+    declarations: [
+        AppComponent,
+        DynamicCellComponent,
+        OrderTableComponent,
+        DynamicExpandCellComponent,
+        TabComponentComponent,
+        FullFeaturesDmtComponent,
+        FormlyCellComponent,
+        TimePickerComponent,
+        UpperCasePipe,
+    ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        MatButtonModule,
+        MatCheckboxModule,
+        MatCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatExpansionModule,
+        DynamicMatTableModule,
+        MatSliderModule,
+        DragDropModule,
+        MatTableModule,
+        MatIconModule,
+        MatBadgeModule,
+        MatTabsModule,
+        FormlyModule.forRoot(),
+        FormlyMaterialModule,
+        // FlatpickrModule.forRoot(),
+    ],
+    providers: [{ provide: TableIntl, useFactory: languageIntl }],
+    bootstrap: [AppComponent]
 })
 export class AppModule {}
