@@ -25,14 +25,14 @@
   }
 }
 
-::ng-deep.mat-menu-content:not(:empty) {
+::ng-deep.mat-mdc-menu-content:not(:empty) {
   padding: 0 !important;
 }
 
-.mat-menu-item-highlighted:not([disabled]),
-.mat-menu-item.cdk-keyboard-focused:not([disabled]),
-.mat-menu-item.cdk-program-focused:not([disabled]),
-.mat-menu-item:hover:not([disabled]) {
+.mat-mdc-menu-item-highlighted:not([disabled]),
+.mat-mdc-menu-item.cdk-keyboard-focused:not([disabled]),
+.mat-mdc-menu-item.cdk-program-focused:not([disabled]),
+.mat-mdc-menu-item:hover:not([disabled]) {
  background-color: inherit;
 }
 

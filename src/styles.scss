@@ -20,9 +20,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .custom-header {
   background: linear-gradient(0deg, rgb(214, 211, 10) 0%, #d6a609 50%, rgb(219, 223, 16) 100%) !important;
-  .mat-sort-header-container, .mat-menu-trigger {
+  .mat-mdc-sort-header-container, .mat-mdc-menu-trigger {
     color: white !important;
-    .mat-sort-header-arrow {
+    .mat-mdc-sort-header-arrow {
       color: white !important;
     }
   }
@@ -41,7 +41,7 @@ dynamic-mat-table {
 }
 
 mat-cell:first-child {
-  label:not(.mat-checkbox-layout) {
+  label:not(.mat-mdc-checkbox-layout) {
     margin-left: 8px;
     width: 100%;
   }
@@ -57,7 +57,7 @@ mat-cell:not(:first-child):not(:last-child)::before, mat-header-cell:not(:first-
 // 	width: 20px;
 // }
 
-mat-header-cell table-menu .mat-icon-button .main-menu {
+mat-header-cell table-menu .mat-mdc-icon-button .main-menu {
   width: 24px!important;
   //line-height: 42px!important;
 }

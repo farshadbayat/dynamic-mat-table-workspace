@@ -121,7 +121,7 @@
   background-color: #fdd78a;
 }
 
-::ng-deep .mat-menu-panel {
+::ng-deep .mat-mdc-menu-panel {
   min-height: auto !important;
 }
 
@@ -283,12 +283,12 @@
   text-align: left;
 }
 
-::ng-deep [dir="rtl"] .mat-checkbox-inner-container {
+::ng-deep [dir="rtl"] .mat-mdc-checkbox-inner-container {
   margin-left: auto !important;
   margin-right: 5px !important;
 }
 
-.mat-menu-item {
+.mat-mdc-menu-item {
   display: inline-flex;
   span {
     width: 100%;
@@ -299,10 +299,10 @@
 }
 
 ::ng-deep .column-config {
-  .mat-checkbox-layout {
+  .mat-mdc-checkbox-layout {
     width: 100%;
   }
-  .mat-checkbox-layout .mat-checkbox-label {
+  .mat-mdc-checkbox-layout .mat-mdc-checkbox-label {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;

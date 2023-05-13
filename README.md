@@ -101,16 +101,16 @@ Inputs:
 `class.conditional-class` = apply custom style. eg:
 ```style
   /* Conditional Class & Overwrite Style */
-  :host ::ng-deep .conditional-class .mat-table .row-selection{
+  :host ::ng-deep .conditional-class .mat-mdc-table .row-selection{
     background-color:rgb(7, 140, 163) !important; /* for over write */
     border-radius: 5px;
-    .mat-cell {
+    .mat-mdc-cell {
       color: white !important;
     }
   }
 
   /* Style Element Inside Table */
-  :host ::ng-deep dynamic-mat-table .mat-table mat-row{
+  :host ::ng-deep dynamic-mat-table .mat-mdc-table mat-row{
     cursor: pointer;
   }
 ```
