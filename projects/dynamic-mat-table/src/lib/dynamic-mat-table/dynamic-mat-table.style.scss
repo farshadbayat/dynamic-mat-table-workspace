@@ -9,7 +9,7 @@
   transition-property: opacity, transform;
 }
 
-// mat-cell:not(.row-checkbox):first-of-type, mat-footer-cell:not(.row-checkbox):first-of-type, mat-header-cell:not(.row-checkbox):first-of-type {
+// mat-cell:not(.row-checkbox):first-of-type, mat-footer-cell:not(.row-checkbox):first-of-type, mat-mdc-header-cell:not(.row-checkbox):first-of-type {
 //   padding-right: 0 !important;
 // }
 
@@ -31,7 +31,7 @@
 }
 
 @mixin progress {
-  .mat-header-row.progress {
+  .mat-mdc-header-row.progress {
     border: none;
     max-height: 4px;
     min-height: 4px;
@@ -41,7 +41,7 @@
     border-top: transparent !important;
     background: transparent !important;
 
-    .mat-header-cell {
+    .mat-mdc-header-cell {
       border: 0;
       padding: 0;
     }
