@@ -16,12 +16,11 @@ import { MatDividerModule } from '@angular/material/divider';
 import { TableIntl } from '../international/table-Intl';
 import { TableCoreDirective } from '../cores/table.core.directive';
 import { RowMenuModule } from './extensions/row-menu/row-menu.module';
-import { DynamicMatTableComponent } from './dynamic-mat-table.component';
+import {DynamicCellDirective, DynamicMatTableComponent} from './dynamic-mat-table.component';
 import { TableMenuModule } from './extensions/table-menu/table-menu.module';
 import { HeaderFilterModule } from './extensions/filter/header-filter.module';
 import { TableVirtualScrollModule } from '../cores/table-virtual-scroll.module';
 import { PrintTableDialogComponent } from './extensions/print-dialog/print-dialog.component';
-import { DynamicCellDirective } from '../cores/dynamic-cell/dynamic-cell.directive';
 import { JitCompilerFactory } from '@angular/platform-browser-dynamic';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -31,6 +30,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../tooltip/tooltip.directive';
 import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
 import { FormsModule } from '@angular/forms';
+import {PaginationModule} from '../modules/pagination/pagination.module';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -49,31 +49,32 @@ export function paginatorLabels(tableIntl: TableIntl) {
 
 const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatTableModule,
-        ScrollingModule,
-        TableVirtualScrollModule,
-        MatCheckboxModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSortModule,
-        MatProgressBarModule,
-        MatIconModule,
-        DragDropModule,
-        TableMenuModule,
-        MatPaginatorModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatMenuModule,
-        MatDividerModule,
-        MatTooltipModule,
-        MatRippleModule,
-        OverlayModule,
-        ExtentionsModule,
-        // NoopAnimationsModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatTableModule,
+    ScrollingModule,
+    TableVirtualScrollModule,
+    MatCheckboxModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSortModule,
+    MatProgressBarModule,
+    MatIconModule,
+    DragDropModule,
+    TableMenuModule,
+    MatPaginatorModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatRippleModule,
+    OverlayModule,
+    ExtentionsModule,
+    PaginationModule,
+    // NoopAnimationsModule
+  ],
     exports: [DynamicMatTableComponent],
     providers: [
         // bugfixed in library compiler not load and must create library

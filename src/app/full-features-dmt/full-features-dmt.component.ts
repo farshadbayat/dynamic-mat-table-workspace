@@ -22,7 +22,7 @@ import { DynamicExpandCellComponent } from "../dynamic-expand-cell/dynamic-expan
 import { FormlyCellComponent } from "../formly-cell/formly-cell.component";
 import { UpperCasePipe } from "../utilit/upper-case.pipe";
 
-const DATA = getData(5);
+const DATA = getData(500);
 @Component({
   selector: "app-full-features-dmt",
   templateUrl: "./full-features-dmt.component.html",
@@ -63,7 +63,7 @@ export class FullFeaturesDmtComponent implements OnInit
   expandComponent = DynamicExpandCellComponent;
 
   pagination: TablePagination = {
-    pageIndex: 0,
+    pageIndex: 1,
     pageSize: 10,
     pageSizeOptions: [5, 10, 100, 1000, 10000],
   };
@@ -232,6 +232,7 @@ export class FullFeaturesDmtComponent implements OnInit
       return { ...item, option: { expandCallback: null, style: null } };
     });
     this.data[1].option.style = { "background-color": "red" };
+    this.pagination.length=this.data.length;
     this.dataSource$.next(this.data);
   }
 

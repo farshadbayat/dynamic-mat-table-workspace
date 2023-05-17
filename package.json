@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --host 0.0.0.0",
     "build-watch": "ng build dynamic-mat-table --watch",
     "build": "ng build",
     "release": "ng build dynamic-mat-table --configuration production",

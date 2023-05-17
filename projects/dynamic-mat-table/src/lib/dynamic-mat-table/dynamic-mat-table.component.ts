@@ -15,11 +15,11 @@ import
   Injector,
   ComponentRef,
   HostBinding,
-  ChangeDetectionStrategy,
-} from "@angular/core";
+  ChangeDetectionStrategy, Directive, OnChanges, EventEmitter, Compiler, ComponentFactoryResolver, ViewContainerRef, SimpleChanges,
+} from '@angular/core';
 import { TableCoreDirective } from "../cores/table.core.directive";
 import { TableService } from "./dynamic-mat-table.service";
-import { TableRow } from "../models/table-row.model";
+import {IRowEvent, TableRow} from '../models/table-row.model';
 import { TableField } from "../models/table-field.model";
 import { AbstractFilter } from "./extensions/filter/compare/abstract-filter";
 import { HeaderFilterComponent } from "./extensions/filter/header-filter.component";
@@ -62,6 +62,7 @@ import { requestFullscreen } from "../utilizes/html.helper";
 import { TooltipComponent } from "../tooltip/tooltip.component";
 import { ComponentPortal } from "@angular/cdk/portal";
 import { PageEvent } from "@angular/material/paginator";
+import {IDynamicCell} from '../cores/dynamic-cell/IDynamicCell';
 
 export const tableAnimation = trigger("tableAnimation", [
   transition("void => *", [
@@ -95,7 +96,6 @@ export const expandAnimation = trigger("detailExpand", [
 ]);
 
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: "dynamic-mat-table",
   templateUrl: "./dynamic-mat-table.component.html",
   styleUrls: ["./dynamic-mat-table.component.scss"],
@@ -903,5 +903,90 @@ export class DynamicMatTableComponent<T extends TableRow>
           : Object.assign({}, from[key]);
       }
     });
+  }
+}
+
+
+
+@Directive({
+  selector: '[dynamicCell]'
+})
+export class DynamicCellDirective implements OnInit, OnChanges, OnDestroy
+{
+  @Input() component: any;
+  @Input() column: TableField<any>;
+  @Input() row: any;
+  @Input() onRowEvent: EventEmitter<IRowEvent>;
+  componentRef: ComponentRef<IDynamicCell> = null;
+
+  constructor(
+    public compiler: Compiler,
+    private cfr: ComponentFactoryResolver,
+    private vc: ViewContainerRef,
+    private parent: DynamicMatTableComponent<any>
+  ) { }
+
+  ngOnChanges(changes: SimpleChanges): void
+  {
+    if (this.componentRef === null || this.componentRef === undefined)
+    {
+      this.initComponent();
+    }
+    // pass input parameters
+    if (changes.column && changes.column.currentValue)
+    {
+      this.componentRef.instance.column = this.column;
+    }
+    if (changes.row && changes.row.currentValue)
+    {
+      (this.componentRef.instance as any).row = this.row;
+    }
+    if (changes.onRowEvent && changes.onRowEvent.currentValue)
+    {
+      (this.componentRef.instance as any).onRowEvent = this.onRowEvent;
+    }
+  }
+
+  ngOnInit() { }
+
+  ngOnDestroy(): void
+  {
+    if (this.componentRef)
+    {
+      this.componentRef.destroy();
+    }
+  }
+
+  initComponent()
+  {
+    try
+    {
+      const componentFactory = this.cfr.resolveComponentFactory<IDynamicCell>(this.component);
+      this.componentRef = this.vc.createComponent<IDynamicCell>(componentFactory);
+      this.updateInput();
+    } catch (e)
+    {
+      console.warn(e);
+    }
+  }
+
+  updateInput()
+  {
+    if (this.parent)
+    {
+      (this.componentRef.instance as IDynamicCell).parent = this.parent;
+    }
+    if (this.column)
+    {
+      this.componentRef.instance.column = this.column;
+    }
+    if (this.row)
+    {
+      (this.componentRef.instance as IDynamicCell).row = this.row;
+    }
+    if (this.onRowEvent)
+    {
+      (this.componentRef.instance as IDynamicCell).onRowEvent = this.onRowEvent;
+    }
   }
 }

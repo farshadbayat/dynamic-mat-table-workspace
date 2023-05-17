@@ -9,7 +9,6 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppComponent } from "./app.component";
 import { PersianLanguage } from "./utilit/persian.language";
-/* import { DynamicMatTableModule } from 'dynamic-mat-table'; */
 import { DynamicMatTableModule, TableIntl } from "dynamic-mat-table";
 import { DynamicCellComponent } from "./dynamic-cell/dynamic-cell.component";
 import { MatSliderModule } from "@angular/material/slider";
