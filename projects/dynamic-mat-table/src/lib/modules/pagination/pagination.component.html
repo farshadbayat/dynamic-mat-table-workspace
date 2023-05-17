@@ -1,13 +1,13 @@
 <div [dir]="dir" class="paginator-root">
   <div class="paginator-root-arrowBox">
-    <div [tooltip]="firstLabel">
+    <div [matTooltip]="firstLabel">
       <button (click)="goFirst()" [class.disable]="pageIndex<=1" [dir]="dir"
               [disabled]="pageIndex===1"
               class="paginator-root-goFirst">
       </button>
     </div>
 
-    <div [tooltip]="previousLabel">
+    <div [matTooltip]="previousLabel">
       <button (click)="previous()" [class.disable]="pageIndex<=1" [dir]="dir" [disabled]="pageIndex===1"
               class="paginator-root-previous">
       </button>
@@ -18,12 +18,12 @@
       &nbsp;&nbsp;<span>/</span>&nbsp;&nbsp;
       <span>{{pageCount}}</span>
     </div>
-    <div [tooltip]="nextLabel">
+    <div [matTooltip]="nextLabel">
       <button (click)="next()" [class.disable]="pageIndex>=pageCount" [dir]="dir" [disabled]="pageIndex===pageCount"
               class="paginator-root-next">
       </button>
     </div>
-    <div [tooltip]="lastLabel">
+    <div [matTooltip]="lastLabel">
       <button (click)="goLast()" [class.disable]="pageIndex>=pageCount" [dir]="dir" [disabled]="pageIndex===pageCount"
               class="paginator-root-goLast">
       </button>

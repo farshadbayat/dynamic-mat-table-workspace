@@ -4,7 +4,6 @@
  */
 export * from './lib/cores/type';
 export * from './lib/cores/dynamic-cell/IDynamicCell';
-
 /*
 Table Component
 */
