@@ -1,4 +1,4 @@
-import { Compiler, CompilerFactory, COMPILER_OPTIONS, NgModule } from '@angular/core';
+import { Compiler, CompilerFactory, COMPILER_OPTIONS, NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
@@ -31,6 +31,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../tooltip/tooltip.directive';
 import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
 import { FormsModule } from '@angular/forms';
+import { TableSetting } from '../models/table-setting.model';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -47,7 +48,7 @@ export function paginatorLabels(tableIntl: TableIntl) {
   return paginatorIntl || null;
 }
 
-const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
+const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
 @NgModule({
   imports: [
     CommonModule,
@@ -71,12 +72,12 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
     MatTooltipModule,
     MatRippleModule,
     OverlayModule,
-    ExtentionsModule,
+    ExtensionsModule,
     // NoopAnimationsModule
   ],
   exports: [DynamicMatTableComponent],
   providers: [
-    // bugfixed in library compiler not load and must create library
+    // bugfixes in library compiler not load and must create library
     {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
     {provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
     {provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory]},
@@ -98,4 +99,17 @@ const ExtentionsModule = [HeaderFilterModule, RowMenuModule];
   ],
   entryComponents: [PrintTableDialogComponent, TooltipComponent],
 })
-export class DynamicMatTableModule {}
+export class DynamicMatTableModule {
+  static forRoot(config: TableSetting): ModuleWithProviders<DynamicMatTableModule>
+  {
+    return {
+      ngModule: DynamicMatTableModule,
+      providers: [
+        {
+          provide: TableSetting,
+          useValue: config,
+        },
+      ],
+    };
+  }
+}

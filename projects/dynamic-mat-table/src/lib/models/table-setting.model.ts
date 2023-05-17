@@ -8,8 +8,8 @@ export interface TableSetting
   // screenMode?: ScreenMode;
   pageSize?: number;
   direction?: Direction;
-  columnSetting?: AbstractField[];
-  visibleActionMenu?: VisibleActionMenu;
+  columnSetting?: AbstractField[] | null;
+  visibleActionMenu?: VisibleActionMenu | null;
   visibleTableMenu?: boolean;
   alternativeRowStyle?: any;
   normalRowStyle?: any;
@@ -30,6 +30,7 @@ export interface SettingItem extends TableSetting
 
 export interface VisibleActionMenu
 {
+  fullscreen?: boolean;
   json?: boolean;
   csv?: boolean;
   print?: boolean;
@@ -40,4 +41,17 @@ export interface VisibleActionMenu
   columnSettingPrint?: boolean;
   saveTableSetting?: boolean;
   clearFilter?: boolean;
+}
+
+
+export class TableSetting implements TableSetting {
+  direction?: Direction = 'ltr';
+  visibleActionMenu?: VisibleActionMenu | null = null;
+  visibleTableMenu?: boolean;
+  alternativeRowStyle?: any;
+  normalRowStyle?: any;
+  rowStyle?: any;
+  enableContextMenu?: boolean;
+  autoHeight?: boolean;
+  saveSettingMode?: "simple" | "multi" | "none";
 }
