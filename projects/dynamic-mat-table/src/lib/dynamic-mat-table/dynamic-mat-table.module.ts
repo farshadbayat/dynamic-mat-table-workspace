@@ -32,6 +32,7 @@ import { TooltipDirective } from '../tooltip/tooltip.directive';
 import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
 import { FormsModule } from '@angular/forms';
 import { TableSetting } from '../models/table-setting.model';
+import {PaginationModule} from '../modules/pagination/pagination.module';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -73,6 +74,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     MatRippleModule,
     OverlayModule,
     ExtensionsModule,
+    PaginationModule,
     // NoopAnimationsModule
   ],
   exports: [DynamicMatTableComponent],

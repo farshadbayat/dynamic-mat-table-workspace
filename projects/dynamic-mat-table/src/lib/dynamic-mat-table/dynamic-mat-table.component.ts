@@ -1,5 +1,4 @@
-import
-{
+import {
   Component,
   OnInit,
   AfterViewInit,
@@ -16,17 +15,14 @@ import
   ComponentRef,
   HostBinding,
   ChangeDetectionStrategy,
-} from "@angular/core";
-import { TableCoreDirective } from "../cores/table.core.directive";
-import { TableService } from "./dynamic-mat-table.service";
-import { TableRow } from "../models/table-row.model";
-import { TableField } from "../models/table-field.model";
-import { AbstractFilter } from "./extensions/filter/compare/abstract-filter";
-import { HeaderFilterComponent } from "./extensions/filter/header-filter.component";
-import { MatDialog } from "@angular/material/dialog";
-import { PrintTableDialogComponent } from "./extensions/print-dialog/print-dialog.component";
-import
-{
+} from '@angular/core';
+import { TableCoreDirective } from '../cores/table.core.directive';
+import { TableService } from './dynamic-mat-table.service';
+import { TableField } from '../models/table-field.model';
+import { AbstractFilter } from './extensions/filter/compare/abstract-filter';
+import { HeaderFilterComponent } from './extensions/filter/header-filter.component';
+import { MatDialog } from '@angular/material/dialog';
+import {
   trigger,
   transition,
   style,
@@ -34,34 +30,32 @@ import
   query,
   stagger,
   state,
-} from "@angular/animations";
-import { ResizeColumn } from "../models/resize-column.mode";
-import { TableIntl } from "../international/table-Intl";
-import { TableMenuActionChange } from "./extensions/table-menu/table-menu.component";
-import
-{
+} from '@angular/animations';
+import { ResizeColumn } from '../models/resize-column.mode';
+import { TableIntl } from '../international/table-Intl';
+import { TableMenuActionChange } from './extensions/table-menu/table-menu.component';
+import {
   CdkDragDrop,
   CdkDragStart,
   moveItemInArray,
-} from "@angular/cdk/drag-drop";
-import { HashMap, isNullorUndefined } from "../cores/type";
-import { SettingItem, TableSetting } from "../models/table-setting.model";
-import { delay, filter } from "rxjs/operators";
-import { FixedSizeTableVirtualScrollStrategy } from "../cores/fixed-size-table-virtual-scroll-strategy";
-import { Subscription } from "rxjs";
-import { MatMenuTrigger } from "@angular/material/menu";
-import { ContextMenuItem } from "../models/context-menu.model";
-import
-{
+} from '@angular/cdk/drag-drop';
+import { HashMap, isNullorUndefined } from '../cores/type';
+import { SettingItem, TableSetting } from '../models/table-setting.model';
+import { delay, filter } from 'rxjs/operators';
+import { FixedSizeTableVirtualScrollStrategy } from '../cores/fixed-size-table-virtual-scroll-strategy';
+import { Subscription } from 'rxjs';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { ContextMenuItem } from '../models/context-menu.model';
+import {
   Overlay,
   OverlayContainer,
   OverlayPositionBuilder,
   OverlayRef,
-} from "@angular/cdk/overlay";
-import { requestFullscreen } from "../utilizes/html.helper";
-import { TooltipComponent } from "../tooltip/tooltip.component";
-import { ComponentPortal } from "@angular/cdk/portal";
-import { PageEvent } from "@angular/material/paginator";
+} from '@angular/cdk/overlay';
+import { requestFullscreen } from '../utilizes/html.helper';
+import { TooltipComponent } from '../tooltip/tooltip.component';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { PageEvent } from '@angular/material/paginator';
 
 export const tableAnimation = trigger("tableAnimation", [
   transition("void => *", [
@@ -95,7 +89,6 @@ export const expandAnimation = trigger("detailExpand", [
 ]);
 
 @Component({
-  // tslint:disable-next-line: component-selector
   selector: "dynamic-mat-table",
   templateUrl: "./dynamic-mat-table.component.html",
   styleUrls: ["./dynamic-mat-table.component.scss"],
@@ -611,7 +604,7 @@ extends TableCoreDirective<T>
       requestFullscreen(this.tbl.elementRef);
     } else if (e.type === "Download")
     {
-      this.onTableEvent.emit({ 
+      this.onTableEvent.emit({
         event: 'ExportData',
         sender: { type: e.data, columns: this.columns, data: this.tvsDataSource.filteredData, dataSelection: this.rowSelectionModel}
       });
@@ -632,7 +625,7 @@ extends TableCoreDirective<T>
       this.headerFilterList.forEach((hf) => hf.clearColumn_OnClick());
     } else if (e.type === "Print")
     {
-      this.onTableEvent.emit({ 
+      this.onTableEvent.emit({
         event: 'ExportData',
         sender: { type: 'Print', columns: this.columns, data: this.tvsDataSource.filteredData, dataSelection: this.rowSelectionModel}
       });

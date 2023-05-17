@@ -122,10 +122,15 @@
       [style.top.px]="inverseOfTranslation + headerHeight - 5"></mat-header-row>
   </mat-table>
 </cdk-virtual-scroll-viewport>
-<mat-paginator *ngIf="pagingMode !== 'none'" class="table-paginator" [length]="pagination?.length"
-  [pageSize]="pagination?.pageSize" [pageIndex]="pagination?.pageIndex" [pageSizeOptions]="pagination?.pageSizeOptions"
+<pagination
+  *ngIf="pagingMode !== 'none'"
+  [dir]="'ltr'"
+  [pageIndex]="pagination?.pageIndex"
+  [pageSize]="pagination?.pageSize"
+  [pageSizeOptions]="pagination?.pageSizeOptions"
+  [length]="pagination?.length"
   (page)="pagination_onChange($event)">
-</mat-paginator>
+</pagination>
 <!-- <ng-content></ng-content> -->
 <ng-container *ngIf="showNoData && init === true">
   <div class="no-records" *ngIf="tvsDataSource.data.length == 0">
