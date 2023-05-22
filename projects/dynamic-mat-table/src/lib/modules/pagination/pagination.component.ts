@@ -24,7 +24,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
 
-  @Input() pageIndex = 1;
+  @Input() pageIndex: number = 1;
   @Input() previousPageIndex: number | null = null;
   @Input() dir: 'rtl' | 'ltr' = 'rtl';
   @Input() pageSize = 10;
@@ -37,7 +37,7 @@ export class PaginationComponent implements OnInit, OnChanges {
 
 
   get pageCount() {
-    if (this.pageSize===0){
+    if (this.pageSize === 0) {
       return 0;
     }
     return Math.ceil(this.length / this.pageSize);
@@ -87,13 +87,12 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
 
-
-  emit(){
-    let data:PageEvent=new PageEvent();
-    data.pageIndex=this.pageIndex;
-    data.length=this.length;
-    data.pageSize=this.pageSize;
-    data.previousPageIndex=this.previousPageIndex;
-    this.pageChange.emit(data)
+  emit() {
+    const data: PageEvent = new PageEvent();
+    data.pageIndex = +this.pageIndex;
+    data.length = +this.length;
+    data.pageSize = +this.pageSize;
+    data.previousPageIndex = +this.previousPageIndex;
+    this.pageChange.emit(data);
   }
 }
