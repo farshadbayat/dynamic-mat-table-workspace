@@ -15,6 +15,9 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes.pageIndex) {
+      this.pageIndex = changes.pageIndex.currentValue + 1;
+    }
     if (changes.pageSizeOptions && !changes.pageSizeOptions.currentValue.includes(this.pageSize) && changes.pageSizeOptions.currentValue.length > 0) {
       this.pageSize = changes.pageSizeOptions.currentValue[0];
     }
@@ -89,7 +92,7 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   emit() {
     const data: PageEvent = new PageEvent();
-    data.pageIndex = +this.pageIndex;
+    data.pageIndex = (+this.pageIndex) - 1;
     data.length = +this.length;
     data.pageSize = +this.pageSize;
     data.previousPageIndex = +this.previousPageIndex;

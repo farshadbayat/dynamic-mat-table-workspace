@@ -223,6 +223,7 @@
   }
 
 
+
   &-pageSize {
 
     &[dir=rtl] {
@@ -283,6 +284,28 @@
   }
 
 
+}
+
+
+
+.total-items{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  @include respond(md) {
+    width: 100%;
+    margin-top: 10px;
+  }
+  &-box{
+    background: white;
+    border: 1px solid #767676FF;
+    border-radius: 2px;
+    padding: 2px 5px;
+    span{
+      font-weight: 450;
+    }
+  }
 }
 
 

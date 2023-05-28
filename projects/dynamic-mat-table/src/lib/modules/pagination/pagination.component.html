@@ -1,4 +1,14 @@
 <div [dir]="dir" class="paginator-root">
+  <div class="total-items">
+    <div class="total-items-box">
+      Total items:&nbsp;
+      <span>
+        {{length}}
+      </span>
+    </div>
+  </div>
+  &nbsp;
+  &nbsp;
   <div class="paginator-root-arrowBox">
     <div [matTooltip]="firstLabel">
       <button (click)="goFirst()" [class.disable]="pageIndex<=1" [dir]="dir"

@@ -22,7 +22,7 @@ import {DynamicExpandCellComponent} from '../dynamic-expand-cell/dynamic-expand-
 import {FormlyCellComponent} from '../formly-cell/formly-cell.component';
 import {UpperCasePipe} from '../utilit/upper-case.pipe';
 
-const DATA = getData(350);
+const DATA = getData(358);
 
 @Component({
   selector: 'app-full-features-dmt',
