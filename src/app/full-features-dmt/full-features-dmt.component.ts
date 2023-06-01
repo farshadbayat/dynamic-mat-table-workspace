@@ -63,7 +63,7 @@ export class FullFeaturesDmtComponent implements OnInit {
   expandComponent = DynamicExpandCellComponent;
 
   pagination: TablePagination = {
-    pageIndex: 1,
+    pageIndex: 0,
     pageSize: 10,
     length: 0,
     pageSizeOptions: [5, 10, 100, 1000, 10000],

@@ -42,9 +42,9 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   get pageCount() {
     if (this.pageSize === 0) {
-      return 0;
+      return 1;
     }
-    return Math.ceil(this.length ?? 0 / this.pageSize);
+    return Math.ceil(this.length ?? 1 / this.pageSize) ;
   }
 
   ngOnInit(): void {
