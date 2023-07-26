@@ -7,8 +7,9 @@ import { AbstractFilter } from '../dynamic-mat-table/extensions/filter/compare/a
 import { titleCase } from '../utilizes/utilizes';
 import { HashMap } from './type';
 import { TableField } from '../models/table-field.model';
+import { TableRow } from '../models/table-row.model';
 
-export class TableVirtualScrollDataSource<T> extends MatTableDataSource<T> {
+export class TableVirtualScrollDataSource<T extends TableRow> extends MatTableDataSource<T> {
   public dataToRender$: Subject<T[]>;
   public dataOfRange$: Subject<T[]>;
   private streamsReady: boolean;
