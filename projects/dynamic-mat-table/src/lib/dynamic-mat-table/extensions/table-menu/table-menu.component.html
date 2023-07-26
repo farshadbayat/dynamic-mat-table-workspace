@@ -56,6 +56,12 @@
     </div>
   </section>
   <mat-divider></mat-divider>
+
+  <button mat-menu-item type="button" (click)="resetDefault_onClick($event)" [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">
+    <mat-icon>settings_backup_restore</mat-icon>
+    {{ languagePack.menuLabels.defaultSetting }}
+  </button>
+
   <section *ngFor="let setting of tableSetting?.settingList" class="setting-item"
     [class.setting-item-active]="setting?.isCurrentSetting == true"
     [class.ltr-menu]="currentTableSetting.direction !== 'rtl'">

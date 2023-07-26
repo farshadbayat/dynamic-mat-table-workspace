@@ -142,6 +142,14 @@ export class TableMenuComponent {
     });
   }
 
+  resetDefault_onClick(e) {
+    e.stopPropagation();
+    this.menuActionChange.emit({
+      type: 'SelectSetting',
+      data: null,
+    });
+  }
+
   default_onClick(e, setting) {
     e.stopPropagation();
     this.menuActionChange.emit({

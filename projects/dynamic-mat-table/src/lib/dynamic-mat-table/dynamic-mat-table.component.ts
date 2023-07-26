@@ -56,6 +56,7 @@ import { requestFullscreen } from '../utilizes/html.helper';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { PageEvent } from '@angular/material/paginator';
+import { TableRow } from '../models/table-row.model';
 
 export const tableAnimation = trigger("tableAnimation", [
   transition("void => *", [
@@ -95,7 +96,7 @@ export const expandAnimation = trigger("detailExpand", [
   animations: [tableAnimation, expandAnimation],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DynamicMatTableComponent<T>
+export class DynamicMatTableComponent<T extends TableRow>
 extends TableCoreDirective<T>
   implements OnInit, AfterViewInit, OnDestroy
 {
@@ -522,7 +523,7 @@ extends TableCoreDirective<T>
   {
     if (e.type === "TableSetting")
     {
-      this.settingChange.emit({ type: 'apply', setting: this.tableSetting });
+      this.settingChange.emit({ type: 'apply', setting: this.tableSetting });      
       this.refreshColumn(this.tableSetting.columnSetting);
     } else if (e.type === "DefaultSetting")
     {
@@ -538,7 +539,7 @@ extends TableCoreDirective<T>
       });
       this.settingChange.emit({ type: 'default', setting: this.tableSetting });
     } else if (e.type === "SaveSetting")
-    {
+    {      
       const newSetting = Object.assign({}, this.setting);
       delete newSetting.settingList;
       newSetting.settingName = e.data;
@@ -566,39 +567,48 @@ extends TableCoreDirective<T>
       this.settingChange.emit({ type: 'delete', setting: this.tableSetting });
     } else if (e.type === "SelectSetting")
     {
-      let setting: SettingItem = null;
-      this.setting.settingList.forEach((s) =>
-      {
-        if (s.settingName === e.data)
+      if(e.data != null) {
+        let setting: SettingItem = null;
+        this.setting.settingList.forEach((s) =>
         {
-          s.isCurrentSetting = true;
-          setting = Object.assign(
-            {},
-            this.setting.settingList.find((s) => s.settingName === e.data)
-          );
-        } else
+          if (s.settingName === e.data)
+          {
+            s.isCurrentSetting = true;
+            setting = Object.assign(
+              {},
+              this.setting.settingList.find((s) => s.settingName === e.data)
+            );
+          } else
+          {
+            s.isCurrentSetting = false;
+          }
+        });
+        setting.settingList = this.setting.settingList;
+        delete setting.isCurrentSetting;
+        delete setting.isDefaultSetting;
+        if (this.pagingMode !== 'none' && this.pagination.pageSize != setting?.pageSize)
         {
-          s.isCurrentSetting = false;
+          this.pagination.pageSize =
+            setting?.pageSize || this.pagination.pageSize;
+          this.paginationChange.emit(this.pagination);
         }
-      });
-      setting.settingList = this.setting.settingList;
-      delete setting.isCurrentSetting;
-      delete setting.isDefaultSetting;
-      if (this.pagingMode !== 'none' && this.pagination.pageSize != setting?.pageSize)
-      {
-        this.pagination.pageSize =
-          setting?.pageSize || this.pagination.pageSize;
-        this.paginationChange.emit(this.pagination);
+        /* Dynamic Cell must update when setting change */
+        setting.columnSetting?.forEach((column) =>
+        {
+          const originalColumn = this.columns.find((c) => c.name === column.name);
+          column = { ...originalColumn, ...column };
+        });
+        this.tableSetting = setting;
+        this.refreshColumn(this.setting.columnSetting);
+        this.settingChange.emit({ type: 'select', setting: this.tableSetting });
+      } else {
+        const columns = [];
+        this.columns.forEach( c =>{
+          columns.push(Object.assign({}, c));
+        });
+        this.refreshColumn(columns);
+        this.refreshUI();
       }
-      /* Dynamic Cell must update when setting change */
-      setting.columnSetting?.forEach((column) =>
-      {
-        const originalColumn = this.columns.find((c) => c.name === column.name);
-        column = { ...originalColumn, ...column };
-      });
-      this.tableSetting = setting;
-      this.refreshColumn(this.setting.columnSetting);
-      this.settingChange.emit({ type: 'select', setting: this.tableSetting });
     } else if (e.type === "FullScreenMode")
     {
       requestFullscreen(this.tbl.elementRef);

@@ -15,7 +15,11 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.pageSizeOptions && !changes.pageSizeOptions.currentValue.includes(this.pageSize) && changes.pageSizeOptions.currentValue.length > 0) {
+    if (changes.pageIndex) {
+      this.pageIndex = changes.pageIndex.currentValue + 1;
+    }
+    if (changes.pageSizeOptions && !changes.pageSizeOptions.currentValue.includes(this.pageSize
+    ) && changes.pageSizeOptions.currentValue.length > 0) {
       this.pageSize = changes.pageSizeOptions.currentValue[0];
     }
     if (changes.pageIndex && this.pageCount < changes.pageIndex.currentValue) {
@@ -24,7 +28,7 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
 
-  @Input() pageIndex = 1;
+  @Input() pageIndex: number = 1;
   @Input() previousPageIndex: number | null = null;
   @Input() dir: 'rtl' | 'ltr' = 'rtl';
   @Input() pageSize = 10;
@@ -37,15 +41,13 @@ export class PaginationComponent implements OnInit, OnChanges {
 
 
   get pageCount() {
-    if (this.pageSize===0){
-      return 0;
-    } else {
-      return Math.ceil(this.length / this.pageSize);
+    if (this.pageSize === 0) {
+      return 1;
     }
+    return Math.ceil((this.length ?? 1) / this.pageSize) ;
   }
 
   ngOnInit(): void {
-    this.length = this.length ?? 0;
   }
 
   goFirst() {
@@ -89,13 +91,12 @@ export class PaginationComponent implements OnInit, OnChanges {
   }
 
 
-
-  emit(){
-    let data:PageEvent=new PageEvent();
-    data.pageIndex=+this.pageIndex;
-    data.length=this.length;
-    data.pageSize=this.pageSize;
-    data.previousPageIndex=this.previousPageIndex;
-    this.pageChange.emit(data)
+  emit() {
+    const data: PageEvent = new PageEvent();
+    data.pageIndex = (+this.pageIndex) - 1;
+    data.length = +this.length;
+    data.pageSize = +this.pageSize;
+    data.previousPageIndex = +this.previousPageIndex;
+    this.pageChange.emit(data);
   }
 }
