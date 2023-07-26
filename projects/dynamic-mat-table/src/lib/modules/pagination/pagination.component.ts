@@ -39,11 +39,13 @@ export class PaginationComponent implements OnInit, OnChanges {
   get pageCount() {
     if (this.pageSize===0){
       return 0;
+    } else {
+      return Math.ceil(this.length / this.pageSize);
     }
-    return Math.ceil(this.length / this.pageSize);
   }
 
   ngOnInit(): void {
+    this.length = this.length ?? 0;
   }
 
   goFirst() {
@@ -90,7 +92,7 @@ export class PaginationComponent implements OnInit, OnChanges {
 
   emit(){
     let data:PageEvent=new PageEvent();
-    data.pageIndex=this.pageIndex;
+    data.pageIndex=+this.pageIndex;
     data.length=this.length;
     data.pageSize=this.pageSize;
     data.previousPageIndex=this.previousPageIndex;
