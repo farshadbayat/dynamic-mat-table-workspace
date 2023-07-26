@@ -53,6 +53,7 @@ export interface FilterLabels {
 export interface MenuLabels {
   saveData: string;
   newSetting: string;
+  defaultSetting: string;
   noSetting: string;
   columnSetting: string;
   saveTableSetting: string;

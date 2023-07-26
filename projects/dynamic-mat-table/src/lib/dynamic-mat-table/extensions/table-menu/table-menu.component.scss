@@ -66,13 +66,13 @@
   outline: none;
   border: none;
   line-height: 48px;
-  height: 48px;
-  // position: relative;
+  height: 48px;  
   display: flex;
   flex-wrap: nowrap;
   width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
   .input-container {
-    width: 64%;
     overflow: hidden;
   }
   input {
@@ -290,6 +290,8 @@
 
 .mat-menu-item {
   display: inline-flex;
+  width: 100%;
+  box-sizing: border-box;
   span {
     width: 100%;
   }
