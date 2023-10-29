@@ -283,7 +283,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /*************************************** I/O parameters *********************************/
-  @Input() printConfig: PrintConfig = {};
+  //@Input() printConfig: PrintConfig = {};
   @Input() sticky: boolean;
   @Input() pending: boolean;
   @Input() rowHeight = 48;

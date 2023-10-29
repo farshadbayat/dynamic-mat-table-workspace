@@ -59,7 +59,7 @@ export function languageIntl() {
     ReactiveFormsModule,
     MatExpansionModule,
     DynamicMatTableModule.forRoot({
-      //visibleActionMenu: { csv: false, json: false, print: false }
+      visibleActionMenu: { csv: false, json: true, print: true }
     }),
     MatSliderModule,
     DragDropModule,

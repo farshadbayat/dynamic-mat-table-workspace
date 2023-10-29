@@ -11,6 +11,8 @@ import
   DynamicMatTableComponent,
   IRowEvent,
   ITableEvent,
+  PrintTableDialogComponent,
+  AbstractField,
 } from 'dynamic-mat-table';
 import {FooterCell} from 'dynamic-mat-table/lib/models/table-footer.model';
 
@@ -21,6 +23,7 @@ import {DynamicCellComponent} from '../dynamic-cell/dynamic-cell.component';
 import {DynamicExpandCellComponent} from '../dynamic-expand-cell/dynamic-expand-cell.component';
 import {FormlyCellComponent} from '../formly-cell/formly-cell.component';
 import {UpperCasePipe} from '../utilit/upper-case.pipe';
+import { MatDialog } from '@angular/material/dialog';
 
 const DATA = getData(350);
 
@@ -68,12 +71,8 @@ export class FullFeaturesDmtComponent implements OnInit {
     length: 0,
     pageSizeOptions: [5, 10, 100, 1000, 10000],
   };
-  printConfig: PrintConfig = {
-    title: 'Print All Test Data',
-    showParameters: true,
-  };
 
-  constructor() {
+  constructor(public dialog: MatDialog,) {
     this.contextMenuItems.push(
       {
         name: 'Edit',
@@ -335,10 +334,33 @@ export class FullFeaturesDmtComponent implements OnInit {
   }
 
   tableEvent_onClick(e: ITableEvent) {
+    console.log(e);
     if (e.event === 'ReloadData') {
       this.fetchData_onClick();
-    } else if (e.event === 'SortChanged') {
+    } else if (e.event === 'ExportData' && e.sender.type === 'Print') {
+      this.printTable(e.sender.columns, e.sender.data);
     }
+  }
+
+  printTable(columns: AbstractField[], data: any) {
+    debugger
+    const printConfig: PrintConfig = {};
+    printConfig.title = '';
+    printConfig.direction = "ltr";
+    printConfig.columns = columns.filter(t => t.display !== 'hidden' && t.printable !== false);
+    printConfig.displayedFields = columns.map((o) => o.name);
+    printConfig.data = data;
+    // const params = this.tvsDataSource.toTranslate();
+      // this.printConfig.tablePrintParameters = [];
+      // params.forEach((item) =>
+      // {
+      //   this.printConfig.tablePrintParameters.push(item);
+      // });
+
+      this.dialog.open(PrintTableDialogComponent, {
+        width: "90vw",
+        data: printConfig,
+      });
   }
 
   rowEvent_onClick(e: IRowEvent) {
