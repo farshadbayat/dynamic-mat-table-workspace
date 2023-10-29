@@ -13,6 +13,7 @@ export * from './lib/dynamic-mat-table/dynamic-mat-table.component';
 export * from './lib/dynamic-mat-table/dynamic-mat-table.module';
 export * from './lib/dynamic-mat-table/dynamic-mat-table.service';
 export * from './lib/cores/table-data-source';
+export * from './lib/dynamic-mat-table/extensions/print-dialog/print-dialog.component';
 
 /*
 Model Class

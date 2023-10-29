@@ -283,7 +283,7 @@ export class TableCoreDirective<T extends TableRow> {
   }
 
   /*************************************** I/O parameters *********************************/
-  @Input() printConfig: PrintConfig = {};
+  //@Input() printConfig: PrintConfig = {};
   @Input() sticky: boolean;
   @Input() pending: boolean;
   @Input() rowHeight = 48;
@@ -335,7 +335,11 @@ export class TableCoreDirective<T extends TableRow> {
 
   protected _rowSelectionMode: TableSelectionMode;
   private _rowSelectionModel = new SelectionModel<T>(true, []);
-  private _tablePagination: TablePagination = {};
+  private _tablePagination: TablePagination = {
+    pageIndex: 0,
+    pageSize: 10,
+    pageSizeOptions: [5, 10, 100, 1000, 10000]
+  };
   public tablePagingMode: TablePaginationMode = "none";
   public viewportClass: "viewport" | "viewport-with-pagination" =
     "viewport-with-pagination";

@@ -1,0 +1,50 @@
+<div [dir]="dir" class="paginator-root">
+  <div class="total-items">
+    <div class="total-items-box">
+      Total items:&nbsp;
+      <span>
+        {{length??0}}
+      </span>
+    </div>
+  </div>
+  &nbsp;
+  &nbsp;
+  <div class="paginator-root-arrowBox">
+    <div [matTooltip]="firstLabel">
+      <button (click)="goFirst()" [class.disable]="pageIndex<=1" [dir]="dir"
+              [disabled]="pageIndex===1"
+              class="paginator-root-goFirst">
+      </button>
+    </div>
+
+    <div [matTooltip]="previousLabel">
+      <button (click)="previous()" [class.disable]="pageIndex<=1" [dir]="dir" [disabled]="pageIndex===1"
+              class="paginator-root-previous">
+      </button>
+    </div>
+
+    <div class="paginator-root-activePage">
+      <input (change)="goToPage($event)" [max]="pageCount" [ngModel]="pageIndex" min="1" type="number">
+      &nbsp;&nbsp;<span>/</span>&nbsp;&nbsp;
+      <span>{{pageCount}}</span>
+    </div>
+    <div [matTooltip]="nextLabel">
+      <button (click)="next()" [class.disable]="pageIndex>=pageCount" [dir]="dir" [disabled]="pageIndex===pageCount"
+              class="paginator-root-next">
+      </button>
+    </div>
+    <div [matTooltip]="lastLabel">
+      <button (click)="goLast()" [class.disable]="pageIndex>=pageCount" [dir]="dir" [disabled]="pageIndex===pageCount"
+              class="paginator-root-goLast">
+      </button>
+    </div>
+
+  </div>
+  <div *ngIf="pageSizeOptions.length>0" [dir]="dir" class="paginator-root-pageSize">
+    <select [(ngModel)]="pageSize" (ngModelChange)="reset($event)">
+      <ng-container *ngFor="let item of pageSizeOptions">
+        <option [value]="item">{{item}}</option>
+      </ng-container>
+    </select>
+  </div>
+</div>
