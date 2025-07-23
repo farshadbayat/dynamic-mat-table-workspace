@@ -1,5 +1,4 @@
-import
-{
+import {
   ChangeDetectionStrategy,
   Component,
   Output,
@@ -8,12 +7,12 @@ import
   ViewChild,
   ElementRef,
 } from '@angular/core';
-import {moveItemInArray, CdkDragDrop} from '@angular/cdk/drag-drop';
-import {TableService} from '../../dynamic-mat-table.service';
-import {TableSetting} from '../../../models/table-setting.model';
-import {TableIntl} from '../../../international/table-Intl';
-import {deepClone, isNullorUndefined} from '../../../cores/type';
-import {AbstractField} from '../../../models/table-field.model';
+import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
+import { TableService } from '../../dynamic-mat-table.service';
+import { TableSetting } from '../../../models/table-setting.model';
+import { TableIntl } from '../../../international/table-Intl';
+import { deepClone, isNullorUndefined } from '../../../cores/type';
+import { AbstractField } from '../../../models/table-field.model';
 
 @Component({
   // tslint:disable-next-line: component-selector
@@ -50,7 +49,7 @@ export class TableMenuComponent {
   }
 
   @Output() tableSettingChange = new EventEmitter<TableSetting>();
-  @ViewChild('newSetting', {static: false}) newSettingElement: ElementRef;
+  @ViewChild('newSetting', { static: false }) newSettingElement: ElementRef;
 
   newSettingName = '';
   showNewSetting = false;
@@ -64,6 +63,12 @@ export class TableMenuComponent {
     public languagePack: TableIntl,
     public tableService: TableService
   ) {
+  }
+
+  get isFullscreen(): boolean {
+    return !!(document.fullscreenElement ||
+      (document as any).webkitFullscreenElement ||
+      (document as any).msFullscreenElement);
   }
 
   screenMode_onClick() {
@@ -175,7 +180,7 @@ export class TableMenuComponent {
 
   deleteSetting_onClick(e, setting) {
     e.stopPropagation();
-    this.menuActionChange.emit({type: 'DeleteSetting', data: setting});
+    this.menuActionChange.emit({ type: 'DeleteSetting', data: setting });
     this.newSettingName = '';
     this.showNewSetting = false;
   }
@@ -183,35 +188,35 @@ export class TableMenuComponent {
   /*****  Filter ********/
   clearFilter_onClick() {
     setTimeout(() => {
-      this.menuActionChange.emit({type: 'FilterClear'});
+      this.menuActionChange.emit({ type: 'FilterClear' });
     });
   }
 
   /******* Save File (JSON, CSV, Print)***********/
   download_onClick(type: string) {
     setTimeout(() => {
-      this.menuActionChange.emit({type: 'Download', data: type});
+      this.menuActionChange.emit({ type: 'Download', data: type });
     });
   }
 
   print_onClick(menu) {
     menu._overlayRef._host.parentElement.click();
     setTimeout(() => {
-      this.menuActionChange.emit({type: 'Print', data: null});
+      this.menuActionChange.emit({ type: 'Print', data: null });
     });
   }
 }
 
 export interface TableMenuActionChange {
   type:
-    | 'FilterClear'
-    | 'TableSetting'
-    | 'Download'
-    | 'SaveSetting'
-    | 'DeleteSetting'
-    | 'SelectSetting'
-    | 'DefaultSetting'
-    | 'Print'
-    | 'FullScreenMode';
+  | 'FilterClear'
+  | 'TableSetting'
+  | 'Download'
+  | 'SaveSetting'
+  | 'DeleteSetting'
+  | 'SelectSetting'
+  | 'DefaultSetting'
+  | 'Print'
+  | 'FullScreenMode';
   data?: any;
 }
