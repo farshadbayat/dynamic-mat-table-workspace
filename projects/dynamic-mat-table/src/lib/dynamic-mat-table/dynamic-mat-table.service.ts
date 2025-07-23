@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { TableField } from '../models/table-field.model';
 import { SelectionModel } from '@angular/cdk/collections';
+import { TableRow } from '../models/table-row.model';
 @Injectable({
   providedIn: "root",
 })
@@ -68,7 +69,7 @@ export class TableService
     }
   }
 
-  public exportToCsv<T>(columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "")
+  public exportToCsv<T extends TableRow>(columns: TableField<T>[], rows: object[], selectionModel: SelectionModel<any>, filename: string = "")
   {
     filename = filename === "" ? this.tableName + TableService.getFormattedTime() + ".csv" : filename;
     if (!rows || !rows.length)

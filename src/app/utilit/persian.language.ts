@@ -12,6 +12,7 @@ export class PersianLanguage implements LanguagePack {
     saveData: 'ذخیره تنظیمات ',
     noSetting: 'هیچ تنظیماتی موجود نمی باشد',
     newSetting: 'تنظیمات جدید',
+    defaultSetting: 'تظیمات اولیه',
     columnSetting: 'تنظیمات ستون ها ',
     saveTableSetting: 'ذخیره  تنظیمات جدول',
     clearFilter: 'فیلتر را پاک کنید',

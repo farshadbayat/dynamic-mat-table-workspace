@@ -1,0 +1,53 @@
+@mixin respond($breakpoint) {
+  @if $breakpoint ==xsm {
+    @media only screen and (max-width: 300px) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==sm {
+    @media only screen and (max-width: 500px) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==md {
+    @media only screen and (max-width: 900px) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==lg {
+    @media only screen and (max-width: 1200px) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==xlg {
+    @media only screen and (max-width: 1800px) {
+      @content
+    }
+  }
+
+  @if $breakpoint ==css-icon {
+    content: "";
+    position: absolute;
+    border-bottom: 0.2rem solid hsl(0deg 0% 0% / 54%);
+    border-left: 0.2rem solid hsl(0deg 0% 0% / 54%);
+    width: 8px;
+    height: 8px;
+    transform: rotate(225deg);
+    border-radius: 0.2rem;
+
+    &:hover {
+      &::before {
+        border-color: #1890ff;
+      }
+
+      &::after {
+        border-color: #1890ff;
+      }
+
+    }
+  }
+}

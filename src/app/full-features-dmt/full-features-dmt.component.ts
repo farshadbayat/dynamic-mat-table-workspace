@@ -1,5 +1,5 @@
-import { SelectionModel } from "@angular/cdk/collections";
-import { Component, OnInit, ViewChild } from "@angular/core";
+import {SelectionModel} from '@angular/cdk/collections';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import
 {
   TableRow,
@@ -11,41 +11,41 @@ import
   DynamicMatTableComponent,
   IRowEvent,
   ITableEvent,
-} from "dynamic-mat-table";
-import { FooterCell } from "dynamic-mat-table/lib/models/table-footer.model";
+} from 'dynamic-mat-table';
+import {FooterCell} from 'dynamic-mat-table/lib/models/table-footer.model';
 
-import { TableScrollStrategy } from "projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy";
-import { ContextMenuItem } from "projects/dynamic-mat-table/src/public-api";
-import { BehaviorSubject } from "rxjs";
-import { DynamicCellComponent } from "../dynamic-cell/dynamic-cell.component";
-import { DynamicExpandCellComponent } from "../dynamic-expand-cell/dynamic-expand-cell.component";
-import { FormlyCellComponent } from "../formly-cell/formly-cell.component";
-import { UpperCasePipe } from "../utilit/upper-case.pipe";
+import {TableScrollStrategy} from 'projects/dynamic-mat-table/src/lib/cores/fixed-size-table-virtual-scroll-strategy';
+import {ContextMenuItem} from 'projects/dynamic-mat-table/src/public-api';
+import {BehaviorSubject} from 'rxjs';
+import {DynamicCellComponent} from '../dynamic-cell/dynamic-cell.component';
+import {DynamicExpandCellComponent} from '../dynamic-expand-cell/dynamic-expand-cell.component';
+import {FormlyCellComponent} from '../formly-cell/formly-cell.component';
+import {UpperCasePipe} from '../utilit/upper-case.pipe';
 
 const DATA = getData(350);
+
 @Component({
-  selector: "app-full-features-dmt",
-  templateUrl: "./full-features-dmt.component.html",
-  styleUrls: ["./full-features-dmt.component.scss"],
+  selector: 'app-full-features-dmt',
+  templateUrl: './full-features-dmt.component.html',
+  styleUrls: ['./full-features-dmt.component.scss'],
 })
-export class FullFeaturesDmtComponent implements OnInit
-{
+export class FullFeaturesDmtComponent implements OnInit {
   eventLog = [];
-  title = "dynamic-mat-table";
+  title = 'dynamic-mat-table';
   private data: any[] = [];
   public dataSource$: BehaviorSubject<any[]>;
-  @ViewChild(DynamicMatTableComponent, { static: true })
+  @ViewChild(DynamicMatTableComponent, {static: true})
   table!: DynamicMatTableComponent<TestElement>;
-  altRowStyle: any = { "background-color": "red" };
+  altRowStyle: any = {'background-color': 'red'};
   fields: TableField<any>[] = []; /* REQUIRED */
   fields$: BehaviorSubject<TableField<any>[]> = new BehaviorSubject<
     TableField<any>[]
   >([]);
   setting: TableSetting = {
-    saveSettingMode: "multi",
+    saveSettingMode: 'multi',
   };
 
-  scrollStrategyType: TableScrollStrategy = "fixed-size";
+  scrollStrategyType: TableScrollStrategy = 'fixed-size';
   showReloadData = true;
   pending = false;
   showNoData = true;
@@ -53,89 +53,87 @@ export class FullFeaturesDmtComponent implements OnInit
   showProgress = true;
   visibleMenu = true;
   conditionalClass = false;
-  paginationMode: string = "none";
-  direction: "rtl" | "ltr" = "rtl";
+  paginationMode: string = 'none';
+  direction: 'rtl' | 'ltr' = 'rtl';
   contextMenuItems: ContextMenuItem[] = [];
-  rowSelectionMode: TableSelectionMode = "multi";
+  rowSelectionMode: TableSelectionMode = 'multi';
   selectionModel: SelectionModel<TestElement> = null;
   // dataSource = new TableVirtualScrollDataSource([]); /* REQUIRED */
   rowHeight = 48;
   expandComponent = DynamicExpandCellComponent;
 
   pagination: TablePagination = {
-    pageIndex: 0,
+    pageIndex: 1,
     pageSize: 10,
+    length: 0,
     pageSizeOptions: [5, 10, 100, 1000, 10000],
   };
   printConfig: PrintConfig = {
-    title: "Print All Test Data",
+    title: 'Print All Test Data',
     showParameters: true,
   };
 
-  constructor()
-  {
+  constructor() {
     this.contextMenuItems.push(
       {
-        name: "Edit",
-        text: "ویرایش",
-        color: "primary",
-        icon: "edit",
+        name: 'Edit',
+        text: 'ویرایش',
+        color: 'primary',
+        icon: 'edit',
         disabled: false,
         visible: true,
       },
       {
-        name: "Delete",
-        text: "حذف",
-        color: "warn",
-        icon: "delete",
+        name: 'Delete',
+        text: 'حذف',
+        color: 'warn',
+        icon: 'delete',
         disabled: false,
         visible: true,
       }
     );
     //this.fetchData_onClick();
   }
-  ngOnInit(): void
-  {
+
+  ngOnInit(): void {
     this.dataSource$ = new BehaviorSubject<any[]>(this.data);
 
     this.initField();
     this.fetchData_onClick();
   }
 
-  loadSetting()
-  {
+  loadSetting() {
     this.setting = TABLE_SETTING as TableSetting;
-    setTimeout(() =>
-    {
+    setTimeout(() => {
       this.table.refreshUI();
     }, 100);
   }
 
   footerContent: FooterCell = {
-    aggregateText: "New Footer Cell Content",
+    aggregateText: 'New Footer Cell Content',
   };
-  initField()
-  {
+
+  initField() {
     this.fields = [
       {
-        name: "row",
+        name: 'row',
         // type: 'number',
         width: 20,
-        widthUnit: "%",
+        widthUnit: '%',
         widthPercentage: 20,
-        cellStyle: { "background-color": "#3f51b5", color: "#ffffff" },
-        display: "prevent-hidden",
-        classNames: "custom-header",
+        cellStyle: {'background-color': '#3f51b5', color: '#ffffff'},
+        display: 'prevent-hidden',
+        classNames: 'custom-header',
         cellTooltipEnable: true,
         //  footer: [{
         //   aggregateText: 'Test1'
         // }]
       },
       {
-        name: "FormlyColumn",
-        header: "Formly Column",
+        name: 'FormlyColumn',
+        header: 'Formly Column',
         width: 300,
-        widthUnit: "px",
+        widthUnit: 'px',
         option: null,
         dynamicCellComponent: FormlyCellComponent,
         draggable: false,
@@ -143,81 +141,79 @@ export class FullFeaturesDmtComponent implements OnInit
         footer: [
           this.footerContent,
           {
-            aggregateText: "Test22",
-            footerStyle: [{ color: "red" }],
+            aggregateText: 'Test22',
+            footerStyle: [{color: 'red'}],
           },
         ],
       },
       {
-        name: "order",
-        header: "Row Order",
-        sticky: "start",
+        name: 'order',
+        header: 'Row Order',
+        sticky: 'start',
         option: 1,
         dynamicCellComponent: DynamicCellComponent,
         clickable: false,
         rowSelectable: false,
         footer: [
           {
-            aggregateText: "Test3",
+            aggregateText: 'Test3',
           },
         ],
-        toExport: (v, type) =>
-        {
+        toExport: (v, type) => {
           console.log(v);
         },
       },
       {
-        name: "name",
-        header: "Element Name",
-        pipes: [{ token: UpperCasePipe, data: ["arg1"] }],
+        name: 'name',
+        header: 'Element Name',
+        pipes: [{token: UpperCasePipe, data: ['arg1']}],
         footer: [
           {
-            aggregateText: "Test4",
+            aggregateText: 'Test4',
           },
         ],
-        sticky: "start",
+        sticky: 'start',
       },
       {
-        name: "weight",
-        sort: "server-side",
+        name: 'weight',
+        sort: 'server-side',
         footer: [
           {
-            aggregateText: "Test5",
+            aggregateText: 'Test5',
           },
         ],
-        clickType: "label",
+        clickType: 'label',
       },
       {
-        name: "color",
+        name: 'color',
         footer: [
           {
-            aggregateText: "Test6",
-          },
-        ],
-      },
-      {
-        name: "brand",
-        footer: [
-          {
-            aggregateText: "Test7",
+            aggregateText: 'Test6',
           },
         ],
       },
       {
-        name: "setting",
-        icon: "chrome_reader_mode",
-        iconColor: "blue",
+        name: 'brand',
+        footer: [
+          {
+            aggregateText: 'Test7',
+          },
+        ],
+      },
+      {
+        name: 'setting',
+        icon: 'chrome_reader_mode',
+        iconColor: 'blue',
         dynamicCellComponent: DynamicCellComponent,
         option: 2,
         clickable: false,
         rowSelectable: false,
         footer: [
           {
-            aggregateText: "Test8",
+            aggregateText: 'Test8',
           },
         ],
-        toExport: (d, t) =>
-        {
+        toExport: (d, t) => {
           return 1;
         },
       },
@@ -225,60 +221,49 @@ export class FullFeaturesDmtComponent implements OnInit
     this.fields$.next([...this.fields]);
   }
 
-  fetchData_onClick()
-  {
-    this.data = DATA.map((item) =>
-    {
-      return { ...item, option: { expandCallback: null, style: null } };
+  fetchData_onClick() {
+    this.data = DATA.map((item) => {
+      return {...item, option: {expandCallback: null, style: null}};
     });
-    this.data[1].option.style = { "background-color": "red" };
+    this.data[1].option.style = {'background-color': 'red'};
+    this.pagination.length = this.data.length;
     this.dataSource$.next(this.data);
   }
 
-  table_onChangeSetting(setting)
-  {
+  table_onChangeSetting(setting) {
     console.log(setting);
-    localStorage.setItem("tableConfig", JSON.stringify(setting));
+    localStorage.setItem('tableConfig', JSON.stringify(setting));
     // if(setting && setting?.settingName !== '') {
     //   this.setting.settingList.push(setting?.settingName);
     // }
   }
 
-  tableonRowActionChange(e)
-  {
+  tableonRowActionChange(e) {
     this.eventLog.push(e);
   }
 
-  columnSticky_onClick(columnSticky, type)
-  {
+  columnSticky_onClick(columnSticky, type) {
     // console.log(this.fields);
 
-    if (this.fields[columnSticky].sticky === type)
-    {
-      this.fields[columnSticky].sticky = "none";
-    } else
-    {
+    if (this.fields[columnSticky].sticky === type) {
+      this.fields[columnSticky].sticky = 'none';
+    } else {
       this.fields[columnSticky].sticky = type;
     }
     // console.log(this.fields);
   }
 
-  tableSelection_onClick()
-  {
-    if (this.rowSelectionMode === "multi")
-    {
-      this.rowSelectionMode = "single";
-    } else if (this.rowSelectionMode === "single")
-    {
-      this.rowSelectionMode = "none";
-    } else
-    {
-      this.rowSelectionMode = "multi";
+  tableSelection_onClick() {
+    if (this.rowSelectionMode === 'multi') {
+      this.rowSelectionMode = 'single';
+    } else if (this.rowSelectionMode === 'single') {
+      this.rowSelectionMode = 'none';
+    } else {
+      this.rowSelectionMode = 'multi';
     }
   }
 
-  selectToggle_onClick()
-  {
+  selectToggle_onClick() {
     // const selection: SelectionModel<TestElement> = new SelectionModel(true);
     // for(let i=0 ; i< 10 ; i++) {
     //   selection.select(this.dataSource$.value[i]);
@@ -286,31 +271,27 @@ export class FullFeaturesDmtComponent implements OnInit
     // this.selectionModel = selection;
   }
 
-  tableVST_onClick()
-  {
+  tableVST_onClick() {
     this.scrollStrategyType;
   }
 
-  table_onRowSelectionChange(e)
-  {
+  table_onRowSelectionChange(e) {
     // console.log(e);
   }
 
-  addNewColumn_onClick()
-  {
+  addNewColumn_onClick() {
     this.fields.push({
-      name: "type",
-      header: "Car Type",
+      name: 'type',
+      header: 'Car Type',
     });
     const cloned = this.fields.map((x) => Object.assign({}, x));
     this.fields = cloned;
   }
 
-  addNewLongColumn_onClick()
-  {
+  addNewLongColumn_onClick() {
     this.fields.push({
-      name: "longText",
-      header: "Long Text Header",
+      name: 'longText',
+      header: 'Long Text Header',
       cellTooltipEnable: true,
       cellEllipsisRow: 3,
       headerEllipsisRow: 1,
@@ -320,23 +301,18 @@ export class FullFeaturesDmtComponent implements OnInit
     this.fields = cloned;
   }
 
-  paginationMode_onClick()
-  {
-    if (this.paginationMode === "client")
-    {
-      this.paginationMode = "server";
-    } else if (this.paginationMode === "server")
-    {
-      this.paginationMode = "none";
-    } else if (this.paginationMode === "none")
-    {
-      this.paginationMode = "client";
+  paginationMode_onClick() {
+    if (this.paginationMode === 'client') {
+      this.paginationMode = 'server';
+    } else if (this.paginationMode === 'server') {
+      this.paginationMode = 'none';
+    } else if (this.paginationMode === 'none') {
+      this.paginationMode = 'client';
     }
     //this.fetchData_onClick();
   }
 
-  paginationConfigChange_onClock()
-  {
+  paginationConfigChange_onClock() {
     // this.pagination.pageSize = 20;
     this.pagination = {
       ...this.pagination,
@@ -345,91 +321,75 @@ export class FullFeaturesDmtComponent implements OnInit
     } as TablePagination;
   }
 
-  direction_onClick()
-  {
-    this.direction === "ltr"
-      ? (this.direction = "rtl")
-      : (this.direction = "ltr");
+  direction_onClick() {
+    this.direction === 'ltr'
+      ? (this.direction = 'rtl')
+      : (this.direction = 'ltr');
   }
 
   expandIndex = 0;
-  expandToggle_onClick()
-  {
+
+  expandToggle_onClick() {
     this.table.expandRow(this.expandIndex);
     this.expandIndex++;
   }
 
-  tableEvent_onClick(e: ITableEvent)
-  {
-    if (e.event === "ReloadData")
-    {
+  tableEvent_onClick(e: ITableEvent) {
+    if (e.event === 'ReloadData') {
       this.fetchData_onClick();
-    } else if (e.event === "SortChanged")
-    {
+    } else if (e.event === 'SortChanged') {
     }
   }
 
-  rowEvent_onClick(e: IRowEvent)
-  {
+  rowEvent_onClick(e: IRowEvent) {
     // console.log(this.table.dataSource.allData);
     console.log(e);
     // console.log(e.event);
-    if (e.event === "RowSelectionChange")
-    {
+    if (e.event === 'RowSelectionChange') {
       // console.log('Row Selection Change',e.sender);
-    } else if (e.event === "RowClick" && e.sender.row)
-    {
+    } else if (e.event === 'RowClick' && e.sender.row) {
       // change style
-      if (!e.sender.row.option)
-      {
+      if (!e.sender.row.option) {
         e.sender.row.option = {};
       }
       // if option not defined
-      if (e.sender.column && !e.sender.row.option[e.sender.column.name])
-      {
+      if (e.sender.column && !e.sender.row.option[e.sender.column.name]) {
         e.sender.row.option[e.sender.column.name] = {};
       }
-    } else if (e.event === "CellClick" && e.sender.column)
-    {
-      if (e.sender.row.option[e.sender.column.name] === undefined)
-      {
+    } else if (e.event === 'CellClick' && e.sender.column) {
+      if (e.sender.row.option[e.sender.column.name] === undefined) {
         e.sender.row.option[e.sender.column.name] = {};
       }
       e.sender.row.option[e.sender.column.name].style = {
-        "background-color": "#ff4081",
-        color: "white",
+        'background-color': '#ff4081',
+        color: 'white',
       };
-    } else if (e.event.type === "dblclick" && e.sender.row)
-    {
+    } else if (e.event.type === 'dblclick' && e.sender.row) {
       // change style
-      if (!e.sender.row.option)
-      {
+      if (!e.sender.row.option) {
         e.sender.row.option = {};
       }
       // if option not defined
       e.sender.row.option.style = {
-        "background-color": "#ff4081",
-        color: "white",
+        'background-color': '#ff4081',
+        color: 'white',
       };
     }
   }
 
-  table_onPaginationChange(e)
-  {
+  table_onPaginationChange(e) {
     console.log(e);
 
   }
 
-  visible_onChange(e)
-  {
+  visible_onChange(e) {
     const setting = Object.assign({}, this.setting);
     setting.visibleTableMenu = e.checked;
     this.setting = setting;
     // console.log(e.checked);
   }
 
-  addNew_onClick()
-  {
+  addNew_onClick() {
     //console.log(this.dataSource.allData);
     // this.dataSource$.value.push({row: 12, name: 'ww', weight: 12, color: 'red', brand: 'zanjna'});
     // this.dataSource.refreshFilterPredicate();
@@ -437,51 +397,43 @@ export class FullFeaturesDmtComponent implements OnInit
     //this.table.refreshTableSetting();
   }
 
-  changeCell_onClick()
-  {
+  changeCell_onClick() {
     // this.dataSource$.value[0].name = new Date().toString();
   }
 
-  clearSelection_onClick()
-  {
+  clearSelection_onClick() {
     this.table.rowSelectionModel.clear();
   }
 
-  refresh_onClick()
-  {
+  refresh_onClick() {
     this.loadSetting();
     this.table.refreshUI();
   }
 
-  loadSetting_onClick()
-  {
+  loadSetting_onClick() {
     this.loadSetting();
     // if (localStorage.getItem("tableConfig")) {
     //   this.setting = JSON.parse(localStorage.getItem("tableConfig"));
     // }
   }
 
-  changeFooter_onClick()
-  {
-    this.footerContent.aggregateText = "121212";
+  changeFooter_onClick() {
+    this.footerContent.aggregateText = '121212';
     this.table.refreshUI();
   }
 
-  autoHeight_onClick()
-  {
+  autoHeight_onClick() {
     this.setting.autoHeight = !this.setting?.autoHeight;
     this.dataSource$.next(this.dataSource$.value);
   }
 
-  clearField_onClick()
-  {
+  clearField_onClick() {
     this.fields$.next([...this.fields]);
     this.table.refreshUI();
   }
 }
 
-export interface TestElement extends TableRow
-{
+export interface TestElement extends TableRow {
   row: number;
   name: string;
   weight: string;
@@ -489,428 +441,427 @@ export interface TestElement extends TableRow
   brand: string;
 }
 
-export function getData(n = 1000): TestElement[]
-{
-  return Array.from({ length: n }, (v, i) => ({
+export function getData(n = 1000): TestElement[] {
+  return Array.from({length: n}, (v, i) => ({
     row: i + 1,
-    FormlyColumn: "allah",
+    FormlyColumn: 'allah',
     name: `Element #${i + 1}`,
-    weight: Math.floor(Math.random() * 100) + " KG",
-    color: ["Red", "Green", "Blue", "Yellow", "Magenta"][
+    weight: Math.floor(Math.random() * 100) + ' KG',
+    color: ['Red', 'Green', 'Blue', 'Yellow', 'Magenta'][
       Math.floor(Math.random() * 5)
-    ],
+      ],
     brand: [
-      "ایران خودرو",
-      "سایپا",
-      "کرمان خودرو",
-      "Zanjan Benz",
-      "Tehran PIKEY",
+      'ایران خودرو',
+      'سایپا',
+      'کرمان خودرو',
+      'Zanjan Benz',
+      'Tehran PIKEY',
     ][Math.floor(Math.random() * 5)],
-    type: ["SUV", "Truck", "Sedan", "Van", "Coupe", "Sports Car"][
+    type: ['SUV', 'Truck', 'Sedan', 'Van', 'Coupe', 'Sports Car'][
       Math.floor(Math.random() * 6)
-    ],
+      ],
     longText: [
-      "Overdub: Correct your voice recordings by simply typing. Powered by Lyrebird AI.",
-      "Multitrack recording — Descript dynamically generates a single combined transcript.",
-      "Our style of podcasting and editing wouldn’t be possible without Descript.",
-      "Live Collaboration: Real time multiuser editing and commenting.",
-      "Use the Timeline Editor for fine-tuning with fades and volume editing.",
-      "Edit audio by editing text. Drag and drop to add music and sound effects.",
+      'Overdub: Correct your voice recordings by simply typing. Powered by Lyrebird AI.',
+      'Multitrack recording — Descript dynamically generates a single combined transcript.',
+      'Our style of podcasting and editing wouldn’t be possible without Descript.',
+      'Live Collaboration: Real time multiuser editing and commenting.',
+      'Use the Timeline Editor for fine-tuning with fades and volume editing.',
+      'Edit audio by editing text. Drag and drop to add music and sound effects.',
     ][Math.floor(Math.random() * 6)],
   }));
 }
 
 const TABLE_SETTING = {
   alternativeRowStyle: {
-    "background-color": "#d2d2d2",
+    'background-color': '#d2d2d2',
   },
   rowStyle: {
-    "border-bottom": "solid 1px red;",
+    'border-bottom': 'solid 1px red;',
   },
-  saveSettingMode: "multi",
+  saveSettingMode: 'multi',
   columnSetting: [
     {
-      name: "row",
+      name: 'row',
       width: 300,
       cellStyle: {
-        "background-color": "#3f51b5",
-        color: "#ffffff",
+        'background-color': '#3f51b5',
+        color: '#ffffff',
       },
-      display: "prevent-hidden",
+      display: 'prevent-hidden',
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      header: "Row",
-      filter: "client-side",
-      sort: "client-side",
-      sticky: "none",
+      header: 'Row',
+      filter: 'client-side',
+      sort: 'client-side',
+      sticky: 'none',
       index: 0,
     },
     {
-      name: "FormlyColumn",
-      header: "Formly Column",
+      name: 'FormlyColumn',
+      header: 'Formly Column',
       option: null,
       draggable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hidden",
-      filter: "none",
-      sort: "client-side",
-      sticky: "none",
+      display: 'hidden',
+      filter: 'none',
+      sort: 'client-side',
+      sticky: 'none',
       width: null,
       index: 1,
     },
     {
-      name: "order",
-      header: "Row Order",
-      sticky: "start",
+      name: 'order',
+      header: 'Row Order',
+      sticky: 'start',
       option: 1,
       clickable: false,
       rowSelectable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hidden",
-      filter: "client-side",
-      sort: "client-side",
+      display: 'hidden',
+      filter: 'client-side',
+      sort: 'client-side',
       width: null,
       index: 2,
     },
     {
-      name: "name",
-      header: "Element Name",
-      sticky: "start",
+      name: 'name',
+      header: 'Element Name',
+      sticky: 'start',
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      display: "hidden",
-      filter: "client-side",
-      sort: "client-side",
+      display: 'hidden',
+      filter: 'client-side',
+      sort: 'client-side',
       width: null,
       index: 3,
     },
     {
-      name: "weight",
-      sort: "server-side",
-      clickType: "label",
+      name: 'weight',
+      sort: 'server-side',
+      clickType: 'label',
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      header: "Weight",
-      display: "hidden",
-      filter: "client-side",
-      sticky: "none",
+      header: 'Weight',
+      display: 'hidden',
+      filter: 'client-side',
+      sticky: 'none',
       width: null,
       index: 4,
     },
     {
-      name: "color",
+      name: 'color',
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      header: "Color",
-      display: "hidden",
-      filter: "client-side",
-      sort: "client-side",
-      sticky: "none",
+      header: 'Color',
+      display: 'hidden',
+      filter: 'client-side',
+      sort: 'client-side',
+      sticky: 'none',
       width: null,
       index: 5,
     },
     {
-      name: "brand",
+      name: 'brand',
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      header: "Brand",
-      display: "hidden",
-      filter: "client-side",
-      sort: "client-side",
-      sticky: "none",
+      header: 'Brand',
+      display: 'hidden',
+      filter: 'client-side',
+      sort: 'client-side',
+      sticky: 'none',
       width: null,
       index: 6,
     },
     {
-      name: "setting",
-      icon: "chrome_reader_mode",
-      iconColor: "blue",
+      name: 'setting',
+      icon: 'chrome_reader_mode',
+      iconColor: 'blue',
       option: 2,
       clickable: false,
       rowSelectable: false,
       printable: true,
       exportable: true,
       enableContextMenu: true,
-      header: "Setting",
-      display: "visible",
-      filter: "client-side",
-      sort: "client-side",
-      sticky: "none",
+      header: 'Setting',
+      display: 'visible',
+      filter: 'client-side',
+      sort: 'client-side',
+      sticky: 'none',
       width: null,
       index: 7,
     },
   ],
-  direction: "rtl",
+  direction: 'rtl',
   visibleActionMenu: null,
-  settingName: "T2",
+  settingName: 'T2',
   settingList: [
     {
       alternativeRowStyle: {
-        "background-color": "#d2d2d2",
+        'background-color': '#d2d2d2',
       },
       rowStyle: {
-        "border-bottom": "solid 1px red;",
+        'border-bottom': 'solid 1px red;',
       },
-      saveSettingMode: "multi",
+      saveSettingMode: 'multi',
       columnSetting: [
         {
-          name: "row",
+          name: 'row',
           width: 300,
           cellStyle: {
-            "background-color": "#3f51b5",
-            color: "#ffffff",
+            'background-color': '#3f51b5',
+            color: '#ffffff',
           },
-          display: "prevent-hidden",
+          display: 'prevent-hidden',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Row",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Row',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
         },
         {
-          name: "FormlyColumn",
-          header: "Formly Column",
+          name: 'FormlyColumn',
+          header: 'Formly Column',
           option: null,
           draggable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "visible",
-          filter: "none",
-          sort: "client-side",
-          sticky: "none",
+          display: 'visible',
+          filter: 'none',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
         },
         {
-          name: "order",
-          header: "Row Order",
-          sticky: "start",
+          name: 'order',
+          header: 'Row Order',
+          sticky: 'start',
           option: 1,
           clickable: false,
           rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
           width: null,
         },
         {
-          name: "name",
-          header: "Element Name",
-          sticky: "start",
+          name: 'name',
+          header: 'Element Name',
+          sticky: 'start',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
           width: null,
         },
         {
-          name: "weight",
-          sort: "server-side",
-          clickType: "label",
+          name: 'weight',
+          sort: 'server-side',
+          clickType: 'label',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Weight",
-          display: "visible",
-          filter: "client-side",
-          sticky: "none",
+          header: 'Weight',
+          display: 'visible',
+          filter: 'client-side',
+          sticky: 'none',
           width: null,
         },
         {
-          name: "color",
+          name: 'color',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Color",
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Color',
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
         },
         {
-          name: "brand",
+          name: 'brand',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Brand",
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Brand',
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
         },
         {
-          name: "setting",
-          icon: "chrome_reader_mode",
-          iconColor: "blue",
+          name: 'setting',
+          icon: 'chrome_reader_mode',
+          iconColor: 'blue',
           option: 2,
           clickable: false,
           rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Setting",
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Setting',
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
         },
       ],
-      direction: "rtl",
+      direction: 'rtl',
       visibleActionMenu: null,
-      settingName: "T1",
+      settingName: 'T1',
       isCurrentSetting: true,
     },
     {
       alternativeRowStyle: {
-        "background-color": "#d2d2d2",
+        'background-color': '#d2d2d2',
       },
       rowStyle: {
-        "border-bottom": "solid 1px red;",
+        'border-bottom': 'solid 1px red;',
       },
-      saveSettingMode: "multi",
+      saveSettingMode: 'multi',
       columnSetting: [
         {
-          name: "row",
+          name: 'row',
           width: 300,
           cellStyle: {
-            "background-color": "#3f51b5",
-            color: "#ffffff",
+            'background-color': '#3f51b5',
+            color: '#ffffff',
           },
-          display: "prevent-hidden",
+          display: 'prevent-hidden',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Row",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Row',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           index: 0,
         },
         {
-          name: "FormlyColumn",
-          header: "Formly Column",
+          name: 'FormlyColumn',
+          header: 'Formly Column',
           option: null,
           draggable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hidden",
-          filter: "none",
-          sort: "client-side",
-          sticky: "none",
+          display: 'hidden',
+          filter: 'none',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
           index: 1,
         },
         {
-          name: "order",
-          header: "Row Order",
-          sticky: "start",
+          name: 'order',
+          header: 'Row Order',
+          sticky: 'start',
           option: 1,
           clickable: false,
           rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hidden",
-          filter: "client-side",
-          sort: "client-side",
+          display: 'hidden',
+          filter: 'client-side',
+          sort: 'client-side',
           width: null,
           index: 2,
         },
         {
-          name: "name",
-          header: "Element Name",
-          sticky: "start",
+          name: 'name',
+          header: 'Element Name',
+          sticky: 'start',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          display: "hidden",
-          filter: "client-side",
-          sort: "client-side",
+          display: 'hidden',
+          filter: 'client-side',
+          sort: 'client-side',
           width: null,
           index: 3,
         },
         {
-          name: "weight",
-          sort: "server-side",
-          clickType: "label",
+          name: 'weight',
+          sort: 'server-side',
+          clickType: 'label',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Weight",
-          display: "hidden",
-          filter: "client-side",
-          sticky: "none",
+          header: 'Weight',
+          display: 'hidden',
+          filter: 'client-side',
+          sticky: 'none',
           width: null,
           index: 4,
         },
         {
-          name: "color",
+          name: 'color',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Color",
-          display: "hidden",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Color',
+          display: 'hidden',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
           index: 5,
         },
         {
-          name: "brand",
+          name: 'brand',
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Brand",
-          display: "hidden",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Brand',
+          display: 'hidden',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
           index: 6,
         },
         {
-          name: "setting",
-          icon: "chrome_reader_mode",
-          iconColor: "blue",
+          name: 'setting',
+          icon: 'chrome_reader_mode',
+          iconColor: 'blue',
           option: 2,
           clickable: false,
           rowSelectable: false,
           printable: true,
           exportable: true,
           enableContextMenu: true,
-          header: "Setting",
-          display: "visible",
-          filter: "client-side",
-          sort: "client-side",
-          sticky: "none",
+          header: 'Setting',
+          display: 'visible',
+          filter: 'client-side',
+          sort: 'client-side',
+          sticky: 'none',
           width: null,
           index: 7,
         },
       ],
-      direction: "rtl",
+      direction: 'rtl',
       visibleActionMenu: null,
-      settingName: "T2",
+      settingName: 'T2',
       isDefaultSetting: true,
     },
   ],

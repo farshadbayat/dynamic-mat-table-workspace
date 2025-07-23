@@ -1,6 +1,6 @@
 import { Compiler, CompilerFactory, COMPILER_OPTIONS, NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSortModule } from '@angular/material/sort';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTableModule } from '@angular/material/table';
@@ -9,9 +9,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
 import { TableIntl } from '../international/table-Intl';
 import { TableCoreDirective } from '../cores/table.core.directive';
@@ -27,11 +27,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRippleModule } from '@angular/material/core';
 import { TooltipComponent } from '../tooltip/tooltip.component';
-import { OverlayModule } from '@angular/cdk/overlay';
+import { FullscreenOverlayContainer, OverlayContainer, OverlayModule } from '@angular/cdk/overlay';
 import { TooltipDirective } from '../tooltip/tooltip.directive';
 import { TemplateOrStringDirective } from '../tooltip/template-or-string.directive';
 import { FormsModule } from '@angular/forms';
 import { TableSetting } from '../models/table-setting.model';
+import { PaginationModule } from '../modules/pagination/pagination.module';
 
 export function createCompiler(compilerFactory: CompilerFactory): Compiler {
   return compilerFactory.createCompiler();
@@ -73,20 +74,22 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
     MatRippleModule,
     OverlayModule,
     ExtensionsModule,
+    PaginationModule,
     // NoopAnimationsModule
   ],
   exports: [DynamicMatTableComponent],
   providers: [
     // bugfixes in library compiler not load and must create library
-    {provide: COMPILER_OPTIONS, useValue: {}, multi: true},
-    {provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS]},
-    {provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory]},
+    { provide: COMPILER_OPTIONS, useValue: {}, multi: true },
+    { provide: CompilerFactory, useClass: JitCompilerFactory, deps: [COMPILER_OPTIONS] },
+    { provide: Compiler, useFactory: createCompiler, deps: [CompilerFactory] },
     TableIntl,
     {
       provide: MatPaginatorIntl,
       useFactory: paginatorLabels,
       deps: [TableIntl],
     },
+    { provide: OverlayContainer, useClass: FullscreenOverlayContainer }
   ],
   declarations: [
     DynamicMatTableComponent,
@@ -100,8 +103,7 @@ const ExtensionsModule = [HeaderFilterModule, RowMenuModule];
   entryComponents: [PrintTableDialogComponent, TooltipComponent],
 })
 export class DynamicMatTableModule {
-  static forRoot(config: TableSetting): ModuleWithProviders<DynamicMatTableModule>
-  {
+  static forRoot(config: TableSetting): ModuleWithProviders<DynamicMatTableModule> {
     return {
       ngModule: DynamicMatTableModule,
       providers: [
